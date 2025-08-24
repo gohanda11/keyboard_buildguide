@@ -343,6 +343,30 @@ h3 {
     color: white;
 }
 
+/* 画像ギャラリーの横スクロール */
+.image-gallery-scroll {
+    overflow-x: auto;
+    padding: 1rem 0;
+}
+
+.image-gallery-scroll::-webkit-scrollbar {
+    height: 8px;
+}
+
+.image-gallery-scroll::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.image-gallery-scroll::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.image-gallery-scroll::-webkit-scrollbar-thumb:hover {
+    background: #a1a1a1;
+}
+
 /* フッター */
 footer {
     background: #2c3e50;
