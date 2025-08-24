@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soa44 ビルドガイド - gohanda_kbd</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 画像拡大表示用のモーダル -->
+    <div id="imageModal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center;" onclick="closeModal()">
+        <img id="modalImage" style="max-width: 90%; max-height: 90%; border-radius: 8px;" />
+        <div style="position: absolute; top: 20px; right: 30px; color: white; font-size: 40px; font-weight: bold; cursor: pointer;" onclick="closeModal()">&times;</div>
+    </div>
+    <header>
+        <div class="container">
+            <h1>Soa44 ビルドガイド</h1>
+            <p>44キー分割型キーボード with 25mmトラックボール</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="build-guide">
+            <section class="keyboard-overview">
+                <h2>Soa44 について</h2>
+                <p>Soa44は44キーの分割型キーボードで、右手親指部分に25mmトラックボールを搭載した無線キーボードです。Grin配列を採用し、ゴムブッシュを使用した簡易ガスケットマウント構造になっています。</p>
+                
+                <div class="keyboard-specs">
+                    <span class="spec-tag">44キー</span>
+                    <span class="spec-tag">分割型</span>
+                    <span class="spec-tag">25mmトラックボール</span>
+                    <span class="spec-tag">無線</span>
+                    <span class="spec-tag">Grin配列</span>
+                    <span class="spec-tag">ガスケットマウント</span>
+                </div>
+            </section>
+
+            <div style="text-align: center; margin: 2rem 0;">
+                <img src="image/soa44/soa44-top.JPG" alt="Soa44キーボード完成例" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+            </div>
+
+            <section class="step">
+                <h3>組み立てを始める前に</h3>
+                <div class="step-content">
+                    <p>組み立てを開始する前に、以下の重要な注意事項を必ずお読みください。</p>
+                    
+                    <div class="warning">
+                        <strong>⚠️ はんだ付け時の重要な注意事項</strong><br>
+                        はんだ付けをする際には必ず電池を外してから行ってください。<br>
+                        電池が入ったままの状態でのはんだ付けは危険です。
+                    </div>
+                    
+                    <div class="warning">
+                        <strong>⚠️ 難易度の高い部品について</strong><br>
+                        XIAOとPMW3610センサーのはんだ付けはとても難しいです。<br>
+                        細かいピッチでの作業となるため、十分に注意して作業してください。<br>
+                        不安な場合は経験者に相談することをお勧めします。
+                    </div>
+                    
+                    <h4>作業前のチェックリスト</h4>
+                    <ul>
+                        <li>✅ 必要な部品と工具が揃っている</li>
+                        <li>✅ 作業スペースが十分に確保されている</li>
+                        <li>✅ 換気の良い場所で作業する</li>
+                        <li>✅ 静電気対策を行っている</li>
+                        <li>✅ はんだごての温度設定を確認している</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="step">
+                <h3>ステップ 1: 必要な部品の確認</h3>
+                <div class="step-content">
+                    <div class="parts-list">
+                        <h4>キット付属品</h4>
+                        <ul>
+                            <li>PCB（左右各1枚、計2枚）</li>
+                            <li>ケース（上下カバー、左右各1セット）</li>
+                            <li>25mmトラックボール（1個）</li>
+                            <li>PMW3610センサー（1個）</li>
+                            <li>電池ホルダー（2個）</li>
+                            <li>ゴムブッシュ</li>
+                            <li>ネジ類</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="parts-list">
+                        <h4>別途用意が必要な部品</h4>
+                        <ul>
+                            <li>XIAO nRF52840 Plus（2個）</li>
+                            <li>単三電池（2個）</li>
+                            <li>Chocスイッチ（44個）</li>
+                            <li>キーキャップ（44個）</li>
+                        </ul>
+                    </div>
+
+                    <div class="tools-list">
+                        <h4>必要な工具</h4>
+                        <ul>
+                            <li>はんだごて（温度調節機能付き推奨）</li>
+                            <li>はんだ（0.6mm程度）</li>
+                            <li>フラックス</li>
+                            <li>はんだ吸い取り線</li>
+                            <li>プラスドライバー（細い物）</li>
+                            <li>USB-Cケーブル</li>
+                            <li>ピンセット</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="step">
+                <h3>ステップ 2: Chocソケットのはんだ付け</h3>
+                <div class="step-content">
+                    <div style="text-align: center; margin: 1.5rem 0;">
+                        <img src="image/soa44/step2.jpg" alt="Chocソケットのはんだ付け" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                    </div>
+                    <p>Chocソケットを左右のPCBにはんだ付けします。</p>
+
+                    <div class="warning">
+                        キットに付属するchocソケットは、親指キーの5キー分のみです。<br>
+                        すべてロープロ化するには別途Chocソケットを用意してください。
+                    </div>
+                    
+                    <ol>
+                        <li>白のシルクに沿ってソケットを載せる</li>
+                        <li>ソケットがPCBにしっかりはまっていることを確認</li>
+                        <li>ソケットの端子をはんだ付け</li>
+                    </ol>
+                </div>
+            </section>
+
+            <section class="step">
+                <h3>ステップ 3: XIAO nRF52840 Plusの取り付け</h3>
+                <div class="step-content">
+                    <div style="display: flex; flex-wrap: nowrap; justify-content: center; gap: 1rem; margin: 1.5rem 0;">
+                        <img src="image/soa44/step3-1.jpg" alt="XIAO nRF52840 Plusの取り付け 1" style="width: 300px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                        <img src="image/soa44/step3-2.jpg" alt="XIAO nRF52840 Plusの取り付け 2" style="width: 300px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                        <img src="image/soa44/step3-3.jpg" alt="XIAO nRF52840 Plusの取り付け 3" style="width: 300px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                    </div>
+                    <p>各PCBにXIAO nRF52840 Plusをはんだ付けします。</p>
+                    
+                    <div class="warning">
+                        XIAO nRF52840 Plusのはんだ付けはとても難しいです。<br>
+                        先の細いはんだごてを使用し、隣のランドとブリッジしないよう注意してください。
+                    </div>
+                    
+                    <ol>
+                        <li>左右のPCBの表側にXIAO nRF52840 Plusを配置</li>
+                        <li>ピンヘッダを写真のようにさし、位置を決める</li>
+                        <li>ピンヘッダをさしていない側の端子をはんだ付け</li>
+                        <li>ピンヘッダを外し、反対側の端子をはんだ付け</li>
+                        <li>裏側の端子をはんだ付け</li>
+                    </ol>
+                </div>
+            </section>
+
+            <section class="step">
+                <h3>ステップ 4: 電池ホルダーの取り付け</h3>
+                <div class="step-content">
+                    <div style="display: flex; flex-wrap: nowrap; justify-content: center; gap: 1rem; margin: 1.5rem 0;">
+                        <img src="image/soa44/step4-1.jpg" alt="電池ホルダーの取り付け 1" style="width: 300px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                        <img src="image/soa44/step4-2.jpg" alt="電池ホルダーの取り付け 2" style="width: 300px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                        <img src="image/soa44/step4-3.jpg" alt="電池ホルダーの取り付け 3" style="width: 300px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                    </div>
+                    <p>各PCBに電池ホルダーをはんだ付けします。</p>
+
+                    <div class="warning">
+                        電池の極性を間違えないよう、電池ホルダーの+/-表示を確認してください。
+                    </div>
+                    
+                    <ol>
+                        <li>電池ホルダーを左右のPCBの表側に配置</li>
+                        <li>マスキングテープで仮固定</li>
+                        <li>裏面から電池ホルダーの端子をはんだ付け</li>
+                        <li>はんだ付け後、飛び出している足をニッパーでカット</li>
+                    </ol>
+                </div>
+            </section>
+
+            <section class="step">
+                <h3>ステップ 5: PMW3610センサー（トラックボール）の取り付け</h3>
+                <div class="step-content">
+                    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 1.5rem 0;">
+                        <img src="image/soa44/step5-1.jpg" alt="PMW3610センサーの取り付け 1" style="width: 300px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                        <img src="image/soa44/step5-2.jpg" alt="PMW3610センサーの取り付け 2" style="width: 300px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                        <img src="image/soa44/step5-3.jpg" alt="PMW3610センサーの取り付け 3" style="width: 300px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                        <img src="image/soa44/step5-4.jpg" alt="PMW3610センサーの取り付け 4" style="width: 300px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                    </div>
+                    <p>右手側PCBにPMW3610センサーを取り付けます。</p>
+                    
+                    <div class="warning">
+                        センサーは精密部品です。はんだ付け時に過度な熱を加えないよう注意してください。
+                    </div>
+
+                    <ol>
+                        <li>センサー基板をセンサー基板に配置(向きは写真を確認)</li>
+                        <li>浮きがないようにマスキングテープで仮固定</li>
+                        <li>センサー基板の各端子をはんだ付け</li>
+                        <li>センサーの保護シールをはがす</li>
+                    </ol>
+                </div>
+            </section>
+
+            <section class="step">
+                <h3>ステップ 6: ファームウェアの書き込み</h3>
+                <div class="step-content">
+                    <p>ZMKファームウェアをXIAO nRF52840 Plusに書き込みます。</p>
+
+                    <div class="warning">
+                        キーマップの変更にはGitHubアカウントが必要です。<br>
+                        詳しい手順は下記の動画が参考になります。
+                    </div>
+
+                    <div style="text-align: center; margin: 1.5rem 0;">
+                        <a href="https://www.youtube.com/watch?v=vXpV9jgRB1M" target="_blank">
+                            <img src="https://img.youtube.com/vi/vXpV9jgRB1M/maxresdefault.jpg" 
+                                 alt="ZMKファームウェア書き込み手順の動画" 
+                                 style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" />
+                        </a>
+                        <p style="margin-top: 0.5rem; color: #666; font-size: 0.9rem;">
+                            ↑ クリックして動画を視聴
+                        </p>
+                    </div>
+                    
+                    <ol>
+                        <li><a href="https://github.com/gohanda11/zmk-config-soa44" target="_blank">ZMKリポジトリ</a>をフォークする</li>
+                        <li>KeymapEditorでキーマップを変更し保存する</li>
+                        <li>ビルドが完了したらファームウェアをダウンロード</li>
+                        <li>左のXiaoにUSB接続、リセットボタンを2回素早く押してブートローダーモードに入る</li>
+                        <li>settings_reset-seeeduino_xiao_ble-zmk.uf2を書き込み</li>
+                        <li>右にも同様にsettings_reset-seeeduino_xiao_ble-zmk.uf2を書き込み</li>
+                        <li>左にsoa44_L rgbled_adapter-seeeduino_xiao_ble-zmk.uf2を書き込み</li>
+                        <li>右にsoa44_R rgbled_adapter-seeeduino_xiao_ble-zmk.uf2を書き込み</li>
+                    </ol>
+
+                    <div class="warning">
+                        左右のペアリング後は、settings_reset-seeeduino_xiao_ble-zmk.uf2の書き込みは不要です。
+                    </div>
+                </div>
+            </section>
+
+            <section class="step">
+                <h3>ステップ 7: センサー基板の接続</h3>
+                <div class="step-content">
+                    <div style="display: flex; flex-wrap: nowrap; justify-content: center; gap: 1rem; margin: 1.5rem 0;">
+                        <img src="image/soa44/step7-1.jpg" alt="センサー基板の接続 1" style="width: 300px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                        <img src="image/soa44/step7-2.jpg" alt="センサー基板の接続 2" style="width: 300px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                        <img src="image/soa44/step7-3.jpg" alt="センサー基板の接続 3" style="width: 300px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                    </div>
+                    <p>PMW3610センサー基板とメインPCBをFFCケーブルで接続します。</p>
+                    
+                    <div class="warning">
+                        FFCケーブルは繊細な部品です。<br>
+                        無理に力を加えると破損する可能性がありますので、慎重に作業してください。
+                    </div>
+                    
+                    <ol>
+                        <li>メインPCBのFFCコネクタのフラップを上に持ち上げる</li>
+                        <li>FFCケーブルをコネクタに挿入する（端子面を確認して正しい向きで）</li>
+                        <li>ケーブルが奥までしっかりと差し込まれていることを確認</li>
+                        <li>ケーブルが曲がっていないか、まっすぐ挿入されているかを確認</li>
+                        <li>フラップをしっかりと下げてケーブルを固定</li>
+                        <li>センサー基板側も同様にFFCケーブルを接続</li>
+                        <li>センサー基板側のFFCケーブルを写真のように90度に折り曲げる(ケーブルでセンサーが浮かないように)</li>
+                    </ol>
+                </div>
+            </section>
+
+            <section class="step">
+                <h3>ステップ 8: 動作テスト</h3>
+                <div class="step-content">
+                    <p>組み立てたキーボードの動作を確認します。</p>
+                    
+                    <ol>
+                        <li>単三電池を電池ホルダーに挿入</li>
+                        <li>左右のキーボードのスライドスイッチを奥側にして電源を入れる</li>
+                        <li>左右のResetスイッチを同時に一度押す(これで左右のペアリングが完了)</li>
+                        <li>パソコンとBluetooth接続</li>
+                        <li>ピンセットでソケットを導通させて、全てのキーが正常に入力できることを確認</li>
+                        <li>トラックボールが正常に動作することを確認</li>
+                    </ol>
+                    
+                    <div class="warning">
+                        動作しないキーがある場合は、はんだ付けを再確認してください。
+                    </div>
+                </div>
+            </section>
+
+            <section class="step">
+                <h3>ステップ 9: トラックボールケースの組み立て</h3>
+                <div class="step-content">
+                    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 1.5rem 0;">
+                        <img src="image/soa44/step9-1.jpg" alt="トラックボールケースの組み立て 1" style="width: 300px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                        <img src="image/soa44/step9-2.jpg" alt="トラックボールケースの組み立て 2" style="width: 300px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                    </div>
+                    <p>トラックボールケースを組み立てます。</p>
+
+                    <div class="warning">
+                        ネジを締め付けすぎるとねじ穴がゆるゆるになって固定できなくなってしまうので、泊るところまで締めたらそこでやめましょう。
+                    </div>
+                    
+                    <ol>
+                        <li>ベアリングをトラックボールケースに取り付け</li>
+                        <li>トラックボールをはめて正常に動作することを確認</li>
+                    </ol>
+                </div>
+            </section>
+
+            <section class="step">
+                <h3>ステップ 10: スイッチの取り付け</h3>
+                <div class="step-content">
+                    <div style="text-align: center; margin: 1.5rem 0;">
+                        <img src="image/soa44/step10.jpg" alt="スイッチの取り付け" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                    </div>
+                    <p>ファームウェアの書き込みと動作テストが完了したら、スイッチを取り付けます。</p>
+                    
+                    <div class="warning">
+                        スイッチを取り付ける前に、必ずファームウェアの動作確認を行ってください。
+                    </div>
+                    
+                    <ol>
+                        <li>Form_sheetをpcbに敷く</li>
+                        <li>Form_middleをpcbに敷く</li>
+                        <li>その上にスイッチプレートを載せてスイッチをはめる</li>
+                        <li>再度、全てのキーの動作をテスト</li>
+                    </ol>
+                </div>
+            </section>
+
+            <section class="step">
+                <h3>ステップ 11: ケースの組み立て</h3>
+                <div class="step-content">
+                    <div style="text-align: center; margin: 1.5rem 0;">
+                        <img src="image/soa44/step11.jpg" alt="ケースの組み立て" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                    </div>
+                    <p>最後にケースを組み立てて完成です。</p>
+                    
+                    <ol>
+                        <li>PCBにゴムブッシュを取り付け</li>
+                        <li>ゴムブッシュ内にネジを入れる</li>
+                        <li>Form_bottomをpcb裏側にはめる</li>
+                        <li>ネジでケースにPCBを固定</li>
+                        <li>ネジでケースを固定</li>
+                        <li>トラックボールが正常に回転することを最終確認</li>
+                    </ol>
+                </div>
+            </section>
+
+            <div style="text-align: center; margin: 3rem 0;">
+                <h2 style="color: #2c3e50; margin-bottom: 1rem;">完成！</h2>
+                <img src="image/soa44/soa44-last.JPG" alt="Soa44キーボード完成" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                <p style="margin-top: 1rem; color: #666; font-size: 1.1rem;">お疲れさまでした！</p>
+            </div>
+
+            <section class="step">
+                <h3>トラブルシューティング</h3>
+                <div class="step-content">
+                    <h4>よくある問題と解決法</h4>
+                    
+                    <div class="warning">
+                        <strong>キーが反応しない</strong><br>
+                        → スイッチの足が折れていないか。はんだ付けを忘れていないかを再確認。
+                    </div>
+                    
+                    <div class="warning">
+                        <strong>トラックボールが動かない</strong><br>
+                        → センサーのはんだ付けとトラックボールの配置を確認
+                    </div>
+                    
+                    <div class="warning">
+                        <strong>Bluetooth接続できない</strong><br>
+                        → ファームウェアの書き込みを再度実行。
+                    </div>
+
+                    <div class="warning">
+                        <strong>ペアリングが途切れる</strong><br>
+                        → 下記の動画を確認してください。
+                    </div>
+
+                    <div style="text-align: center; margin: 1.5rem 0;">
+                        <a href="https://www.youtube.com/watch?v=u2jcjx3hFhA" target="_blank">
+                            <img src="https://img.youtube.com/vi/u2jcjx3hFhA/maxresdefault.jpg" 
+                                 alt="ペアリング問題の解決方法動画" 
+                                 style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" />
+                        </a>
+                        <p style="margin-top: 0.5rem; color: #666; font-size: 0.9rem;">
+                            ↑ クリックして動画を視聴
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <div class="keyboard-links">
+            <a href="index.html" class="btn btn-secondary">一覧に戻る</a>
+            <a href="https://gohanda.booth.pm/items/7260867" class="btn btn-primary" target="_blank">Soa44を購入</a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 gohanda_kbd. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function openModal(img) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            
+            modal.style.display = 'flex';
+            modalImg.src = img.src;
+            modalImg.alt = img.alt;
+            
+            // Escapeキーでモーダルを閉じる
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeModal();
+                }
+            });
+        }
+        
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
