@@ -5,3 +5,7 @@
 ## サイトURL
 
 https://gohanda11.github.io/buildguide/
+
+## キーボード
+
+・Soa44
