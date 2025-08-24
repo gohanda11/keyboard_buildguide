@@ -19,6 +19,28 @@
         </div>
     </header>
 
+    <!-- PC用サイドバー目次 -->
+    <div class="sidebar-toc" id="sidebarToc">
+        <div class="sidebar-content">
+            <h3>目次</h3>
+            <ul class="sidebar-toc-list">
+                <li><a href="#step1">1. Chocスイッチの取り付け</a></li>
+                <li><a href="#step2">2. XIAOの取り付け</a></li>
+                <li><a href="#step3">3. 電池ホルダーの取り付け</a></li>
+                <li><a href="#step4">4. PMW3610センサーボードの接続</a></li>
+                <li><a href="#step5">5. トラックボールケースの取り付け</a></li>
+                <li><a href="#step6">6. ファームウェアの書き込み</a></li>
+                <li><a href="#step7">7. ゴムブッシュ・スイッチプレートの取り付け</a></li>
+                <li><a href="#step8">8. 動作確認</a></li>
+                <li><a href="#step9">9. トラックボールケースの組み立て</a></li>
+                <li><a href="#step10">10. ボトムプレートの取り付け</a></li>
+                <li><a href="#step11">11. ソケット・キーキャップの取り付け</a></li>
+                <li><a href="#complete">完成</a></li>
+                <li><a href="#troubleshooting">トラブルシューティング</a></li>
+            </ul>
+        </div>
+    </div>
+
     <main class="container">
         <div class="build-guide">
             <section class="keyboard-overview">
@@ -68,7 +90,28 @@
                 </div>
             </section>
 
-            <section class="step">
+            <section class="table-of-contents">
+                <h2>目次</h2>
+                <div class="toc-content">
+                    <ul class="toc-list">
+                        <li><a href="#step1">ステップ 1: 必要な部品の確認</a></li>
+                        <li><a href="#step2">ステップ 2: Chocソケットのはんだ付け</a></li>
+                        <li><a href="#step3">ステップ 3: XIAO nRF52840 Plusの取り付け</a></li>
+                        <li><a href="#step4">ステップ 4: 電池ホルダーの取り付け</a></li>
+                        <li><a href="#step5">ステップ 5: PMW3610センサー（トラックボール）の取り付け</a></li>
+                        <li><a href="#step6">ステップ 6: ファームウェアの書き込み</a></li>
+                        <li><a href="#step7">ステップ 7: センサー基板の接続</a></li>
+                        <li><a href="#step8">ステップ 8: 動作テスト</a></li>
+                        <li><a href="#step9">ステップ 9: トラックボールケースの組み立て</a></li>
+                        <li><a href="#step10">ステップ 10: スイッチの取り付け</a></li>
+                        <li><a href="#step11">ステップ 11: ケースの組み立て</a></li>
+                        <li><a href="#complete">完成！</a></li>
+                        <li><a href="#troubleshooting">トラブルシューティング</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="step" id="step1">
                 <h3>ステップ 1: 必要な部品の確認</h3>
                 <div class="step-content">
                     <div class="parts-list">
@@ -109,7 +152,7 @@
                 </div>
             </section>
 
-            <section class="step">
+            <section class="step" id="step2">
                 <h3>ステップ 2: Chocソケットのはんだ付け</h3>
                 <div class="step-content">
                     <div style="text-align: center; margin: 1.5rem 0;">
@@ -130,7 +173,7 @@
                 </div>
             </section>
 
-            <section class="step">
+            <section class="step" id="step3">
                 <h3>ステップ 3: XIAO nRF52840 Plusの取り付け</h3>
                 <div class="step-content">
                     <div style="display: flex; flex-wrap: nowrap; justify-content: center; gap: 1rem; margin: 1.5rem 0;">
@@ -155,7 +198,7 @@
                 </div>
             </section>
 
-            <section class="step">
+            <section class="step" id="step4">
                 <h3>ステップ 4: 電池ホルダーの取り付け</h3>
                 <div class="step-content">
                     <div style="display: flex; flex-wrap: nowrap; justify-content: center; gap: 1rem; margin: 1.5rem 0;">
@@ -178,7 +221,7 @@
                 </div>
             </section>
 
-            <section class="step">
+            <section class="step" id="step5">
                 <h3>ステップ 5: PMW3610センサー（トラックボール）の取り付け</h3>
                 <div class="step-content">
                     <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 1.5rem 0;">
@@ -202,7 +245,7 @@
                 </div>
             </section>
 
-            <section class="step">
+            <section class="step" id="step6">
                 <h3>ステップ 6: ファームウェアの書き込み</h3>
                 <div class="step-content">
                     <p>ZMKファームウェアをXIAO nRF52840 Plusに書き込みます。</p>
@@ -240,7 +283,7 @@
                 </div>
             </section>
 
-            <section class="step">
+            <section class="step" id="step7">
                 <h3>ステップ 7: センサー基板の接続</h3>
                 <div class="step-content">
                     <div style="display: flex; flex-wrap: nowrap; justify-content: center; gap: 1rem; margin: 1.5rem 0;">
@@ -267,7 +310,7 @@
                 </div>
             </section>
 
-            <section class="step">
+            <section class="step" id="step8">
                 <h3>ステップ 8: 動作テスト</h3>
                 <div class="step-content">
                     <p>組み立てたキーボードの動作を確認します。</p>
@@ -287,7 +330,7 @@
                 </div>
             </section>
 
-            <section class="step">
+            <section class="step" id="step9">
                 <h3>ステップ 9: トラックボールケースの組み立て</h3>
                 <div class="step-content">
                     <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 1.5rem 0;">
@@ -307,7 +350,7 @@
                 </div>
             </section>
 
-            <section class="step">
+            <section class="step" id="step10">
                 <h3>ステップ 10: スイッチの取り付け</h3>
                 <div class="step-content">
                     <div style="text-align: center; margin: 1.5rem 0;">
@@ -328,7 +371,7 @@
                 </div>
             </section>
 
-            <section class="step">
+            <section class="step" id="step11">
                 <h3>ステップ 11: ケースの組み立て</h3>
                 <div class="step-content">
                     <div style="text-align: center; margin: 1.5rem 0;">
@@ -347,13 +390,13 @@
                 </div>
             </section>
 
-            <div style="text-align: center; margin: 3rem 0;">
+            <div id="complete" style="text-align: center; margin: 3rem 0;">
                 <h2 style="color: #2c3e50; margin-bottom: 1rem;">完成！</h2>
                 <img src="image/soa44/soa44-last.JPG" alt="Soa44キーボード完成" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
                 <p style="margin-top: 1rem; color: #666; font-size: 1.1rem;">お疲れさまでした！</p>
             </div>
 
-            <section class="step">
+            <section class="step" id="troubleshooting">
                 <h3>トラブルシューティング</h3>
                 <div class="step-content">
                     <h4>よくある問題と解決法</h4>
