@@ -36,6 +36,9 @@
                 <li><a href="#step10">10. ボトムプレートの取り付け</a></li>
                 <li><a href="#step11">11. ソケット・キーキャップの取り付け</a></li>
                 <li><a href="#complete">完成</a></li>
+                <li><a href="#led-indicators">LEDインジケータ</a></li>
+                <li><a href="#mouse-operation">マウス操作</a></li>
+                <li><a href="#customization">おすすめカスタマイズ</a></li>
                 <li><a href="#troubleshooting">トラブルシューティング</a></li>
             </ul>
         </div>
@@ -111,6 +114,9 @@
                         <li><a href="#step10">ステップ 10: スイッチの取り付け</a></li>
                         <li><a href="#step11">ステップ 11: ケースの組み立て</a></li>
                         <li><a href="#complete">完成！</a></li>
+                        <li><a href="#led-indicators">LEDインジケータの説明</a></li>
+                        <li><a href="#mouse-operation">マウス操作について</a></li>
+                        <li><a href="#customization">おすすめカスタマイズ</a></li>
                         <li><a href="#troubleshooting">トラブルシューティング</a></li>
                     </ul>
                 </div>
@@ -313,7 +319,7 @@
                         <li>フラップをしっかりと下げてケーブルを固定</li>
                         <li>センサー基板側も同様にFFCケーブルを接続</li>
                         <li>センサー基板側のFFCケーブルを写真のように90度に折り曲げる(ケーブルでセンサーが浮かないように)</li>
-                    </ol>ｘｃ
+                    </ol>
                 </div>
             </section>
 
@@ -413,6 +419,170 @@
                 <img src="image/soa44/soa44-last.JPG" alt="Soa44キーボード完成" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
                 <p style="margin-top: 1rem; color: #666; font-size: 1.1rem;">お疲れさまでした！</p>
             </div>
+
+            <section class="step" id="led-indicators">
+                <h3>LEDインジケータの説明</h3>
+                <div class="step-content">
+                    <p>Soa44にはRGB LEDが搭載されており、キーボードの状態を色で表示します。</p>
+                    
+                    <h4 style="color: #667eea; margin: 1.5rem 0 1rem 0;">電源投入時のステータス表示</h4>
+                    <p>電源投入時に2回LEDが光ります。1回目がバッテリー残量、2回目がBluetooth接続状態です。</p>
+                    
+                    <div style="margin: 1rem 0;">
+                        <h5 style="margin: 1rem 0 0.5rem 0;">バッテリー残量</h5>
+                        <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                            <li><span style="background: green; color: white; padding: 2px 8px; border-radius: 4px; margin-right: 8px;">緑</span>残量多い</li>
+                            <li><span style="background: #ffd700; color: black; padding: 2px 8px; border-radius: 4px; margin-right: 8px;">黄</span>残量中程度</li>
+                            <li><span style="background: red; color: white; padding: 2px 8px; border-radius: 4px; margin-right: 8px;">赤</span>残量少ない</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="margin: 1rem 0;">
+                        <h5 style="margin: 1rem 0 0.5rem 0;">Bluetooth接続状態</h5>
+                        <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                            <li><span style="background: blue; color: white; padding: 2px 8px; border-radius: 4px; margin-right: 8px;">青</span>接続済み</li>
+                            <li><span style="background: #ffd700; color: black; padding: 2px 8px; border-radius: 4px; margin-right: 8px;">黄</span>ペアリング待機中</li>
+                            <li><span style="background: red; color: white; padding: 2px 8px; border-radius: 4px; margin-right: 8px;">赤</span>切断状態</li>
+                        </ul>
+                    </div>
+                    
+                    <h4 style="color: #667eea; margin: 1.5rem 0 1rem 0;">レイヤー表示</h4>
+                    <p>各レイヤーには固有の色が設定されており、レイヤーが有効な間その色が表示されます。</p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1rem 0;">
+                        <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                            <strong>レイヤー 0 (Default)</strong><br>
+                            <span style="background: black; color: white; padding: 2px 8px; border-radius: 4px;">黒</span>
+                        </div>
+                        <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                            <strong>レイヤー 1 (Mouse)</strong><br>
+                            <span style="background: red; color: white; padding: 2px 8px; border-radius: 4px;">赤</span>
+                        </div>
+                        <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                            <strong>レイヤー 2 (Function)</strong><br>
+                            <span style="background: green; color: white; padding: 2px 8px; border-radius: 4px;">緑</span>
+                        </div>
+                        <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                            <strong>レイヤー 3 (Number)</strong><br>
+                            <span style="background: #ffd700; color: black; padding: 2px 8px; border-radius: 4px;">黄</span>
+                        </div>
+                        <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                            <strong>レイヤー 4 (Arrow)</strong><br>
+                            <span style="background: blue; color: white; padding: 2px 8px; border-radius: 4px;">青</span>
+                        </div>
+                        <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                            <strong>レイヤー 5 (Scroll)</strong><br>
+                            <span style="background: magenta; color: white; padding: 2px 8px; border-radius: 4px;">マゼンタ</span>
+                        </div>
+                        <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                            <strong>レイヤー 6 (Bluetooth)</strong><br>
+                            <span style="background: cyan; color: black; padding: 2px 8px; border-radius: 4px;">シアン</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="step" id="mouse-operation">
+                <h3>マウス操作について</h3>
+                <div class="step-content">
+                    <p>Soa44の右手側に搭載されたトラックボールによるマウス操作について説明します。</p>
+                    
+                    <div style="margin: 1rem 0;">
+                        <h4 style="color: #667eea; margin: 1.5rem 0 1rem 0; font-size: 1.1rem;">Auto Mouse Layer</h4>
+                        <p>トラックボールを操作すると、自動的にレイヤー1（Mouse）に移動し、LEDが赤色に点灯します。</p>
+                    </div>
+                    
+                    <div style="margin: 1rem 0;">
+                        <h4 style="color: #667eea; margin: 1.5rem 0 1rem 0; font-size: 1.1rem;">マウスボタン</h4>
+                        <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                            <li><strong>Mouse Button 1</strong>：左クリック</li>
+                            <li><strong>Mouse Button 2</strong>：右クリック</li>
+                            <li><strong>Mouse Button 3</strong>：ミドルクリック（中クリック）</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="margin: 1rem 0;">
+                        <h4 style="color: #667eea; margin: 1.5rem 0 1rem 0; font-size: 1.1rem;">スクロール操作</h4>
+                        <p>レイヤー5（Scroll）に移動すると、トラックボールの操作がカーソル移動からスクロール操作に変わります。LEDがマゼンタ色に点灯している間は、トラックボールでページのスクロールができます。</p>
+                    </div>
+                    
+                    <div class="warning">
+                        トラックボールが正常に動作しない場合は、センサー基板の接続とはんだ付けを確認してください。
+                    </div>
+                </div>
+            </section>
+
+            <section class="step" id="customization">
+                <h3>おすすめカスタマイズ</h3>
+                <div class="step-content">
+                    <p>Soa44をより便利に使うためのカスタマイズ方法をご紹介します。</p>
+                    
+                <div style="background: #f0f7ff; border: 1px solid #b3d9ff; border-radius: 8px; padding: 1.5rem; margin: 1rem 0;">
+                    <h4 style="color: #667eea; margin: 0 0 1rem 0;">🔋 左右バッテリー残量の確認</h4>
+                    <p>通常、分割キーボードでは主側（左手側）のバッテリー残量しか確認できませんが、以下のツールを使用することで左右両方のバッテリー残量を確認できるようになります。</p>
+                    
+                    <div style="background: #f8f9fa; border-left: 4px solid #667eea; padding: 1rem; margin: 1rem 0; border-radius: 0 8px 8px 0;">
+                        <h5 style="margin: 0 0 0.5rem 0; color: #667eea;">ZMK Battery Center</h5>
+                        <p style="margin: 0.5rem 0;">左右両方のキーボードのバッテリー残量をWindowsのシステムトレイで確認できるツールです。</p>
+                        <p style="margin: 0.5rem 0;"><strong>ダウンロード：</strong></p>
+                        <a href="https://github.com/kot149/zmk-battery-center/releases" target="_blank" style="display: inline-block; background: #667eea; color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 6px; margin: 0.5rem 0;">
+                            zmk-battery-center ダウンロード
+                        </a>
+                        <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: #666;">
+                            ↑ GitHubのReleasesページから最新版をダウンロードしてください
+                        </p>
+                    </div>
+                    
+                    <div style="margin: 1rem 0;">
+                        <h5 style="margin: 1rem 0 0.5rem 0;">使用方法</h5>
+                        <ol style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                            <li>上記リンクから最新のリリース版をダウンロード</li>
+                            <li>ダウンロードしたファイルを実行してインストール</li>
+                            <li>Soa44を追加</li>
+                            <li>システムトレイに左右両方のバッテリー残量が表示される</li>
+                            <li>Centralが右でPeripheralが左になります</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <!-- セクション区切り -->
+                <div style="background: #f0fff0; border: 1px solid #c3e6c3; border-radius: 8px; padding: 1.5rem; margin: 2rem 0;">
+                    <h4 style="color: #28a745; margin: 0 0 1rem 0;">⚙️ CNCケースの発注</h4>
+                    <p>より高品質なアルミ削り出しケースをご希望の場合は、JLCCNCでCNCケースを発注することができます。</p>
+                    
+                    <div style="background: #f8f9fa; border-left: 4px solid #28a745; padding: 1rem; margin: 1rem 0; border-radius: 0 8px 8px 0;">
+                        <h5 style="margin: 0 0 0.5rem 0; color: #28a745;">CNCケース発注手順</h5>
+                        <ol style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                            <li><strong>ケースデータのダウンロード</strong><br>
+                                Boothの注文詳細からケースデータをダウンロード</li>
+                            <li><strong>JLCCNCへのアップロード</strong><br>
+                                ケースデータをJLCCNCにアップロード<br>
+                                <span style="color: #dc3545; font-weight: bold;">⚠️ ThreadsにPDFをアップロードするのを忘れずに！（自分でタップを立てなきゃいけなくなりますよ）</span></li>
+                            <li><strong>スライドスイッチの3Dプリント</strong><br>
+                                JLC3DP または お手持ちの3DプリンターでCNCケース用スライドスイッチを印刷</li>
+                        </ol>
+                    </div>
+                    
+                    <div style="background: #e7f3ff; border: 1px solid #b3d9ff; padding: 1rem; margin: 1rem 0; border-radius: 8px;">
+                        <h5 style="margin: 0 0 0.5rem 0; color: #0066cc;">💰 料金目安</h5>
+                        <p style="margin: 0.5rem 0;"><strong>CNCケース（左右セット）：約100ドル</strong></p>
+                        <p style="margin: 0.5rem 0; font-size: 0.9rem; color: #666;">
+                            その他のパーツ（PCB、スイッチ、トラックボールなど）はそのまま使用できます
+                        </p>
+                    </div>
+                    
+                    <div style="margin: 1rem 0;">
+                        <h5 style="margin: 1rem 0 0.5rem 0;">メリット</h5>
+                        <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                            <li>高品質なアルミ削り出しで耐久性が向上</li>
+                            <li>より精密な仕上がりで見た目が美しい</li>
+                            <li>重量感があり、タイピング時の安定性が向上</li>
+                            <li>長期使用での変形や劣化がほとんどない</li>
+                            <li>打鍵音がよくなる気がする</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
 
             <section class="step" id="troubleshooting">
                 <h3>トラブルシューティング</h3>
