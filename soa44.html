@@ -81,8 +81,7 @@
                     <div class="warning">
                         <strong>⚠️ 難易度の高い部品について</strong><br>
                         XIAOとPMW3610センサーのはんだ付けはとても難しいです。<br>
-                        細かいピッチでの作業となるため、十分に注意して作業してください。<br>
-                        不安な場合は経験者に相談することをお勧めします。
+                        細かいピッチのはんだ付けとなるため、十分に注意して作業してください。
                     </div>
                     
                     <h4>作業前のチェックリスト</h4>
@@ -187,7 +186,7 @@
                         <img src="image/soa44/step3-2.jpg" alt="XIAO nRF52840 Plusの取り付け 2" style="width: 300px; flex-shrink: 0; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
                         <img src="image/soa44/step3-3.jpg" alt="XIAO nRF52840 Plusの取り付け 3" style="width: 300px; flex-shrink: 0; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
                     </div>
-                    <p>各PCBにXIAO nRF52840 Plusをはんだ付けします。</p>
+                    <p>左右のPCBにXIAO nRF52840 Plusをはんだ付けします。</p>
                     
                     <div class="warning">
                         XIAO nRF52840 Plusのはんだ付けはとても難しいです。<br>
@@ -212,10 +211,11 @@
                         <img src="image/soa44/step4-2.jpg" alt="電池ホルダーの取り付け 2" style="width: 300px; flex-shrink: 0; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
                         <img src="image/soa44/step4-3.jpg" alt="電池ホルダーの取り付け 3" style="width: 300px; flex-shrink: 0; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
                     </div>
-                    <p>各PCBに電池ホルダーをはんだ付けします。</p>
+                    <p>左右のPCBに電池ホルダーをはんだ付けします。</p>
 
                     <div class="warning">
-                        電池の極性を間違えないよう、電池ホルダーの+/-表示を確認してください。
+                        電池の極性を間違えないよう、電池ホルダーの+/-表示を確認してください。<br>
+                        -側(ばねのある方)が手前になります。
                     </div>
                     
                     <ol>
@@ -245,7 +245,7 @@
                     <ol>
                         <li>センサー基板をセンサー基板に配置(向きは写真を確認)</li>
                         <li>浮きがないようにマスキングテープで仮固定</li>
-                        <li>センサー基板の各端子をはんだ付け</li>
+                        <li>センサーの各端子をはんだ付け</li>
                         <li>センサーの保護シールをはがす</li>
                     </ol>
                 </div>
@@ -274,7 +274,7 @@
                     
                     <ol>
                         <li><a href="https://github.com/gohanda11/zmk-config-soa44" target="_blank">ZMKリポジトリ</a>をフォークする</li>
-                        <li>KeymapEditorでキーマップを変更し保存する</li>
+                        <li><a href="https://nickcoutsos.github.io/keymap-editor/" target="_blank">KeymapEditor</a>でキーマップを変更し保存する</li>
                         <li>ビルドが完了したらファームウェアをダウンロード</li>
                         <li>左のXiaoにUSB接続、リセットボタンを2回素早く押してブートローダーモードに入る</li>
                         <li>settings_reset-seeeduino_xiao_ble-zmk.uf2を書き込み</li>
@@ -300,34 +300,39 @@
                     <p>PMW3610センサー基板とメインPCBをFFCケーブルで接続します。</p>
                     
                     <div class="warning">
-                        FFCケーブルは繊細な部品です。<br>
-                        無理に力を加えると破損する可能性がありますので、慎重に作業してください。
+                        FFCコネクタは繊細な部品です。<br>
+                        無理に力を加えると破損する可能性がありますので、慎重に作業してください。<br>
+                        コネクタに対して垂直にケーブルを挿入するようにしてください。
                     </div>
                     
                     <ol>
-                        <li>メインPCBのFFCコネクタのフラップを上に持ち上げる</li>
+                        <li>メインPCBのFFCコネクタのフラップを上に持ち上げる(黒い部分がフラップです。)</li>
                         <li>FFCケーブルをコネクタに挿入する（端子面を確認して正しい向きで）</li>
                         <li>ケーブルが奥までしっかりと差し込まれていることを確認</li>
                         <li>ケーブルが曲がっていないか、まっすぐ挿入されているかを確認</li>
                         <li>フラップをしっかりと下げてケーブルを固定</li>
                         <li>センサー基板側も同様にFFCケーブルを接続</li>
                         <li>センサー基板側のFFCケーブルを写真のように90度に折り曲げる(ケーブルでセンサーが浮かないように)</li>
-                    </ol>
+                    </ol>ｘｃ
                 </div>
             </section>
 
             <section class="step" id="step8">
                 <h3>ステップ 8: 動作テスト</h3>
                 <div class="step-content">
+                    <div class="image-gallery-scroll" style="display: flex; flex-wrap: nowrap; justify-content: flex-start; gap: 1rem; margin: 1.5rem 0;">
+                        <img src="image/soa44/step8-1.jpg" alt="スイッチの取り付け" style="width: 300px; flex-shrink: 0; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                        <img src="image/soa44/step8-2.jpg" alt="スイッチの取り付け" style="width: 700px; flex-shrink: 0; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                    </div>
                     <p>組み立てたキーボードの動作を確認します。</p>
                     
                     <ol>
-                        <li>単三電池を電池ホルダーに挿入</li>
+                        <li>単三電池を電池ホルダーに入れる</li>
                         <li>左右のキーボードのスライドスイッチを奥側にして電源を入れる</li>
                         <li>左右のResetスイッチを同時に一度押す(これで左右のペアリングが完了)</li>
                         <li>パソコンとBluetooth接続</li>
                         <li>ピンセットでソケットを導通させて、全てのキーが正常に入力できることを確認</li>
-                        <li>トラックボールが正常に動作することを確認</li>
+                        <li>センサーが正常に動作することを確認</li>
                     </ol>
                     
                     <div class="warning">
@@ -380,19 +385,26 @@
             <section class="step" id="step11">
                 <h3>ステップ 11: ケースの組み立て</h3>
                 <div class="step-content">
-                    <div style="text-align: center; margin: 1.5rem 0;">
-                        <img src="image/soa44/step11.jpg" alt="ケースの組み立て" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                    <div class="image-gallery-scroll" style="display: flex; flex-wrap: nowrap; justify-content: flex-start; gap: 1rem; margin: 1.5rem 0;">
+                        <img src="image/soa44/step11-1.jpg" alt="ケースの組み立て 1" style="width: 300px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                        <img src="image/soa44/step11-2.jpg" alt="ケースの組み立て 2" style="width: 300px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                        <img src="image/soa44/step11-3.jpg" alt="ケースの組み立て 2" style="width: 500px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
                     </div>
                     <p>最後にケースを組み立てて完成です。</p>
                     
                     <ol>
-                        <li>PCBにゴムブッシュを取り付け</li>
+                        <li>PCBにゴムブッシュを取り付け(長いほうが下になるように)</li>
                         <li>ゴムブッシュ内にネジを入れる</li>
                         <li>Form_bottomをpcb裏側にはめる</li>
                         <li>ネジでケースにPCBを固定</li>
-                        <li>ネジでケースを固定</li>
-                        <li>トラックボールが正常に回転することを最終確認</li>
+                        <li>ネジでトラックボールケースを固定</li>
+                        <li>キーキャップをはめる</li>
                     </ol>
+
+                    <div class="warning">
+                        センサー基板の下側がケースに接しているぐらいがちょうどいいです。<br>
+                        FFCケーブルが90°に折り曲げられていることを確認してください。
+                    </div>
                 </div>
             </section>
 
