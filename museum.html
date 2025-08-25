@@ -158,7 +158,7 @@
         </div>
 
         <div style="text-align: center; margin: 2rem 0;">
-            <a href="https://github.com/gohanda11/buildguide/discussions/new?category=keyboard-showcase" target="_blank" 
+            <a href="https://github.com/gohanda11/keyboard_buildguide/discussions/new?category=show-and-tell" target="_blank" 
                style="display: inline-block; background: #28a745; color: white; padding: 1rem 2rem; text-decoration: none; border-radius: 8px; font-weight: bold; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
                 📸 あなたのキーボードを投稿する
             </a>
@@ -204,7 +204,7 @@
     <script>
         // GitHub Discussions API設定
         const REPO_OWNER = 'gohanda11';
-        const REPO_NAME = 'buildguide';
+        const REPO_NAME = 'keyboard_buildguide';
         let currentPage = 1;
         let allPosts = [];
         let filteredPosts = [];
@@ -276,7 +276,7 @@
                 return data.data.repository.discussions.edges
                     .map(edge => edge.node)
                     .filter(discussion => 
-                        discussion.category.name === 'keyboard-showcase' ||
+                        discussion.category.name === 'Show and tell' ||
                         discussion.title.toLowerCase().includes('keyboard') ||
                         discussion.title.toLowerCase().includes('soa44')
                     );

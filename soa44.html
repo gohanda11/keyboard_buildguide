@@ -780,23 +780,23 @@
             body += `\n### 📷 写真\n`;
             body += `[ここに写真をドラッグ&ドロップでアップロードしてください]\n`;
             body += `\n---\n`;
-            body += `*このビルドガイドで組み立てました: https://gohanda11.github.io/buildguide/soa44.html*`;
+            body += `*このビルドガイドで組み立てました: https://gohanda11.github.io/keyboard_buildguide/soa44.html*`;
 
             // URLパラメータを作成
             const params = new URLSearchParams({
-                category: 'keyboard-showcase',
+                category: 'show-and-tell',
                 title: title,
                 body: body
             });
 
             // GitHub Discussionsページを開く
-            const url = `https://github.com/gohanda11/buildguide/discussions/new?${params.toString()}`;
+            const url = `https://github.com/gohanda11/keyboard_buildguide/discussions/new?${params.toString()}`;
             window.open(url, '_blank');
         }
 
         // GitHub Discussions API設定
         const REPO_OWNER = 'gohanda11';
-        const REPO_NAME = 'buildguide';
+        const REPO_NAME = 'keyboard_buildguide';
 
         // ページ読み込み時にSoa44ギャラリーを表示
         document.addEventListener('DOMContentLoaded', function() {
@@ -859,7 +859,7 @@
                 return data.data.repository.discussions.edges
                     .map(edge => edge.node)
                     .filter(discussion => 
-                        (discussion.category.name === 'keyboard-showcase' ||
+                        (discussion.category.name === 'Show and tell' ||
                          discussion.title.toLowerCase().includes('keyboard')) &&
                         (discussion.title.toLowerCase().includes('soa44') ||
                          discussion.body.toLowerCase().includes('soa44'))
