@@ -14,8 +14,19 @@
     </div>
     <header>
         <div class="container">
-            <h1>Soa44 ビルドガイド</h1>
-            <p>44キー分割型キーボード with 25mmトラックボール</p>
+            <nav>
+                <div class="logo">
+                    <h1>gohanda_kbd</h1>
+                </div>
+                <div class="nav-links">
+                    <a href="index.html">ホーム</a>
+                    <a href="museum.html">博物館</a>
+                </div>
+            </nav>
+            <div class="hero">
+                <h2>Soa44 ビルドガイド</h2>
+                <p>44キー分割型キーボード with 25mmトラックボール</p>
+            </div>
         </div>
     </header>
 
@@ -39,6 +50,7 @@
                 <li><a href="#led-indicators">LEDインジケータ</a></li>
                 <li><a href="#mouse-operation">マウス操作</a></li>
                 <li><a href="#customization">おすすめカスタマイズ</a></li>
+                <li><a href="#share-your-build">作品投稿</a></li>
                 <li><a href="#troubleshooting">トラブルシューティング</a></li>
             </ul>
         </div>
@@ -117,6 +129,7 @@
                         <li><a href="#led-indicators">LEDインジケータの説明</a></li>
                         <li><a href="#mouse-operation">マウス操作について</a></li>
                         <li><a href="#customization">おすすめカスタマイズ</a></li>
+                        <li><a href="#share-your-build">あなたのSoa44を投稿</a></li>
                         <li><a href="#troubleshooting">トラブルシューティング</a></li>
                     </ul>
                 </div>
@@ -623,6 +636,93 @@
 
         </div>
 
+        <section class="step" id="share-your-build">
+            <h3>📸 あなたのSoa44を投稿しませんか？</h3>
+            <div class="step-content">
+                <p>完成したSoa44の写真と詳細を共有して、他のビルダーの参考にしませんか？</p>
+                
+                <div style="background: #f0f8ff; border: 1px solid #b3d9ff; border-radius: 8px; padding: 1.5rem; margin: 1rem 0;">
+                    <h4 style="color: #0066cc; margin: 0 0 1rem 0;">🖼️ 投稿フォーム</h4>
+                    
+                    <form id="keyboard-submission-form" style="display: grid; gap: 1rem;">
+                        <div>
+                            <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">📷 写真をアップロード:</label>
+                            <input type="file" id="photos" multiple accept="image/*" 
+                                   style="width: 100%; padding: 0.5rem; border: 2px dashed #b3d9ff; border-radius: 4px; background: white;">
+                            <small style="color: #666; display: block; margin-top: 0.5rem;">
+                                複数枚の写真を選択可能（完成写真、角度違い、使用風景など）
+                            </small>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div>
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">⌨️ キーボード:</label>
+                                <select id="keyboard-select" required 
+                                        style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                                    <option value="Soa44">Soa44</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">🔘 Switch:</label>
+                                <input type="text" id="switches" placeholder="例: Cherry MX Red, Gateron Yellow" 
+                                       style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">🎯 Keycap:</label>
+                            <input type="text" id="keycaps" placeholder="例: XDA Profile, PBT Double Shot" 
+                                   style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                        </div>
+                        
+                        <div>
+                            <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">💬 コメント（こだわり・感想）:</label>
+                            <textarea id="comments" rows="4" placeholder="組み立て時の工夫、使用感、こだわりポイントなど自由にお書きください"
+                                      style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; resize: vertical; font-family: inherit;"></textarea>
+                        </div>
+                    </form>
+                    
+                    <div style="text-align: center; margin-top: 1.5rem;">
+                        <button onclick="prepareGitHubPost()" 
+                                style="background: #28a745; color: white; border: none; padding: 0.8rem 2rem; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: bold;">
+                            📝 GitHub Discussionsで投稿する
+                        </button>
+                    </div>
+                    
+                    <div style="margin: 1rem 0; padding: 1rem; background: #f8f9fa; border-radius: 6px; font-size: 0.9rem; color: #666;">
+                        <strong>投稿方法：</strong><br>
+                        • 上記フォームに情報を入力後、「GitHub Discussionsで投稿する」ボタンをクリック<br>
+                        • GitHubのDiscussionsページが開くので、写真をドラッグ&ドロップでアップロード<br>
+                        • 自動生成されたテンプレートを確認し、投稿してください<br>
+                        • GitHubアカウントが必要です（無料で作成可能）
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin: 2rem 0;">
+                    <h4 style="color: #667eea; margin-bottom: 1rem;">🎨 最新のSoa44作品</h4>
+                    <div id="soa44-gallery" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
+                        <div class="loading-message" style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: #666;">
+                            <div style="display: inline-block; width: 30px; height: 30px; border: 3px solid #f3f3f3; border-top: 3px solid #667eea; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 1rem;"></div>
+                            <p>最新の作品を読み込み中...</p>
+                        </div>
+                    </div>
+                    
+                    <div id="no-soa44-posts" style="display: none; text-align: center; padding: 2rem; color: #666; background: #f8f9fa; border-radius: 8px; margin: 1rem 0;">
+                        <p style="font-size: 1.1rem; margin-bottom: 0.5rem;">📷 まだSoa44の投稿がありません</p>
+                        <p>最初の投稿者になりませんか？</p>
+                    </div>
+                    
+                    <div style="margin-top: 1.5rem;">
+                        <a href="museum.html" 
+                           style="display: inline-block; background: #667eea; color: white; padding: 0.8rem 1.5rem; text-decoration: none; border-radius: 8px; font-weight: bold;">
+                            🏛️ キーボード博物館で他の作品も見る
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <div class="keyboard-links">
             <a href="index.html" class="btn btn-secondary">一覧に戻る</a>
             <a href="https://gohanda.booth.pm/items/7260867" class="btn btn-primary" target="_blank">Soa44を購入</a>
@@ -655,6 +755,219 @@
         function closeModal() {
             const modal = document.getElementById('imageModal');
             modal.style.display = 'none';
+        }
+
+        // GitHub Discussions投稿用テンプレート生成
+        function prepareGitHubPost() {
+            const keyboard = document.getElementById('keyboard-select').value;
+            const switches = document.getElementById('switches').value;
+            const keycaps = document.getElementById('keycaps').value;
+            const comments = document.getElementById('comments').value;
+
+            // タイトルとボディを生成
+            const title = `${keyboard} 作品投稿 - ${new Date().toLocaleDateString('ja-JP')}`;
+            
+            let body = `## 📸 ${keyboard} 作品投稿\n\n`;
+            body += `**⌨️ キーボード:** ${keyboard}\n`;
+            if (switches) body += `**🔘 Switch:** ${switches}\n`;
+            if (keycaps) body += `**🎯 Keycap:** ${keycaps}\n`;
+            body += `\n### 💬 コメント・こだわりポイント\n`;
+            if (comments) {
+                body += `${comments}\n`;
+            } else {
+                body += `[ここにコメントを入力してください]\n`;
+            }
+            body += `\n### 📷 写真\n`;
+            body += `[ここに写真をドラッグ&ドロップでアップロードしてください]\n`;
+            body += `\n---\n`;
+            body += `*このビルドガイドで組み立てました: https://gohanda11.github.io/buildguide/soa44.html*`;
+
+            // URLパラメータを作成
+            const params = new URLSearchParams({
+                category: 'keyboard-showcase',
+                title: title,
+                body: body
+            });
+
+            // GitHub Discussionsページを開く
+            const url = `https://github.com/gohanda11/buildguide/discussions/new?${params.toString()}`;
+            window.open(url, '_blank');
+        }
+
+        // GitHub Discussions API設定
+        const REPO_OWNER = 'gohanda11';
+        const REPO_NAME = 'buildguide';
+
+        // ページ読み込み時にSoa44ギャラリーを表示
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSoa44Gallery();
+        });
+
+        // GitHub Discussions APIからSoa44投稿を取得
+        async function fetchSoa44Posts() {
+            try {
+                const query = `
+                    query($owner: String!, $name: String!, $first: Int!) {
+                        repository(owner: $owner, name: $name) {
+                            discussions(first: $first, orderBy: {field: CREATED_AT, direction: DESC}) {
+                                edges {
+                                    node {
+                                        id
+                                        title
+                                        body
+                                        createdAt
+                                        author {
+                                            login
+                                            avatarUrl
+                                        }
+                                        category {
+                                            name
+                                        }
+                                        labels(first: 10) {
+                                            nodes {
+                                                name
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+
+                const response = await fetch('https://api.github.com/graphql', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        query,
+                        variables: {
+                            owner: REPO_OWNER,
+                            name: REPO_NAME,
+                            first: 10
+                        }
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.errors) {
+                    throw new Error(data.errors[0].message);
+                }
+
+                return data.data.repository.discussions.edges
+                    .map(edge => edge.node)
+                    .filter(discussion => 
+                        (discussion.category.name === 'keyboard-showcase' ||
+                         discussion.title.toLowerCase().includes('keyboard')) &&
+                        (discussion.title.toLowerCase().includes('soa44') ||
+                         discussion.body.toLowerCase().includes('soa44'))
+                    )
+                    .slice(0, 6); // 最大6件表示
+            } catch (error) {
+                console.error('Error fetching Soa44 posts:', error);
+                return [];
+            }
+        }
+
+        // Soa44ギャラリーを読み込み
+        async function loadSoa44Gallery() {
+            const gallery = document.getElementById('soa44-gallery');
+            const noPostsMessage = document.getElementById('no-soa44-posts');
+
+            try {
+                const posts = await fetchSoa44Posts();
+                
+                if (posts.length === 0) {
+                    gallery.innerHTML = '';
+                    noPostsMessage.style.display = 'block';
+                    return;
+                }
+
+                gallery.innerHTML = '';
+                noPostsMessage.style.display = 'none';
+
+                posts.forEach(post => {
+                    const postElement = createSoa44Card(post);
+                    gallery.appendChild(postElement);
+                });
+
+            } catch (error) {
+                console.error('Error loading Soa44 gallery:', error);
+                gallery.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: #dc3545;">ギャラリーの読み込みでエラーが発生しました。</div>';
+            }
+        }
+
+        // Soa44カードを作成
+        function createSoa44Card(post) {
+            const card = document.createElement('div');
+            card.className = 'keyboard-card';
+            card.style.cssText = `
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                overflow: hidden;
+                transition: transform 0.2s ease;
+            `;
+
+            // ホバーエフェクト
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-2px)';
+                card.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+                card.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
+            });
+
+            // 投稿本文から画像URLを抽出
+            const imageRegex = /!\[.*?\]\((https?:\/\/[^\s)]+)\)/g;
+            const images = [];
+            let match;
+            while ((match = imageRegex.exec(post.body)) !== null) {
+                images.push(match[1]);
+            }
+
+            // 投稿本文から詳細を抽出
+            const details = extractKeyboardDetails(post.body);
+
+            card.innerHTML = `
+                ${images.length > 0 ? 
+                    `<img src="${images[0]}" alt="${post.title}" style="width: 100%; height: 150px; object-fit: cover; cursor: pointer;" onclick="openModal(this)">` 
+                    : '<div style="height: 150px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem;">🎹</div>'
+                }
+                <div style="padding: 1rem;">
+                    <h4 style="margin: 0 0 0.5rem 0; font-size: 0.9rem; color: #2c3e50; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${post.title}">
+                        ${post.title}
+                    </h4>
+                    <div style="font-size: 0.8rem; color: #666; margin-bottom: 0.5rem;">
+                        <div>👤 ${post.author.login}</div>
+                        ${details.switches ? `<div>🔘 ${details.switches}</div>` : ''}
+                        ${details.keycaps ? `<div>🎯 ${details.keycaps}</div>` : ''}
+                    </div>
+                    <div style="font-size: 0.7rem; color: #999; text-align: center; border-top: 1px solid #eee; padding-top: 0.5rem;">
+                        📅 ${new Date(post.createdAt).toLocaleDateString('ja-JP')}
+                    </div>
+                </div>
+            `;
+
+            return card;
+        }
+
+        // 投稿本文からキーボード詳細を抽出
+        function extractKeyboardDetails(body) {
+            const details = {};
+            
+            // スイッチを抽出
+            const switchMatch = body.match(/(?:switch|switches|スイッチ)[:\*\s]*([^\n\r]+)/i);
+            if (switchMatch) details.switches = switchMatch[1].trim();
+            
+            // キーキャップを抽出
+            const keycapMatch = body.match(/(?:keycap|keycaps|キーキャップ)[:\*\s]*([^\n\r]+)/i);
+            if (keycapMatch) details.keycaps = keycapMatch[1].trim();
+            
+            return details;
         }
     </script>
 </body>
