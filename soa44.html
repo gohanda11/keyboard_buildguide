@@ -50,8 +50,8 @@
                 <li><a href="#led-indicators">LEDインジケータ</a></li>
                 <li><a href="#mouse-operation">マウス操作</a></li>
                 <li><a href="#customization">おすすめカスタマイズ</a></li>
-                <li><a href="#share-your-build">作品投稿</a></li>
                 <li><a href="#troubleshooting">トラブルシューティング</a></li>
+                <li><a href="#share-your-build">作品投稿</a></li>
             </ul>
         </div>
     </div>
@@ -647,11 +647,12 @@
                     <form id="keyboard-submission-form" style="display: grid; gap: 1rem;">
                         <div>
                             <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">📷 写真をアップロード:</label>
-                            <input type="file" id="photos" multiple accept="image/*" 
+                            <input type="file" id="photos" multiple accept="image/*" onchange="previewImages()"
                                    style="width: 100%; padding: 0.5rem; border: 2px dashed #b3d9ff; border-radius: 4px; background: white;">
                             <small style="color: #666; display: block; margin-top: 0.5rem;">
                                 複数枚の写真を選択可能（完成写真、角度違い、使用風景など）
                             </small>
+                            <div id="image-preview" style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem;"></div>
                         </div>
                         
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
@@ -688,6 +689,14 @@
                                 style="background: #28a745; color: white; border: none; padding: 0.8rem 2rem; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: bold;">
                             📝 GitHub Discussionsで投稿する
                         </button>
+                    </div>
+                    
+                    <div id="upload-instructions" style="display: none; margin: 1rem 0; padding: 1rem; background: #fff3cd; border: 1px solid #ffeeba; border-radius: 6px; font-size: 0.9rem; color: #856404;">
+                        <strong>📸 写真付きで投稿する手順：</strong><br>
+                        <span id="selected-photos-count">0</span>枚の写真が選択されています<br>
+                        1. 「GitHub Discussionsで投稿する」ボタンをクリック<br>
+                        2. GitHubページが開いたら、本文の「### 📷 写真」の下に写真をドラッグ&ドロップ<br>
+                        3. 全ての写真がアップロードされたら「Start discussion」をクリック
                     </div>
                     
                     <div style="margin: 1rem 0; padding: 1rem; background: #f8f9fa; border-radius: 6px; font-size: 0.9rem; color: #666;">
@@ -757,12 +766,78 @@
             modal.style.display = 'none';
         }
 
+        // 画像プレビュー機能
+        function previewImages() {
+            const fileInput = document.getElementById('photos');
+            const previewContainer = document.getElementById('image-preview');
+            const uploadInstructions = document.getElementById('upload-instructions');
+            const photoCount = document.getElementById('selected-photos-count');
+            
+            // プレビューをクリア
+            previewContainer.innerHTML = '';
+            
+            const files = fileInput.files;
+            photoCount.textContent = files.length;
+            
+            if (files.length > 0) {
+                uploadInstructions.style.display = 'block';
+                
+                Array.from(files).forEach((file, index) => {
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const imgContainer = document.createElement('div');
+                            imgContainer.style.cssText = `
+                                position: relative;
+                                width: 120px;
+                                height: 120px;
+                                border-radius: 8px;
+                                overflow: hidden;
+                                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                            `;
+                            
+                            const img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.alt = `プレビュー ${index + 1}`;
+                            img.style.cssText = `
+                                width: 100%;
+                                height: 100%;
+                                object-fit: cover;
+                            `;
+                            
+                            const overlay = document.createElement('div');
+                            overlay.style.cssText = `
+                                position: absolute;
+                                bottom: 0;
+                                left: 0;
+                                right: 0;
+                                background: rgba(0,0,0,0.7);
+                                color: white;
+                                font-size: 0.7rem;
+                                padding: 0.25rem;
+                                text-align: center;
+                            `;
+                            overlay.textContent = `写真 ${index + 1}`;
+                            
+                            imgContainer.appendChild(img);
+                            imgContainer.appendChild(overlay);
+                            previewContainer.appendChild(imgContainer);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            } else {
+                uploadInstructions.style.display = 'none';
+            }
+        }
+
         // GitHub Discussions投稿用テンプレート生成
         function prepareGitHubPost() {
             const keyboard = document.getElementById('keyboard-select').value;
             const switches = document.getElementById('switches').value;
             const keycaps = document.getElementById('keycaps').value;
             const comments = document.getElementById('comments').value;
+            const photos = document.getElementById('photos').files;
 
             // タイトルとボディを生成
             const title = `${keyboard} 作品投稿 - ${new Date().toLocaleDateString('ja-JP')}`;
@@ -778,7 +853,14 @@
                 body += `[ここにコメントを入力してください]\n`;
             }
             body += `\n### 📷 写真\n`;
-            body += `[ここに写真をドラッグ&ドロップでアップロードしてください]\n`;
+            if (photos.length > 0) {
+                body += `**📌 ${photos.length}枚の写真を下記にドラッグ&ドロップしてアップロードしてください：**\n\n`;
+                for (let i = 1; i <= photos.length; i++) {
+                    body += `${i}. [写真${i}をここにドラッグ&ドロップ]\n\n`;
+                }
+            } else {
+                body += `[写真をドラッグ&ドロップでアップロードしてください]\n`;
+            }
             body += `\n---\n`;
             body += `*このビルドガイドで組み立てました: https://gohanda11.github.io/keyboard_buildguide/soa44.html*`;
 
