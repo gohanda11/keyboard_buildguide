@@ -20,7 +20,6 @@
                 </div>
                 <div class="nav-links">
                     <a href="index.html">ホーム</a>
-                    <a href="museum.html">博物館</a>
                 </div>
             </nav>
             <div class="hero">
@@ -51,7 +50,6 @@
                 <li><a href="#mouse-operation">マウス操作</a></li>
                 <li><a href="#customization">おすすめカスタマイズ</a></li>
                 <li><a href="#troubleshooting">トラブルシューティング</a></li>
-                <li><a href="#share-your-build">作品投稿</a></li>
             </ul>
         </div>
     </div>
@@ -129,7 +127,6 @@
                         <li><a href="#led-indicators">LEDインジケータの説明</a></li>
                         <li><a href="#mouse-operation">マウス操作について</a></li>
                         <li><a href="#customization">おすすめカスタマイズ</a></li>
-                        <li><a href="#share-your-build">あなたのSoa44を投稿</a></li>
                         <li><a href="#troubleshooting">トラブルシューティング</a></li>
                     </ul>
                 </div>
@@ -636,94 +633,6 @@
 
         </div>
 
-        <section class="step" id="share-your-build">
-            <h3>📸 あなたのSoa44を投稿しませんか？</h3>
-            <div class="step-content">
-                <p>完成したSoa44の写真と詳細を共有して、他のビルダーの参考にしませんか？</p>
-                
-                <div style="background: #f0f8ff; border: 1px solid #b3d9ff; border-radius: 8px; padding: 1.5rem; margin: 1rem 0;">
-                    <h4 style="color: #0066cc; margin: 0 0 1rem 0;">🖼️ 投稿フォーム</h4>
-                    
-                    <div style="background: #e7f3ff; border: 1px solid #b3d9ff; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
-                        <h5 style="color: #0066cc; margin: 0 0 0.5rem 0;">📸 写真について</h5>
-                        <p style="margin: 0; font-size: 0.9rem;">
-                            GitHubで投稿する際に、直接写真をドラッグ&ドロップでアップロードできます。<br>
-                            事前にお手元のキーボード写真をご準備ください。
-                        </p>
-                    </div>
-                    
-                    <form id="keyboard-submission-form" style="display: grid; gap: 1rem;">
-                        
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                            <div>
-                                <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">⌨️ キーボード:</label>
-                                <select id="keyboard-select" required 
-                                        style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
-                                    <option value="Soa44">Soa44</option>
-                                </select>
-                            </div>
-                            
-                            <div>
-                                <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">🔘 Switch:</label>
-                                <input type="text" id="switches" placeholder="例: Cherry MX Red, Gateron Yellow" 
-                                       style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">🎯 Keycap:</label>
-                            <input type="text" id="keycaps" placeholder="例: XDA Profile, PBT Double Shot" 
-                                   style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
-                        </div>
-                        
-                        <div>
-                            <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">💬 コメント（こだわり・感想）:</label>
-                            <textarea id="comments" rows="4" placeholder="組み立て時の工夫、使用感、こだわりポイントなど自由にお書きください"
-                                      style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; resize: vertical; font-family: inherit;"></textarea>
-                        </div>
-                    </form>
-                    
-                    <div style="text-align: center; margin-top: 1.5rem;">
-                        <button onclick="prepareGitHubPost()" 
-                                style="background: #28a745; color: white; border: none; padding: 0.8rem 2rem; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: bold;">
-                            📝 GitHub Discussionsで投稿する
-                        </button>
-                    </div>
-                    
-                    <div style="margin: 1rem 0; padding: 1rem; background: #f8f9fa; border-radius: 6px; font-size: 0.9rem; color: #666;">
-                        <strong>📝 投稿手順：</strong><br>
-                        1. 上記フォームに情報を入力<br>
-                        2. 「GitHub Discussionsで投稿する」ボタンをクリック<br>
-                        3. GitHubページで写真をドラッグ&ドロップしてアップロード<br>
-                        4. 自動生成されたテンプレートを確認して「Start discussion」をクリック<br>
-                        <small style="color: #888;">※ GitHubアカウントが必要です（無料で作成可能）</small>
-                    </div>
-                </div>
-                
-                <div style="text-align: center; margin: 2rem 0;">
-                    <h4 style="color: #667eea; margin-bottom: 1rem;">🎨 最新のSoa44作品</h4>
-                    <div id="soa44-gallery" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
-                        <div class="loading-message" style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: #666;">
-                            <div style="display: inline-block; width: 30px; height: 30px; border: 3px solid #f3f3f3; border-top: 3px solid #667eea; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 1rem;"></div>
-                            <p>最新の作品を読み込み中...</p>
-                        </div>
-                    </div>
-                    
-                    <div id="no-soa44-posts" style="display: none; text-align: center; padding: 2rem; color: #666; background: #f8f9fa; border-radius: 8px; margin: 1rem 0;">
-                        <p style="font-size: 1.1rem; margin-bottom: 0.5rem;">📷 まだSoa44の投稿がありません</p>
-                        <p>最初の投稿者になりませんか？</p>
-                    </div>
-                    
-                    <div style="margin-top: 1.5rem;">
-                        <a href="museum.html" 
-                           style="display: inline-block; background: #667eea; color: white; padding: 0.8rem 1.5rem; text-decoration: none; border-radius: 8px; font-weight: bold;">
-                            🏛️ キーボード博物館で他の作品も見る
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <div class="keyboard-links">
             <a href="index.html" class="btn btn-secondary">一覧に戻る</a>
             <a href="https://gohanda.booth.pm/items/7260867" class="btn btn-primary" target="_blank">Soa44を購入</a>
@@ -759,212 +668,8 @@
         }
 
 
-        // GitHub Discussions投稿用テンプレート生成
-        function prepareGitHubPost() {
-            const keyboard = document.getElementById('keyboard-select').value;
-            const switches = document.getElementById('switches').value;
-            const keycaps = document.getElementById('keycaps').value;
-            const comments = document.getElementById('comments').value;
 
-            // タイトルとボディを生成
-            const title = `${keyboard} 作品投稿 - ${new Date().toLocaleDateString('ja-JP')}`;
-            
-            let body = `## 📸 ${keyboard} 作品投稿\n\n`;
-            body += `**⌨️ キーボード:** ${keyboard}\n`;
-            if (switches) body += `**🔘 Switch:** ${switches}\n`;
-            if (keycaps) body += `**🎯 Keycap:** ${keycaps}\n`;
-            body += `\n### 💬 コメント・こだわりポイント\n`;
-            if (comments) {
-                body += `${comments}\n`;
-            } else {
-                body += `[ここにコメントを入力してください]\n`;
-            }
-            body += `\n### 📷 写真\n`;
-            body += `[ここに写真をドラッグ&ドロップでアップロードしてください]\n\n`;
-            body += `---\n`;
-            body += `*このビルドガイドで組み立てました: https://gohanda11.github.io/keyboard_buildguide/soa44.html*`;
 
-            // URLパラメータを作成
-            const params = new URLSearchParams({
-                category: 'show-and-tell',
-                title: title,
-                body: body
-            });
-
-            // GitHub Discussionsページを開く
-            const url = `https://github.com/gohanda11/keyboard_buildguide/discussions/new?${params.toString()}`;
-            window.open(url, '_blank');
-        }
-
-        // GitHub Discussions API設定
-        const REPO_OWNER = 'gohanda11';
-        const REPO_NAME = 'keyboard_buildguide';
-
-        // ページ読み込み時にSoa44ギャラリーを表示
-        document.addEventListener('DOMContentLoaded', function() {
-            loadSoa44Gallery();
-        });
-
-        // GitHub REST APIでSoa44投稿を取得
-        async function fetchSoa44Posts() {
-            try {
-                // テスト用の模擬データ（実際の投稿情報を手動で追加）
-                const mockPosts = [
-                    {
-                        id: '3',
-                        title: 'Soa44完成しました！',
-                        body: `## 📸 Soa44作品投稿
-
-**⌨️ キーボード:** Soa44
-**🔘 Switch:** Invokeys Hojicha Reserve
-**🎯 Keycap:** PBTfans X-Ray
-
-### 💬 コメント・こだわりポイント
-JLCCNCでCNCでアルミケースを発注しました。
-打鍵感がとても良いです。
-
-### 📷 写真
-<div style="width: 100%; height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem; border-radius: 8px; margin: 1rem 0;">📸 Soa44完成写真</div>
-
-*実際の写真は[GitHub Discussions](https://github.com/gohanda11/keyboard_buildguide/discussions/3)でご覧ください*`,
-                        createdAt: '2025-08-26T00:00:00Z',
-                        author: {
-                            login: 'gohanda11',
-                            avatarUrl: 'https://github.com/gohanda11.png'
-                        },
-                        category: {
-                            name: 'Show and tell'
-                        },
-                        url: 'https://github.com/gohanda11/keyboard_buildguide/discussions/3'
-                    },
-                    {
-                        id: '2',
-                        title: 'Soa44 作品投稿 - 2025/8/25',
-                        body: `## 📸 Soa44 作品投稿\n\n**⌨️ キーボード:** Soa44\n**🔘 Switch:** Invokeys Hojicha Reserve\n**🎯 Keycap:** PBTfans X-Ray\n\n### 💬 コメント・こだわりポイント\nJLCCNCでCNCケースを発注しました。すごくかっこいいケースです。`,
-                        createdAt: '2025-01-25T00:00:00Z',
-                        author: {
-                            login: 'gohanda11',
-                            avatarUrl: 'https://github.com/gohanda11.png'
-                        },
-                        category: {
-                            name: 'Show and tell'
-                        },
-                        url: 'https://github.com/gohanda11/keyboard_buildguide/discussions/2'
-                    }
-                ];
-
-                return mockPosts
-                    .filter(discussion => 
-                        (discussion.category.name === 'Show and tell' ||
-                         discussion.title.toLowerCase().includes('keyboard')) &&
-                        (discussion.title.toLowerCase().includes('soa44') ||
-                         discussion.body.toLowerCase().includes('soa44'))
-                    )
-                    .slice(0, 6); // 最大6件表示
-            } catch (error) {
-                console.error('Error fetching Soa44 posts:', error);
-                return [];
-            }
-        }
-
-        // Soa44ギャラリーを読み込み
-        async function loadSoa44Gallery() {
-            const gallery = document.getElementById('soa44-gallery');
-            const noPostsMessage = document.getElementById('no-soa44-posts');
-
-            try {
-                const posts = await fetchSoa44Posts();
-                
-                if (posts.length === 0) {
-                    gallery.innerHTML = '';
-                    noPostsMessage.style.display = 'block';
-                    return;
-                }
-
-                gallery.innerHTML = '';
-                noPostsMessage.style.display = 'none';
-
-                posts.forEach(post => {
-                    const postElement = createSoa44Card(post);
-                    gallery.appendChild(postElement);
-                });
-
-            } catch (error) {
-                console.error('Error loading Soa44 gallery:', error);
-                gallery.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: #dc3545;">ギャラリーの読み込みでエラーが発生しました。</div>';
-            }
-        }
-
-        // Soa44カードを作成
-        function createSoa44Card(post) {
-            const card = document.createElement('div');
-            card.className = 'keyboard-card';
-            card.style.cssText = `
-                background: white;
-                border-radius: 8px;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-                overflow: hidden;
-                transition: transform 0.2s ease;
-            `;
-
-            // ホバーエフェクト
-            card.addEventListener('mouseenter', () => {
-                card.style.transform = 'translateY(-2px)';
-                card.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
-            });
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = 'translateY(0)';
-                card.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
-            });
-
-            // 投稿本文から画像URLを抽出
-            const imageRegex = /!\[.*?\]\((https?:\/\/[^\s)]+)\)/g;
-            const images = [];
-            let match;
-            while ((match = imageRegex.exec(post.body)) !== null) {
-                images.push(match[1]);
-            }
-
-            // 投稿本文から詳細を抽出
-            const details = extractKeyboardDetails(post.body);
-
-            card.innerHTML = `
-                ${images.length > 0 ? 
-                    `<img src="${images[0]}" alt="${post.title}" style="width: 100%; height: 150px; object-fit: cover; cursor: pointer;" onclick="openModal(this)">` 
-                    : '<div style="height: 150px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem;">🎹</div>'
-                }
-                <div style="padding: 1rem;">
-                    <h4 style="margin: 0 0 0.5rem 0; font-size: 0.9rem; color: #2c3e50; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${post.title}">
-                        ${post.title}
-                    </h4>
-                    <div style="font-size: 0.8rem; color: #666; margin-bottom: 0.5rem;">
-                        <div>👤 ${post.author.login}</div>
-                        ${details.switches ? `<div>🔘 ${details.switches}</div>` : ''}
-                        ${details.keycaps ? `<div>🎯 ${details.keycaps}</div>` : ''}
-                    </div>
-                    <div style="font-size: 0.7rem; color: #999; text-align: center; border-top: 1px solid #eee; padding-top: 0.5rem;">
-                        📅 ${new Date(post.createdAt).toLocaleDateString('ja-JP')}
-                    </div>
-                </div>
-            `;
-
-            return card;
-        }
-
-        // 投稿本文からキーボード詳細を抽出
-        function extractKeyboardDetails(body) {
-            const details = {};
-            
-            // スイッチを抽出
-            const switchMatch = body.match(/(?:switch|switches|スイッチ)[:\*\s]*([^\n\r]+)/i);
-            if (switchMatch) details.switches = switchMatch[1].trim();
-            
-            // キーキャップを抽出
-            const keycapMatch = body.match(/(?:keycap|keycaps|キーキャップ)[:\*\s]*([^\n\r]+)/i);
-            if (keycapMatch) details.keycaps = keycapMatch[1].trim();
-            
-            return details;
-        }
     </script>
 </body>
 </html>
