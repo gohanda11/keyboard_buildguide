@@ -394,7 +394,7 @@ h3 {
 /* 画像ギャラリーの横スクロール */
 .image-gallery-scroll {
     overflow-x: auto;
-    padding: 1rem 0;
+    padding: 0;
 }
 
 .image-gallery-scroll::-webkit-scrollbar {

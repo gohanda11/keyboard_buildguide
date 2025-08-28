@@ -8,7 +8,7 @@
 </head>
 <body>
     <!-- 画像拡大表示用のモーダル -->
-    <div id="imageModal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center;" onclick="closeModal()">
+    <div id="imageModal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: flex-start; align-items: center;" onclick="closeModal()">
         <img id="modalImage" style="max-width: 90%; max-height: 90%; border-radius: 8px;" />
         <div style="position: absolute; top: 20px; right: 30px; color: white; font-size: 40px; font-weight: bold; cursor: pointer;" onclick="closeModal()">&times;</div>
     </div>
@@ -34,20 +34,20 @@
         <div class="sidebar-content">
             <h3>目次</h3>
             <ul class="sidebar-toc-list">
-                <li><a href="#step1">1. Chocスイッチの取り付け</a></li>
-                <li><a href="#step2">2. XIAOの取り付け</a></li>
-                <li><a href="#step3">3. 電池ホルダーの取り付け</a></li>
-                <li><a href="#step4">4. PMW3610センサーボードの接続</a></li>
-                <li><a href="#step5">5. トラックボールケースの取り付け</a></li>
+                <li><a href="#step1">1. 必要な部品の確認</a></li>
+                <li><a href="#step2">2. Chocソケットのはんだ付け</a></li>
+                <li><a href="#step3">3. XIAO nRF52840 Plusの取り付け</a></li>
+                <li><a href="#step4">4. 電池ホルダーの取り付け</a></li>
+                <li><a href="#step5">5. PMW3610センサー（トラックボール）の取り付け</a></li>
                 <li><a href="#step6">6. ファームウェアの書き込み</a></li>
-                <li><a href="#step7">7. ゴムブッシュ・スイッチプレートの取り付け</a></li>
-                <li><a href="#step8">8. 動作確認</a></li>
+                <li><a href="#step7">7. センサー基板の接続</a></li>
+                <li><a href="#step8">8. 動作テスト</a></li>
                 <li><a href="#step9">9. トラックボールケースの組み立て</a></li>
-                <li><a href="#step10">10. ボトムプレートの取り付け</a></li>
-                <li><a href="#step11">11. ソケット・キーキャップの取り付け</a></li>
-                <li><a href="#complete">完成</a></li>
-                <li><a href="#led-indicators">LEDインジケータ</a></li>
-                <li><a href="#mouse-operation">マウス操作</a></li>
+                <li><a href="#step10">10. スイッチの取り付け</a></li>
+                <li><a href="#step11">11. ケースの組み立て</a></li>
+                <li><a href="#complete">完成！</a></li>
+                <li><a href="#led-indicators">LEDインジケータの説明</a></li>
+                <li><a href="#mouse-operation">マウス操作について</a></li>
                 <li><a href="#customization">おすすめカスタマイズ</a></li>
                 <li><a href="#troubleshooting">トラブルシューティング</a></li>
             </ul>
@@ -225,8 +225,8 @@
             <section class="step" id="step2">
                 <h3>ステップ 2: Chocソケットのはんだ付け</h3>
                 <div class="step-content">
-                    <div style="text-align: center; margin: 1.5rem 0;">
-                        <img src="image/soa44/step2.jpg" alt="Chocソケットのはんだ付け" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                    <div class="image-gallery-scroll" style="display: flex; flex-wrap: nowrap; justify-content: center; gap: 1rem; margin: 1.5rem 0;">
+                        <img src="image/soa44/step2.jpg" alt="Chocソケットのはんだ付け" style="height: 300px; width: auto; flex-shrink: 0; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
                     </div>
                     <p>Chocソケットを左右のPCBにはんだ付けします。</p>
 
@@ -247,9 +247,9 @@
                 <h3>ステップ 3: XIAO nRF52840 Plusの取り付け</h3>
                 <div class="step-content">
                     <div class="image-gallery-scroll" style="display: flex; flex-wrap: nowrap; justify-content: flex-start; gap: 1rem; margin: 1.5rem 0;">
-                        <img src="image/soa44/step3-1.jpg" alt="XIAO nRF52840 Plusの取り付け 1" style="width: 300px; flex-shrink: 0; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
-                        <img src="image/soa44/step3-2.jpg" alt="XIAO nRF52840 Plusの取り付け 2" style="width: 300px; flex-shrink: 0; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
-                        <img src="image/soa44/step3-3.jpg" alt="XIAO nRF52840 Plusの取り付け 3" style="width: 300px; flex-shrink: 0; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                        <img src="image/soa44/step3-1.jpg" alt="XIAO nRF52840 Plusの取り付け 1" style="height: 300px; width: auto; flex-shrink: 0; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                        <img src="image/soa44/step3-2.jpg" alt="XIAO nRF52840 Plusの取り付け 2" style="height: 300px; width: auto; flex-shrink: 0; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                        <img src="image/soa44/step3-3.jpg" alt="XIAO nRF52840 Plusの取り付け 3" style="height: 300px; width: auto; flex-shrink: 0; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
                     </div>
                     <p>左右のPCBにXIAO nRF52840 Plusをはんだ付けします。</p>
                     
@@ -272,9 +272,9 @@
                 <h3>ステップ 4: 電池ホルダーの取り付け</h3>
                 <div class="step-content">
                     <div class="image-gallery-scroll" style="display: flex; flex-wrap: nowrap; justify-content: flex-start; gap: 1rem; margin: 1.5rem 0;">
-                        <img src="image/soa44/step4-1.jpg" alt="電池ホルダーの取り付け 1" style="width: 300px; flex-shrink: 0; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
-                        <img src="image/soa44/step4-2.jpg" alt="電池ホルダーの取り付け 2" style="width: 300px; flex-shrink: 0; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
-                        <img src="image/soa44/step4-3.jpg" alt="電池ホルダーの取り付け 3" style="width: 300px; flex-shrink: 0; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                        <img src="image/soa44/step4-1.jpg" alt="電池ホルダーの取り付け 1" style="height: 300px; width: auto; flex-shrink: 0; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                        <img src="image/soa44/step4-2.jpg" alt="電池ホルダーの取り付け 2" style="height: 300px; width: auto; flex-shrink: 0; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                        <img src="image/soa44/step4-3.jpg" alt="電池ホルダーの取り付け 3" style="height: 300px; width: auto; flex-shrink: 0; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
                     </div>
                     <p>左右のPCBに電池ホルダーをはんだ付けします。</p>
 
@@ -296,10 +296,10 @@
                 <h3>ステップ 5: PMW3610センサー（トラックボール）の取り付け</h3>
                 <div class="step-content">
                     <div class="image-gallery-scroll" style="display: flex; flex-wrap: nowrap; justify-content: flex-start; gap: 1rem; margin: 1.5rem 0;">
-                        <img src="image/soa44/step5-1.jpg" alt="PMW3610センサーの取り付け 1" style="width: 300px; flex-shrink: 0; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
-                        <img src="image/soa44/step5-2.jpg" alt="PMW3610センサーの取り付け 2" style="width: 300px; flex-shrink: 0; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
-                        <img src="image/soa44/step5-3.jpg" alt="PMW3610センサーの取り付け 3" style="width: 300px; flex-shrink: 0; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
-                        <img src="image/soa44/step5-4.jpg" alt="PMW3610センサーの取り付け 4" style="width: 300px; flex-shrink: 0; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                        <img src="image/soa44/step5-1.jpg" alt="PMW3610センサーの取り付け 1" style="height: 300px; width: auto; flex-shrink: 0; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                        <img src="image/soa44/step5-2.jpg" alt="PMW3610センサーの取り付け 2" style="height: 300px; width: auto; flex-shrink: 0; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                        <img src="image/soa44/step5-3.jpg" alt="PMW3610センサーの取り付け 3" style="height: 300px; width: auto; flex-shrink: 0; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                        <img src="image/soa44/step5-4.jpg" alt="PMW3610センサーの取り付け 4" style="height: 300px; width: auto; flex-shrink: 0; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
                     </div>
                     <p>右手側PCBにPMW3610センサーを取り付けます。</p>
                     
@@ -358,9 +358,9 @@
                 <h3>ステップ 7: センサー基板の接続</h3>
                 <div class="step-content">
                     <div class="image-gallery-scroll" style="display: flex; flex-wrap: nowrap; justify-content: flex-start; gap: 1rem; margin: 1.5rem 0;">
-                        <img src="image/soa44/step7-1.jpg" alt="センサー基板の接続 1" style="width: 300px; flex-shrink: 0; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
-                        <img src="image/soa44/step7-2.jpg" alt="センサー基板の接続 2" style="width: 300px; flex-shrink: 0; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
-                        <img src="image/soa44/step7-3.jpg" alt="センサー基板の接続 3" style="width: 300px; flex-shrink: 0; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                        <img src="image/soa44/step7-1.jpg" alt="センサー基板の接続 1" style="height: 300px; width: auto; flex-shrink: 0; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                        <img src="image/soa44/step7-2.jpg" alt="センサー基板の接続 2" style="height: 300px; width: auto; flex-shrink: 0; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                        <img src="image/soa44/step7-3.jpg" alt="センサー基板の接続 3" style="height: 300px; width: auto; flex-shrink: 0; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
                     </div>
                     <p>PMW3610センサー基板とメインPCBをFFCケーブルで接続します。</p>
                     
@@ -386,8 +386,8 @@
                 <h3>ステップ 8: 動作テスト</h3>
                 <div class="step-content">
                     <div class="image-gallery-scroll" style="display: flex; flex-wrap: nowrap; justify-content: flex-start; gap: 1rem; margin: 1.5rem 0;">
-                        <img src="image/soa44/step8-1.jpg" alt="スイッチの取り付け" style="width: 300px; flex-shrink: 0; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
-                        <img src="image/soa44/step8-2.jpg" alt="スイッチの取り付け" style="width: 700px; flex-shrink: 0; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                        <img src="image/soa44/step8-1.jpg" alt="スイッチの取り付け" style="height: 300px; width: auto; flex-shrink: 0; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                        <img src="image/soa44/step8-2.jpg" alt="スイッチの取り付け" style="height: 300px; width: auto; flex-shrink: 0; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
                     </div>
                     <p>組み立てたキーボードの動作を確認します。</p>
                     
@@ -409,9 +409,9 @@
             <section class="step" id="step9">
                 <h3>ステップ 9: トラックボールケースの組み立て</h3>
                 <div class="step-content">
-                    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 1.5rem 0;">
-                        <img src="image/soa44/step9-1.jpg" alt="トラックボールケースの組み立て 1" style="width: 300px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
-                        <img src="image/soa44/step9-2.jpg" alt="トラックボールケースの組み立て 2" style="width: 300px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                    <div class="image-gallery-scroll" style="display: flex; flex-wrap: nowrap; justify-content: flex-start; gap: 1rem; margin: 1.5rem 0;">
+                        <img src="image/soa44/step9-1.jpg" alt="トラックボールケースの組み立て 1" style="height: 300px; width: auto; flex-shrink: 0; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                        <img src="image/soa44/step9-2.jpg" alt="トラックボールケースの組み立て 2" style="height: 300px; width: auto; flex-shrink: 0; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
                     </div>
                     <p>トラックボールケースを組み立てます。</p>
 
@@ -429,8 +429,8 @@
             <section class="step" id="step10">
                 <h3>ステップ 10: スイッチの取り付け</h3>
                 <div class="step-content">
-                    <div style="text-align: center; margin: 1.5rem 0;">
-                        <img src="image/soa44/step10.jpg" alt="スイッチの取り付け" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                    <div class="image-gallery-scroll" style="display: flex; flex-wrap: nowrap; justify-content: center; gap: 1rem; margin: 1.5rem 0;">
+                        <img src="image/soa44/step10.jpg" alt="スイッチの取り付け" style="height: 300px; width: auto; flex-shrink: 0; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
                     </div>
                     <p>ファームウェアの書き込みと動作テストが完了したら、スイッチを取り付けます。</p>
                     
@@ -451,9 +451,9 @@
                 <h3>ステップ 11: ケースの組み立て</h3>
                 <div class="step-content">
                     <div class="image-gallery-scroll" style="display: flex; flex-wrap: nowrap; justify-content: flex-start; gap: 1rem; margin: 1.5rem 0;">
-                        <img src="image/soa44/step11-1.jpg" alt="ケースの組み立て 1" style="width: 300px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
-                        <img src="image/soa44/step11-2.jpg" alt="ケースの組み立て 2" style="width: 300px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
-                        <img src="image/soa44/step11-3.jpg" alt="ケースの組み立て 2" style="width: 500px; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                        <img src="image/soa44/step11-1.jpg" alt="ケースの組み立て 1" style="height: 300px; width: auto; flex-shrink: 0; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                        <img src="image/soa44/step11-2.jpg" alt="ケースの組み立て 2" style="height: 300px; width: auto; flex-shrink: 0; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                        <img src="image/soa44/step11-3.jpg" alt="ケースの組み立て 3" style="height: 300px; width: auto; flex-shrink: 0; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
                     </div>
                     <p>最後にケースを組み立てて完成です。</p>
                     
