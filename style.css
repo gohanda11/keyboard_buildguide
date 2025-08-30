@@ -464,7 +464,8 @@ footer {
     
     /* ステップ画像のモバイル対応 */
     .step-content img {
-        width: 250px !important;
-        min-width: 200px !important;
+        height: 200px !important;
+        width: auto !important;
+        min-width: unset !important;
     }
 }
