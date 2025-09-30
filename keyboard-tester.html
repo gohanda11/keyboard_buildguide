@@ -63,9 +63,14 @@
                 </div>
                 <div class="modal-body">
                     <div class="input-row">
-                        <label for="github-url">GitHub リポジトリURL:</label>
-                        <input type="text" id="github-url" placeholder="https://github.com/username/zmk-config-xxx">
-                        <small>ZMK設定のGitHubリポジトリURLを入力してください。リポジトリ内の.keymapと.jsonファイルを自動検出します。</small>
+                        <label for="keymap-url">.keymap ファイルのURL:</label>
+                        <input type="text" id="keymap-url" placeholder="https://github.com/username/repo/blob/main/config/keyboard.keymap">
+                        <small>キーマップファイル(.keymap)のURLを入力してください（通常のGitHub URLまたはraw URL）</small>
+                    </div>
+                    <div class="input-row">
+                        <label for="layout-url">.json ファイルのURL:</label>
+                        <input type="text" id="layout-url" placeholder="https://github.com/username/repo/blob/main/config/keyboard.json">
+                        <small>レイアウトファイル(.json)のURLを入力してください（通常のGitHub URLまたはraw URL）</small>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -83,10 +88,11 @@
             <h3>使い方</h3>
             <ul>
                 <li>キーボードを選択すると、ごはんだのGitHubから自動的にキーマップが読み込まれます</li>
-                <li>セレクトボックス横の<strong>+ボタン</strong>をクリックすると、カスタムリポジトリから読み込めます
+                <li>セレクトボックス横の<strong>+ボタン</strong>をクリックすると、カスタムキーボードを読み込めます
                     <ul style="margin-top: 0.5rem; margin-bottom: 0.5rem;">
-                        <li>ZMK設定のGitHubリポジトリURLを入力してください</li>
-                        <li>リポジトリ内の.keymapと.jsonファイルを自動検出します</li>
+                        <li>.keymapファイルと.jsonファイルのURLを入力してください</li>
+                        <li>GitHubのファイルページURLまたはraw URLどちらでも使用できます</li>
+                        <li>例: https://github.com/username/repo/blob/main/config/keyboard.keymap</li>
                     </ul>
                 </li>
                 <li>レイヤーボタンをクリックすると、そのレイヤーのキーマップが表示されます</li>
@@ -192,42 +198,36 @@
 
         // カスタムリポジトリ読み込み
         document.getElementById('load-custom').addEventListener('click', async () => {
-            const githubUrl = document.getElementById('github-url').value.trim();
+            let keymapUrl = document.getElementById('keymap-url').value.trim();
+            let layoutUrl = document.getElementById('layout-url').value.trim();
 
-            if (!githubUrl) {
-                alert('GitHub URLを入力してください');
+            if (!keymapUrl || !layoutUrl) {
+                alert('.keymapと.jsonの両方のURLを入力してください');
                 return;
             }
 
-            // GitHub URLをraw URLに変換
-            const rawBaseUrl = convertToRawUrl(githubUrl);
-            if (!rawBaseUrl) {
-                alert('無効なGitHub URLです。正しい形式: https://github.com/username/repository');
+            // URLの妥当性チェック
+            if (!keymapUrl.includes('.keymap')) {
+                alert('.keymapファイルのURLが正しくありません');
+                return;
+            }
+            if (!layoutUrl.includes('.json')) {
+                alert('.jsonファイルのURLが正しくありません');
                 return;
             }
 
-            const statusDiv = document.getElementById('loading-status');
-            statusDiv.textContent = 'キーマップファイルを検索中...';
-            statusDiv.className = 'loading-status loading';
+            // 通常のGitHub URLをraw URLに自動変換
+            keymapUrl = convertToRawFileUrl(keymapUrl);
+            layoutUrl = convertToRawFileUrl(layoutUrl);
 
-            // リポジトリ全体からkeymapとjsonファイルを検索
-            const files = await autoDetectKeymapFiles(rawBaseUrl);
+            // ファイル名からキーボード名を抽出
+            const keymapFileName = keymapUrl.split('/').pop().replace('.keymap', '');
+            const keyboardName = keymapFileName || 'custom';
 
-            if (!files) {
-                statusDiv.textContent = 'エラー: .keymapと.jsonファイルが見つかりませんでした';
-                statusDiv.className = 'loading-status error';
-                setTimeout(() => {
-                    statusDiv.textContent = '';
-                    statusDiv.className = 'loading-status';
-                }, 5000);
-                return;
-            }
-
-            const keyboardName = files.name;
             customKeyboardData = {
                 name: keyboardName,
-                keymapUrl: files.keymapUrl,
-                layoutUrl: files.layoutUrl,
+                keymapUrl: keymapUrl,
+                layoutUrl: layoutUrl,
                 layout: 'custom',
                 keys: 0
             };
@@ -236,6 +236,10 @@
 
             // ダイアログを閉じる
             document.getElementById('custom-dialog').style.display = 'none';
+
+            // 入力欄をクリア
+            document.getElementById('keymap-url').value = '';
+            document.getElementById('layout-url').value = '';
 
             // セレクトボックスにカスタムオプションを追加または更新
             updateCustomOption(keyboardName);
@@ -262,7 +266,7 @@
             select.appendChild(option);
         }
 
-        // GitHub URLをraw URLに変換
+        // GitHub URLをraw URLに変換（リポジトリURL用）
         function convertToRawUrl(githubUrl) {
             // https://github.com/username/repo → https://raw.githubusercontent.com/username/repo/main
             const match = githubUrl.match(/github\.com\/([^\/]+)\/([^\/]+)/);
@@ -273,6 +277,27 @@
 
             // デフォルトはmainブランチを使用
             return `https://raw.githubusercontent.com/${username}/${repo}/main`;
+        }
+
+        // GitHub ファイルURLをraw URLに変換
+        function convertToRawFileUrl(url) {
+            // 既にraw URLの場合はそのまま返す
+            if (url.includes('raw.githubusercontent.com')) {
+                return url;
+            }
+
+            // https://github.com/username/repo/blob/branch/path/file.ext
+            // → https://raw.githubusercontent.com/username/repo/branch/path/file.ext
+            const match = url.match(/github\.com\/([^\/]+)\/([^\/]+)\/blob\/(.+)/);
+            if (match) {
+                const username = match[1];
+                const repo = match[2];
+                const pathWithBranch = match[3];
+                return `https://raw.githubusercontent.com/${username}/${repo}/${pathWithBranch}`;
+            }
+
+            // 変換できない場合はそのまま返す
+            return url;
         }
 
         // キーマップファイルを自動検出（リポジトリ全体を再帰的に検索）
@@ -300,13 +325,41 @@
             }
         }
 
-        // リポジトリを再帰的に検索
+        // リポジトリを再帰的に検索（よくあるディレクトリを優先）
         async function searchRepository(username, repo, path) {
+            try {
+                // まず一般的なディレクトリを優先的に検索
+                const commonDirs = ['config', 'boards', 'keyboards', ''];
+
+                // pathが空の場合、よくあるディレクトリを先に試す
+                if (path === '') {
+                    for (const dir of commonDirs) {
+                        const found = await searchInDirectory(username, repo, dir);
+                        if (found) return found;
+                    }
+                    return null;
+                }
+
+                return await searchInDirectory(username, repo, path);
+            } catch (error) {
+                console.error('Search error:', error);
+                return null;
+            }
+        }
+
+        // 特定のディレクトリ内を検索
+        async function searchInDirectory(username, repo, path) {
             try {
                 const apiUrl = `https://api.github.com/repos/${username}/${repo}/contents/${path}`;
                 const response = await fetch(apiUrl);
 
-                if (!response.ok) return null;
+                if (!response.ok) {
+                    // 403エラーの場合はレート制限の可能性
+                    if (response.status === 403) {
+                        console.error('GitHub API rate limit exceeded');
+                    }
+                    return null;
+                }
 
                 const items = await response.json();
 
@@ -329,16 +382,19 @@
                     }
                 }
 
-                // サブディレクトリを再帰的に検索
-                const directories = items.filter(item => item.type === 'dir');
-                for (const dir of directories) {
-                    const found = await searchRepository(username, repo, dir.path);
-                    if (found) return found;
+                // サブディレクトリを検索（深さ制限を追加）
+                const pathDepth = path.split('/').filter(p => p).length;
+                if (pathDepth < 3) {  // 最大3階層まで
+                    const directories = items.filter(item => item.type === 'dir');
+                    for (const dir of directories) {
+                        const found = await searchInDirectory(username, repo, dir.path);
+                        if (found) return found;
+                    }
                 }
 
                 return null;
             } catch (error) {
-                console.error('Search error:', error);
+                console.error('Search in directory error:', error);
                 return null;
             }
         }
@@ -734,6 +790,7 @@
                 const keyDiv = document.createElement('div');
                 keyDiv.className = 'key';
                 keyDiv.dataset.keyIndex = index;
+                keyDiv.dataset.layer = currentLayer;
 
                 // 位置とサイズを設定
                 const width = (keyLayout.w || 1) * keySize - 4; // 4px = gap
@@ -840,7 +897,13 @@
                 return;
             }
 
-            const keyCode = e.code;
+            // 修飾キーとの組み合わせでキーを識別
+            let keyCode = e.code;
+
+            // Shiftキーが押されている場合は記号キーとして扱う
+            if (e.shiftKey && !e.code.startsWith('Shift')) {
+                keyCode = 'Shift+' + e.code;
+            }
 
             // 既に押下済みの場合はスキップ
             if (pressedKeys.has(keyCode)) return;
@@ -867,7 +930,13 @@
                 return;
             }
 
-            const keyCode = e.code;
+            // 修飾キーとの組み合わせでキーを識別
+            let keyCode = e.code;
+
+            // Shiftキーが押されている場合は記号キーとして扱う
+            if (e.shiftKey && !e.code.startsWith('Shift')) {
+                keyCode = 'Shift+' + e.code;
+            }
 
             // Winキーのみデフォルト動作を防止
             if (e.key === 'Meta' || e.key === 'OS') {
@@ -877,6 +946,46 @@
             pressedKeys.delete(keyCode);
             highlightKey(keyCode, false);
         });
+
+        // マウスボタン押下イベント
+        document.addEventListener('mousedown', (e) => {
+            if (!keymapData) return;
+
+            // マウスボタンをキーコードに変換
+            const mouseButton = getMouseButtonCode(e.button);
+            if (!mouseButton) return;
+
+            // 既に押下済みの場合はスキップ
+            if (pressedKeys.has(mouseButton)) return;
+
+            pressedKeys.add(mouseButton);
+            testHistory.add(mouseButton);
+
+            // マウスボタンをハイライト
+            highlightKey(mouseButton, true);
+        });
+
+        document.addEventListener('mouseup', (e) => {
+            if (!keymapData) return;
+
+            const mouseButton = getMouseButtonCode(e.button);
+            if (!mouseButton) return;
+
+            pressedKeys.delete(mouseButton);
+            highlightKey(mouseButton, false);
+        });
+
+        // マウスボタン番号をキーコードに変換
+        function getMouseButtonCode(button) {
+            const buttonMap = {
+                0: 'Mouse1',  // 左クリック
+                1: 'Mouse3',  // 中クリック（ホイールクリック）
+                2: 'Mouse2',  // 右クリック
+                3: 'Mouse4',  // サイドボタン1
+                4: 'Mouse5'   // サイドボタン2
+            };
+            return buttonMap[button];
+        }
 
         // ウィンドウフォーカス喪失時に全てのキーをリセット
         window.addEventListener('blur', () => {
@@ -889,7 +998,7 @@
 
         // キーハイライト
         function highlightKey(keyCode, isPressed) {
-            if (!keymapData || !keymapData.layers || !keymapData.layers[currentLayer]) {
+            if (!keymapData || !keymapData.layers) {
                 return;
             }
 
@@ -939,6 +1048,38 @@
                 'KanaMode': 'Lang2',
                 'Lang1': 'Lang1',
                 'Lang2': 'Lang2',
+                // ファンクションキー
+                'F1': 'F1', 'F2': 'F2', 'F3': 'F3', 'F4': 'F4', 'F5': 'F5', 'F6': 'F6',
+                'F7': 'F7', 'F8': 'F8', 'F9': 'F9', 'F10': 'F10', 'F11': 'F11', 'F12': 'F12',
+                // マウスボタン
+                'Mouse1': 'M1',
+                'Mouse2': 'M2',
+                'Mouse3': 'M3',
+                'Mouse4': 'M4',
+                'Mouse5': 'M5',
+                // Shift + 数字キー
+                'Shift+Digit1': '!',
+                'Shift+Digit2': '@',
+                'Shift+Digit3': '#',
+                'Shift+Digit4': '$',
+                'Shift+Digit5': '%',
+                'Shift+Digit6': '^',
+                'Shift+Digit7': '&',
+                'Shift+Digit8': '*',
+                'Shift+Digit9': '(',
+                'Shift+Digit0': ')',
+                // Shift + 記号キー
+                'Shift+Minus': '_',
+                'Shift+Equal': '+',
+                'Shift+BracketLeft': '{',
+                'Shift+BracketRight': '}',
+                'Shift+Backslash': '|',
+                'Shift+Semicolon': ':',
+                'Shift+Quote': '"',
+                'Shift+Comma': '<',
+                'Shift+Period': '>',
+                'Shift+Slash': '?',
+                'Shift+Backquote': '~',
             };
 
             const mappedKey = keyMapping[keyCode];
@@ -947,39 +1088,41 @@
                 return;
             }
 
-            const layerBindings = keymapData.layers[currentLayer];
+            // すべてのレイヤーで該当するキーを探す
+            keymapData.layers.forEach((layerBindings, layerIndex) => {
+                layerBindings.forEach((binding, keyIndex) => {
+                    // 複数のマッチ条件をチェック
+                    let isMatch = false;
 
-            // 現在のレイヤーで該当するキーを探す
-            layerBindings.forEach((binding, index) => {
-                // 複数のマッチ条件をチェック
-                let isMatch = false;
-
-                if (binding.type === 'keypress' && binding.key === mappedKey) {
-                    isMatch = true;
-                } else if (binding.type === 'mod-tap') {
-                    // mod-tapはメインキーまたは修飾キーにマッチ
-                    if (binding.key === mappedKey || binding.mod === mappedKey) {
+                    if (binding.type === 'keypress' && binding.key === mappedKey) {
+                        isMatch = true;
+                    } else if (binding.type === 'mod-tap') {
+                        // mod-tapはメインキーまたは修飾キーにマッチ
+                        if (binding.key === mappedKey || binding.mod === mappedKey) {
+                            isMatch = true;
+                        }
+                    } else if (binding.type === 'layer-tap' && binding.key === mappedKey) {
+                        isMatch = true;
+                    } else if (binding.type === 'momentary' && binding.key === mappedKey) {
+                        isMatch = true;
+                    } else if (binding.type === 'mouse-key' && binding.key === mappedKey) {
                         isMatch = true;
                     }
-                } else if (binding.type === 'layer-tap' && binding.key === mappedKey) {
-                    isMatch = true;
-                } else if (binding.type === 'momentary' && binding.key === mappedKey) {
-                    isMatch = true;
-                }
 
-                if (isMatch) {
-                    const keyElement = document.querySelector(`[data-key-index="${index}"]`);
-                    if (keyElement) {
-                        if (isPressed) {
-                            keyElement.classList.add('pressed');
-                            // テスト履歴に追加
-                            keyElement.classList.add('tested');
-                        } else {
-                            keyElement.classList.remove('pressed');
-                            // testedクラスは維持
+                    if (isMatch) {
+                        const keyElement = document.querySelector(`[data-layer="${layerIndex}"][data-key-index="${keyIndex}"]`);
+                        if (keyElement) {
+                            if (isPressed) {
+                                keyElement.classList.add('pressed');
+                                // テスト履歴に追加
+                                keyElement.classList.add('tested');
+                            } else {
+                                keyElement.classList.remove('pressed');
+                                // testedクラスは維持
+                            }
                         }
                     }
-                }
+                });
             });
         }
 
