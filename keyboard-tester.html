@@ -61,16 +61,16 @@
                     <h3>カスタムリポジトリから読み込み</h3>
                     <button id="close-dialog" class="close-button">&times;</button>
                 </div>
-                <form autocomplete="off">
+                <form autocomplete="off" data-form-type="other">
                     <div class="modal-body">
                         <div class="input-row">
                             <label for="keymap-url">.keymap ファイルのURL:</label>
-                            <input type="url" id="keymap-url" name="keymap-url" placeholder="https://github.com/username/repo/blob/main/config/keyboard.keymap" autocomplete="url" spellcheck="false">
+                            <input type="url" id="keymap-url" name="keymap-url" placeholder="https://github.com/username/repo/blob/main/config/keyboard.keymap" autocomplete="url" spellcheck="false" data-lpignore="true" data-form-type="other">
                             <small>キーマップファイル(.keymap)のURLを入力してください（通常のGitHub URLまたはraw URL）</small>
                         </div>
                         <div class="input-row">
                             <label for="layout-url">.json ファイルのURL:</label>
-                            <input type="url" id="layout-url" name="layout-url" placeholder="https://github.com/username/repo/blob/main/config/keyboard.json" autocomplete="url" spellcheck="false">
+                            <input type="url" id="layout-url" name="layout-url" placeholder="https://github.com/username/repo/blob/main/config/keyboard.json" autocomplete="url" spellcheck="false" data-lpignore="true" data-form-type="other">
                             <small>レイアウトファイル(.json)のURLを入力してください（通常のGitHub URLまたはraw URL）</small>
                         </div>
                     </div>
