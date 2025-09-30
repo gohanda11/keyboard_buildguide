@@ -128,6 +128,15 @@
     </footer>
 
     <script>
+        // Chrome拡張機能のエラーを抑制
+        window.addEventListener('error', (e) => {
+            if (e.filename && e.filename.includes('chrome-extension://')) {
+                e.stopImmediatePropagation();
+                e.preventDefault();
+                return true;
+            }
+        }, true);
+
         // キーボード設定
         const keyboardConfigs = {
             soa44: {
