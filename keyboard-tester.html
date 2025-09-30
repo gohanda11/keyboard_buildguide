@@ -61,18 +61,20 @@
                     <h3>カスタムリポジトリから読み込み</h3>
                     <button id="close-dialog" class="close-button">&times;</button>
                 </div>
-                <div class="modal-body">
-                    <div class="input-row">
-                        <label for="keymap-url">.keymap ファイルのURL:</label>
-                        <input type="text" id="keymap-url" placeholder="https://github.com/username/repo/blob/main/config/keyboard.keymap" autocomplete="off" spellcheck="false">
-                        <small>キーマップファイル(.keymap)のURLを入力してください（通常のGitHub URLまたはraw URL）</small>
+                <form autocomplete="off">
+                    <div class="modal-body">
+                        <div class="input-row">
+                            <label for="keymap-url">.keymap ファイルのURL:</label>
+                            <input type="url" id="keymap-url" name="keymap-url" placeholder="https://github.com/username/repo/blob/main/config/keyboard.keymap" autocomplete="url" spellcheck="false">
+                            <small>キーマップファイル(.keymap)のURLを入力してください（通常のGitHub URLまたはraw URL）</small>
+                        </div>
+                        <div class="input-row">
+                            <label for="layout-url">.json ファイルのURL:</label>
+                            <input type="url" id="layout-url" name="layout-url" placeholder="https://github.com/username/repo/blob/main/config/keyboard.json" autocomplete="url" spellcheck="false">
+                            <small>レイアウトファイル(.json)のURLを入力してください（通常のGitHub URLまたはraw URL）</small>
+                        </div>
                     </div>
-                    <div class="input-row">
-                        <label for="layout-url">.json ファイルのURL:</label>
-                        <input type="text" id="layout-url" placeholder="https://github.com/username/repo/blob/main/config/keyboard.json" autocomplete="off" spellcheck="false">
-                        <small>レイアウトファイル(.json)のURLを入力してください（通常のGitHub URLまたはraw URL）</small>
-                    </div>
-                </div>
+                </form>
                 <div class="modal-footer">
                     <button id="cancel-custom" class="cancel-button">キャンセル</button>
                     <button id="load-custom" class="load-button">読み込み</button>
