@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>キーボードテスター - gohanda_kbd</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <h1>gohanda_kbd</h1>
+                </div>
+                <div class="nav-links">
+                    <a href="index.html">ホーム</a>
+                    <a href="keyboard-tester.html" class="active">キーボードテスター</a>
+                </div>
+            </nav>
+            <div class="hero">
+                <h2>キーボードテスター</h2>
+                <p>キーボードの動作確認とレイヤー表示</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="tester-controls">
+            <div class="control-group">
+                <label for="keyboard-select">キーボードを選択:</label>
+                <div class="select-with-button">
+                    <select id="keyboard-select">
+                        <option value="">選択してください</option>
+                        <option value="soa44">Soa44</option>
+                        <option value="soa39">Soa39</option>
+                    </select>
+                    <button id="open-custom-dialog" class="custom-button" title="カスタムリポジトリから読み込み">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div id="layer-controls" class="layer-controls" style="display: none;">
+                <label>レイヤー:</label>
+                <div id="layer-buttons" class="layer-buttons"></div>
+                <div class="current-layer-info">
+                    <span id="current-layer-name">Layer 0: Default</span>
+                </div>
+            </div>
+
+            <div id="loading-status" class="loading-status"></div>
+        </section>
+
+        <!-- カスタムリポジトリダイアログ -->
+        <div id="custom-dialog" class="modal-overlay" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>カスタムリポジトリから読み込み</h3>
+                    <button id="close-dialog" class="close-button">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-row">
+                        <label for="github-url">GitHub リポジトリURL:</label>
+                        <input type="text" id="github-url" placeholder="https://github.com/username/zmk-config-xxx">
+                        <small>ZMK設定のGitHubリポジトリURLを入力してください。リポジトリ内の.keymapと.jsonファイルを自動検出します。</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="cancel-custom" class="cancel-button">キャンセル</button>
+                    <button id="load-custom" class="load-button">読み込み</button>
+                </div>
+            </div>
+        </div>
+
+        <section id="keyboard-display" class="keyboard-display" style="display: none;">
+            <div id="keyboard-visual" class="keyboard-visual"></div>
+        </section>
+
+        <section class="tester-info">
+            <h3>使い方</h3>
+            <ul>
+                <li>キーボードを選択すると、ごはんだのGitHubから自動的にキーマップが読み込まれます</li>
+                <li>セレクトボックス横の<strong>+ボタン</strong>をクリックすると、カスタムリポジトリから読み込めます
+                    <ul style="margin-top: 0.5rem; margin-bottom: 0.5rem;">
+                        <li>ZMK設定のGitHubリポジトリURLを入力してください</li>
+                        <li>リポジトリ内の.keymapと.jsonファイルを自動検出します</li>
+                    </ul>
+                </li>
+                <li>レイヤーボタンをクリックすると、そのレイヤーのキーマップが表示されます</li>
+                <li>実際にキーを押すと、押されたキーが<strong style="color: #228b22;">緑色</strong>にハイライトされます</li>
+                <li>押したキーは履歴として記録され、<strong style="color: #4682b4;">水色</strong>で表示されます</li>
+            </ul>
+            <div class="tester-legend">
+                <div class="legend-item">
+                    <div class="legend-key key-default">Key</div>
+                    <span>未使用のキー</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-key key-tested">Key</div>
+                    <span>テスト済みのキー</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-key key-pressing">Key</div>
+                    <span>押している間</span>
+                </div>
+            </div>
+            <div class="warning">
+                <strong>注意:</strong> このテスターは各キーボードのデフォルトキーマップを表示します。カスタムキーマップには対応していません。
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 gohanda_kbd. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // キーボード設定
+        const keyboardConfigs = {
+            soa44: {
+                name: 'Soa44',
+                keymapUrl: 'https://raw.githubusercontent.com/gohanda11/zmk-config-soa44/main/config/soa44.keymap',
+                layoutUrl: 'https://raw.githubusercontent.com/gohanda11/zmk-config-soa44/main/config/soa44.json',
+                layout: 'split',
+                keys: 44
+            },
+            soa39: {
+                name: 'Soa39mini',
+                keymapUrl: 'https://raw.githubusercontent.com/gohanda11/zmk-config-soa39/main/config/soa39.keymap',
+                layoutUrl: 'https://raw.githubusercontent.com/gohanda11/zmk-config-soa39/main/config/soa39.json',
+                layout: 'split',
+                keys: 39
+            }
+        };
+
+        let currentKeyboard = null;
+        let currentLayer = 0;
+        let keymapData = null;
+        let layoutData = null;
+        let pressedKeys = new Set();
+        let keyTimers = new Map(); // キーごとのタイマー
+        let holdThreshold = 200; // 長押し判定時間（ミリ秒）
+        let testHistory = new Set(); // テスト済みキーの履歴
+        let customKeyboardData = null; // カスタムキーボードのデータを保存
+
+        // キーボード選択
+        document.getElementById('keyboard-select').addEventListener('change', async (e) => {
+            const selectedKeyboard = e.target.value;
+            if (!selectedKeyboard) {
+                document.getElementById('layer-controls').style.display = 'none';
+                document.getElementById('keyboard-display').style.display = 'none';
+                return;
+            }
+
+            // プリセットキーボード
+            if (keyboardConfigs[selectedKeyboard]) {
+                currentKeyboard = keyboardConfigs[selectedKeyboard];
+                await loadKeyboardData(currentKeyboard);
+            }
+            // カスタムキーボード
+            else if (selectedKeyboard.startsWith('custom_') && customKeyboardData) {
+                currentKeyboard = customKeyboardData;
+                await loadKeyboardData(currentKeyboard);
+            }
+        });
+
+        // カスタムダイアログを開く
+        document.getElementById('open-custom-dialog').addEventListener('click', () => {
+            document.getElementById('custom-dialog').style.display = 'flex';
+        });
+
+        // ダイアログを閉じる
+        document.getElementById('close-dialog').addEventListener('click', () => {
+            document.getElementById('custom-dialog').style.display = 'none';
+        });
+
+        document.getElementById('cancel-custom').addEventListener('click', () => {
+            document.getElementById('custom-dialog').style.display = 'none';
+        });
+
+        // モーダル外クリックで閉じる
+        document.getElementById('custom-dialog').addEventListener('click', (e) => {
+            if (e.target.id === 'custom-dialog') {
+                document.getElementById('custom-dialog').style.display = 'none';
+            }
+        });
+
+        // カスタムリポジトリ読み込み
+        document.getElementById('load-custom').addEventListener('click', async () => {
+            const githubUrl = document.getElementById('github-url').value.trim();
+
+            if (!githubUrl) {
+                alert('GitHub URLを入力してください');
+                return;
+            }
+
+            // GitHub URLをraw URLに変換
+            const rawBaseUrl = convertToRawUrl(githubUrl);
+            if (!rawBaseUrl) {
+                alert('無効なGitHub URLです。正しい形式: https://github.com/username/repository');
+                return;
+            }
+
+            const statusDiv = document.getElementById('loading-status');
+            statusDiv.textContent = 'キーマップファイルを検索中...';
+            statusDiv.className = 'loading-status loading';
+
+            // リポジトリ全体からkeymapとjsonファイルを検索
+            const files = await autoDetectKeymapFiles(rawBaseUrl);
+
+            if (!files) {
+                statusDiv.textContent = 'エラー: .keymapと.jsonファイルが見つかりませんでした';
+                statusDiv.className = 'loading-status error';
+                setTimeout(() => {
+                    statusDiv.textContent = '';
+                    statusDiv.className = 'loading-status';
+                }, 5000);
+                return;
+            }
+
+            const keyboardName = files.name;
+            customKeyboardData = {
+                name: keyboardName,
+                keymapUrl: files.keymapUrl,
+                layoutUrl: files.layoutUrl,
+                layout: 'custom',
+                keys: 0
+            };
+
+            currentKeyboard = customKeyboardData;
+
+            // ダイアログを閉じる
+            document.getElementById('custom-dialog').style.display = 'none';
+
+            // セレクトボックスにカスタムオプションを追加または更新
+            updateCustomOption(keyboardName);
+
+            await loadKeyboardData(currentKeyboard);
+        });
+
+        // セレクトボックスにカスタムオプションを追加
+        function updateCustomOption(keyboardName) {
+            const select = document.getElementById('keyboard-select');
+
+            // 既存のカスタムオプションを削除
+            const existingCustom = select.querySelector('option[data-custom="true"]');
+            if (existingCustom) {
+                existingCustom.remove();
+            }
+
+            // 新しいカスタムオプションを追加
+            const option = document.createElement('option');
+            option.value = `custom_${keyboardName}`;
+            option.textContent = `${keyboardName} (カスタム)`;
+            option.dataset.custom = 'true';
+            option.selected = true;
+            select.appendChild(option);
+        }
+
+        // GitHub URLをraw URLに変換
+        function convertToRawUrl(githubUrl) {
+            // https://github.com/username/repo → https://raw.githubusercontent.com/username/repo/main
+            const match = githubUrl.match(/github\.com\/([^\/]+)\/([^\/]+)/);
+            if (!match) return null;
+
+            const username = match[1];
+            const repo = match[2].replace(/\.git$/, ''); // .git拡張子を削除
+
+            // デフォルトはmainブランチを使用
+            return `https://raw.githubusercontent.com/${username}/${repo}/main`;
+        }
+
+        // キーマップファイルを自動検出（リポジトリ全体を再帰的に検索）
+        async function autoDetectKeymapFiles(rawBaseUrl) {
+            try {
+                const repoMatch = rawBaseUrl.match(/githubusercontent\.com\/([^\/]+)\/([^\/]+)/);
+                if (!repoMatch) return null;
+
+                const username = repoMatch[1];
+                const repo = repoMatch[2];
+
+                // リポジトリのルートから再帰的に検索
+                const foundFiles = await searchRepository(username, repo, '');
+
+                if (!foundFiles) return null;
+
+                return {
+                    name: foundFiles.name,
+                    keymapUrl: `https://raw.githubusercontent.com/${username}/${repo}/main/${foundFiles.keymapPath}`,
+                    layoutUrl: `https://raw.githubusercontent.com/${username}/${repo}/main/${foundFiles.jsonPath}`
+                };
+            } catch (error) {
+                console.error('Auto-detect error:', error);
+                return null;
+            }
+        }
+
+        // リポジトリを再帰的に検索
+        async function searchRepository(username, repo, path) {
+            try {
+                const apiUrl = `https://api.github.com/repos/${username}/${repo}/contents/${path}`;
+                const response = await fetch(apiUrl);
+
+                if (!response.ok) return null;
+
+                const items = await response.json();
+
+                // 現在のディレクトリ内でkeymapとjsonのペアを探す
+                const keymapFiles = items.filter(item => item.type === 'file' && item.name.endsWith('.keymap'));
+
+                for (const keymapFile of keymapFiles) {
+                    const baseName = keymapFile.name.replace('.keymap', '');
+                    const jsonFile = items.find(item =>
+                        item.type === 'file' && item.name === `${baseName}.json`
+                    );
+
+                    if (jsonFile) {
+                        // ペアが見つかった
+                        return {
+                            name: baseName,
+                            keymapPath: keymapFile.path,
+                            jsonPath: jsonFile.path
+                        };
+                    }
+                }
+
+                // サブディレクトリを再帰的に検索
+                const directories = items.filter(item => item.type === 'dir');
+                for (const dir of directories) {
+                    const found = await searchRepository(username, repo, dir.path);
+                    if (found) return found;
+                }
+
+                return null;
+            } catch (error) {
+                console.error('Search error:', error);
+                return null;
+            }
+        }
+
+        // キーボードデータ読み込み（キーマップ + レイアウト）
+        async function loadKeyboardData(keyboard) {
+            const statusDiv = document.getElementById('loading-status');
+            statusDiv.textContent = 'キーマップとレイアウトを読み込み中...';
+            statusDiv.className = 'loading-status loading';
+
+            try {
+                // キーマップとレイアウトを並行取得
+                const [keymapResponse, layoutResponse] = await Promise.all([
+                    fetch(keyboard.keymapUrl),
+                    fetch(keyboard.layoutUrl)
+                ]);
+
+                if (!keymapResponse.ok) throw new Error('キーマップの取得に失敗しました');
+                if (!layoutResponse.ok) throw new Error('レイアウトの取得に失敗しました');
+
+                const keymapText = await keymapResponse.text();
+                const layoutJson = await layoutResponse.json();
+
+                keymapData = parseZmkKeymap(keymapText);
+
+                // レイアウトデータの取得（複数の形式に対応）
+                if (layoutJson.layouts.default_layout) {
+                    layoutData = layoutJson.layouts.default_layout.layout;
+                } else if (layoutJson.layouts.LAYOUT) {
+                    layoutData = layoutJson.layouts.LAYOUT.layout;
+                } else {
+                    // 最初に見つかったレイアウトを使用
+                    const firstLayoutKey = Object.keys(layoutJson.layouts)[0];
+                    layoutData = layoutJson.layouts[firstLayoutKey].layout;
+                }
+
+                statusDiv.textContent = '';
+                statusDiv.className = 'loading-status';
+
+                setupLayerControls();
+                renderKeyboard();
+            } catch (error) {
+                statusDiv.textContent = `エラー: ${error.message}`;
+                statusDiv.className = 'loading-status error';
+            }
+        }
+
+        // ZMKキーマップパーサー(改善版)
+        function parseZmkKeymap(text) {
+            const layers = [];
+            const layerNames = [];
+
+            // keymapブロック全体を抽出（最後の閉じ括弧まで）
+            const keymapMatch = text.match(/keymap\s*\{([\s\S]*)\n\s*\};/);
+            if (!keymapMatch) {
+                console.error('keymapブロックが見つかりません');
+                throw new Error('キーマップの解析に失敗しました');
+            }
+
+            const keymapContent = keymapMatch[1];
+            console.log('Keymap content length:', keymapContent.length);
+            console.log('First 500 chars of keymap:', keymapContent.substring(0, 500));
+
+            // 各レイヤーブロックを抽出（改善版：ネストした括弧に対応）
+            const layerRegex = /(\w+)\s*\{/g;
+            let match;
+            let matchCount = 0;
+
+            const layerMatches = [];
+
+            // すべてのレイヤー開始位置を見つける
+            while ((match = layerRegex.exec(keymapContent)) !== null) {
+                layerMatches.push({
+                    name: match[1],
+                    startIndex: match.index,
+                    startBraceIndex: match.index + match[0].length - 1
+                });
+            }
+
+            // 各レイヤーのブロックを抽出
+            for (let i = 0; i < layerMatches.length; i++) {
+                const currentLayer = layerMatches[i];
+                const nextLayerStart = i < layerMatches.length - 1 ? layerMatches[i + 1].startIndex : keymapContent.length;
+
+                // 括弧のバランスを取ってレイヤーブロックの終わりを見つける
+                const layerContent = keymapContent.substring(currentLayer.startBraceIndex, nextLayerStart);
+                const endIndex = findMatchingBrace(layerContent);
+
+                if (endIndex === -1) continue;
+
+                const fullLayerContent = layerContent.substring(0, endIndex);
+
+                // bindings部分を抽出
+                const bindingsMatch = fullLayerContent.match(/bindings\s*=\s*<([\s\S]*?)>\s*;/);
+                if (!bindingsMatch) continue;
+
+                const layerName = currentLayer.name;
+                const bindingsText = bindingsMatch[1];
+                matchCount++;
+
+                console.log(`Layer ${matchCount}: ${layerName}, bindings length: ${bindingsText.length}`);
+
+                // compatible, template, 不要なレイヤーをスキップ
+                if (layerName === 'compatible' || layerName === 'template') continue;
+
+                layerNames.push(layerName);
+
+                // バインディングをパース
+                const cleanText = bindingsText
+                    .replace(/\/\*[\s\S]*?\*\//g, '') // コメント削除
+                    .replace(/\/\/.*/g, ''); // 行コメント削除
+
+                // 正規表現で&から始まる完全なバインディングを抽出
+                const bindingRegex = /&\w+(?:\s+[\w_]+)*(?:\s+[\w_]+)*/g;
+                const bindingMatches = cleanText.match(bindingRegex) || [];
+
+                const bindings = bindingMatches.map(b => parseBinding(b.trim()));
+
+                console.log(`  Parsed ${bindings.length} bindings`);
+                if (layerName === 'default' && bindings.length > 0) {
+                    console.log('First 5 bindings of default layer:');
+                    bindings.slice(0, 5).forEach((b, i) => {
+                        console.log(`  [${i}] type: ${b.type}, key: ${b.key}, raw: ${b.raw}`);
+                    });
+                }
+                layers.push(bindings);
+            }
+
+            // 括弧のバランスを取る関数
+            function findMatchingBrace(text) {
+                let depth = 1;
+                for (let i = 1; i < text.length; i++) {
+                    if (text[i] === '{') depth++;
+                    else if (text[i] === '}') {
+                        depth--;
+                        if (depth === 0) return i;
+                    }
+                }
+                return -1;
+            }
+
+            console.log(`Total layers found: ${layers.length}`);
+            console.log('Layer names:', layerNames);
+
+            if (layers.length === 0) {
+                throw new Error('レイヤーが見つかりませんでした');
+            }
+
+            return {
+                layers: layers,
+                layerNames: layerNames
+            };
+        }
+
+        // バインディングをパース
+        function parseBinding(binding) {
+            // &lt レイヤータップ (例: &lt 3 SPACE, &lt 6 DELETE)
+            const ltMatch = binding.match(/&lt\s+(\d+)\s+([\w_]+)/);
+            if (ltMatch) {
+                return {
+                    type: 'layer-tap',
+                    layer: parseInt(ltMatch[1]),
+                    key: formatKeycode(ltMatch[2]),
+                    raw: binding
+                };
+            }
+
+            // &mo モーメンタリレイヤー
+            const moMatch = binding.match(/&mo\s+(\d+)/);
+            if (moMatch) {
+                return {
+                    type: 'momentary',
+                    layer: parseInt(moMatch[1]),
+                    key: `MO(${moMatch[1]})`,
+                    raw: binding
+                };
+            }
+
+            // &mt モッドタップ (例: &mt LCTRL TAB)
+            const mtMatch = binding.match(/&mt\s+([\w_]+)\s+([\w_]+)/);
+            if (mtMatch) {
+                return {
+                    type: 'mod-tap',
+                    key: `${formatKeycode(mtMatch[2])}`,
+                    mod: formatKeycode(mtMatch[1]),
+                    raw: binding
+                };
+            }
+
+            // &kp 通常キー (例: &kp ESCAPE, &kp LEFT_SHIFT)
+            const kpMatch = binding.match(/&kp\s+([\w_]+)/);
+            if (kpMatch) {
+                return {
+                    type: 'keypress',
+                    key: formatKeycode(kpMatch[1]),
+                    raw: binding
+                };
+            }
+
+            // &mkp マウスキー (例: &mkp MB1)
+            const mkpMatch = binding.match(/&mkp\s+([\w_]+)/);
+            if (mkpMatch) {
+                return {
+                    type: 'mouse-key',
+                    key: formatKeycode(mkpMatch[1]),
+                    raw: binding
+                };
+            }
+
+            // &trans 透過
+            if (binding.includes('&trans')) {
+                return { type: 'trans', key: '▽', raw: binding };
+            }
+
+            // &none なし
+            if (binding.includes('&none')) {
+                return { type: 'none', key: '✕', raw: binding };
+            }
+
+            // その他
+            return { type: 'other', key: binding.replace(/^&/, ''), raw: binding };
+        }
+
+        // キーコードをフォーマット
+        function formatKeycode(code) {
+            const keyMap = {
+                'SPACE': 'Space',
+                'ENTER': 'Enter',
+                'RET': 'Enter',
+                'BSPC': 'BS',
+                'BACKSPACE': 'BS',
+                'TAB': 'Tab',
+                'ESC': 'Esc',
+                'ESCAPE': 'Esc',
+                'DELETE': 'Del',
+                'DEL': 'Del',
+                'LEFT_SHIFT': 'LShift',
+                'RIGHT_SHIFT': 'RShift',
+                'LSHIFT': 'LShift',
+                'RSHIFT': 'RShift',
+                'LSHFT': 'LShift',
+                'RSHFT': 'RShift',
+                'LEFT_CONTROL': 'LCtrl',
+                'RIGHT_CONTROL': 'RCtrl',
+                'LCTRL': 'LCtrl',
+                'RCTRL': 'RCtrl',
+                'LCTL': 'LCtrl',
+                'RCTL': 'RCtrl',
+                'LEFT_ALT': 'LAlt',
+                'RIGHT_ALT': 'RAlt',
+                'LALT': 'LAlt',
+                'RALT': 'RAlt',
+                'LEFT_WIN': 'LWin',
+                'RIGHT_WIN': 'RWin',
+                'LGUI': 'LCmd',
+                'RGUI': 'RCmd',
+                'UP': '↑',
+                'DOWN': '↓',
+                'LEFT': '←',
+                'RIGHT': '→',
+                'UP_ARROW': '↑',
+                'DOWN_ARROW': '↓',
+                'LEFT_ARROW': '←',
+                'RIGHT_ARROW': '→',
+                'MINUS': '-',
+                'EQUAL': '=',
+                'LEFT_BRACKET': '[',
+                'RIGHT_BRACKET': ']',
+                'LBKT': '[',
+                'RBKT': ']',
+                'BACKSLASH': '\\',
+                'BSLH': '\\',
+                'PIPE': '|',
+                'SEMICOLON': ';',
+                'SEMI': ';',
+                'SINGLE_QUOTE': "'",
+                'SQT': "'",
+                'APOSTROPHE': "'",
+                'GRAVE': '`',
+                'COMMA': ',',
+                'PERIOD': '.',
+                'DOT': '.',
+                'SLASH': '/',
+                'FSLH': '/',
+                'EXCLAMATION': '!',
+                'EXCL': '!',
+                'AT_SIGN': '@',
+                'AT': '@',
+                'HASH': '#',
+                'POUND': '#',
+                'DOLLAR': '$',
+                'DLLR': '$',
+                'PERCENT': '%',
+                'PRCNT': '%',
+                'CARET': '^',
+                'AMPERSAND': '&',
+                'AMPS': '&',
+                'ASTERISK': '*',
+                'ASTRK': '*',
+                'STAR': '*',
+                'LEFT_PARENTHESIS': '(',
+                'RIGHT_PARENTHESIS': ')',
+                'LPAR': '(',
+                'RPAR': ')',
+                'LEFT_BRACE': '{',
+                'RIGHT_BRACE': '}',
+                'DOUBLE_QUOTES': '"',
+                'LANGUAGE_1': 'Lang1',
+                'LANGUAGE_2': 'Lang2',
+                'INT_MUHENKAN': '無変換',
+                // マウスキー
+                'MB1': 'M1',
+                'MB2': 'M2',
+                'MB3': 'M3',
+            };
+
+            // ファンクションキー
+            if (code.match(/^F\d+$/)) return code;
+
+            // 数字
+            if (code.match(/^N\d$/)) return code.replace('N', '');
+
+            // アルファベット
+            if (code.match(/^[A-Z]$/)) return code;
+
+            return keyMap[code] || code;
+        }
+
+        // レイヤーコントロールのセットアップ
+        function setupLayerControls() {
+            const layerControlsDiv = document.getElementById('layer-controls');
+            const layerButtonsDiv = document.getElementById('layer-buttons');
+
+            layerButtonsDiv.innerHTML = '';
+            keymapData.layers.forEach((_, index) => {
+                const button = document.createElement('button');
+                button.textContent = index;
+                button.className = index === 0 ? 'layer-button active' : 'layer-button';
+                button.onclick = () => switchLayer(index);
+                layerButtonsDiv.appendChild(button);
+            });
+
+            layerControlsDiv.style.display = 'block';
+            updateLayerName();
+        }
+
+        // レイヤー切り替え
+        function switchLayer(layerIndex) {
+            currentLayer = layerIndex;
+
+            // ボタンの状態更新
+            document.querySelectorAll('.layer-button').forEach((btn, index) => {
+                btn.className = index === layerIndex ? 'layer-button active' : 'layer-button';
+            });
+
+            updateLayerName();
+            renderKeyboard();
+        }
+
+        // レイヤー名更新
+        function updateLayerName() {
+            const layerName = keymapData.layerNames[currentLayer] || `Layer ${currentLayer}`;
+            document.getElementById('current-layer-name').textContent = `Layer ${currentLayer}: ${layerName}`;
+        }
+
+        // キーボード描画
+        function renderKeyboard() {
+            const visualDiv = document.getElementById('keyboard-visual');
+            const displaySection = document.getElementById('keyboard-display');
+
+            visualDiv.innerHTML = '';
+
+            const layerBindings = keymapData.layers[currentLayer];
+            if (!layerBindings || !layoutData) return;
+
+            // レイアウトデータを使用して絶対配置でキーを描画
+            const keySize = 50; // 1キー単位のサイズ（px）
+
+            // コンテナのサイズを計算
+            const maxX = Math.max(...layoutData.map(k => k.x + (k.w || 1)));
+            const maxY = Math.max(...layoutData.map(k => k.y)) + 1;
+
+            visualDiv.style.position = 'relative';
+            visualDiv.style.width = `${maxX * keySize}px`;
+            visualDiv.style.height = `${maxY * keySize}px`;
+            visualDiv.style.margin = '0 auto';
+
+            // 各キーを配置
+            layoutData.forEach((keyLayout, index) => {
+                const binding = layerBindings[index];
+                if (!binding) return;
+
+                const keyDiv = document.createElement('div');
+                keyDiv.className = 'key';
+                keyDiv.dataset.keyIndex = index;
+
+                // 位置とサイズを設定
+                const width = (keyLayout.w || 1) * keySize - 4; // 4px = gap
+                const height = keySize - 4;
+                const left = keyLayout.x * keySize;
+                const top = keyLayout.y * keySize;
+
+                keyDiv.style.position = 'absolute';
+                keyDiv.style.left = `${left}px`;
+                keyDiv.style.top = `${top}px`;
+                keyDiv.style.width = `${width}px`;
+                keyDiv.style.height = `${height}px`;
+                keyDiv.style.minWidth = `${width}px`;
+                keyDiv.style.minHeight = `${height}px`;
+
+                // キー内容を構築
+                buildKeyContent(keyDiv, binding);
+
+                visualDiv.appendChild(keyDiv);
+            });
+
+            displaySection.style.display = 'block';
+        }
+
+        // キー内容を構築
+        function buildKeyContent(keyDiv, binding) {
+            // メインラベル（大きく表示するキー）
+            const mainLabel = document.createElement('div');
+            mainLabel.className = 'key-main-label';
+
+            // 上部ラベル（修飾キーや追加情報）
+            const topLabel = document.createElement('div');
+            topLabel.className = 'key-top-label';
+
+            // 下部ラベル（レイヤー情報など）
+            const bottomLabel = document.createElement('div');
+            bottomLabel.className = 'key-bottom-label';
+
+            switch (binding.type) {
+                case 'keypress':
+                    // 通常キー: &kp Q → Q
+                    mainLabel.textContent = binding.key;
+                    break;
+
+                case 'mod-tap':
+                    // モッドタップ: &mt LCTRL TAB → 上部にCtrl、メインにTab
+                    topLabel.textContent = binding.mod;
+                    mainLabel.textContent = binding.key;
+                    break;
+
+                case 'layer-tap':
+                    // レイヤータップ: &lt 3 SPACE → メインにSpace、下部にL3
+                    mainLabel.textContent = binding.key;
+                    bottomLabel.textContent = `L${binding.layer}`;
+                    break;
+
+                case 'momentary':
+                    // モーメンタリ: &mo 2 → MO(2)
+                    mainLabel.textContent = `MO(${binding.layer})`;
+                    break;
+
+                case 'trans':
+                    // 透過キー
+                    mainLabel.textContent = '▽';
+                    mainLabel.style.opacity = '0.5';
+                    break;
+
+                case 'none':
+                    // なし
+                    mainLabel.textContent = '✕';
+                    mainLabel.style.opacity = '0.3';
+                    break;
+
+                case 'mouse-key':
+                    // マウスキー
+                    mainLabel.textContent = binding.key;
+                    topLabel.textContent = '🖱';
+                    break;
+
+                default:
+                    // その他
+                    mainLabel.textContent = binding.key;
+                    break;
+            }
+
+            // 要素を追加
+            if (topLabel.textContent) keyDiv.appendChild(topLabel);
+            keyDiv.appendChild(mainLabel);
+            if (bottomLabel.textContent) keyDiv.appendChild(bottomLabel);
+        }
+
+        // ページ読み込み時にセレクトボックスからフォーカスを外す
+        document.getElementById('keyboard-select').addEventListener('change', function() {
+            // キーボード選択後、フォーカスをbodyに移動してキーイベントが正常に動作するようにする
+            this.blur();
+        });
+
+        // キー押下イベント
+        document.addEventListener('keydown', (e) => {
+            if (!keymapData) return;
+
+            // フォーム要素にフォーカスがある場合は除外
+            if (e.target.tagName === 'SELECT' || e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                return;
+            }
+
+            const keyCode = e.code;
+
+            // 既に押下済みの場合はスキップ
+            if (pressedKeys.has(keyCode)) return;
+
+            // Winキーのみデフォルト動作を防止
+            if (e.key === 'Meta' || e.key === 'OS') {
+                e.preventDefault();
+            }
+
+            pressedKeys.add(keyCode);
+
+            // テスト済みとしてマーク
+            testHistory.add(keyCode);
+
+            // キーをハイライト
+            highlightKey(keyCode, true);
+        });
+
+        document.addEventListener('keyup', (e) => {
+            if (!keymapData) return;
+
+            // フォーム要素にフォーカスがある場合は除外
+            if (e.target.tagName === 'SELECT' || e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                return;
+            }
+
+            const keyCode = e.code;
+
+            // Winキーのみデフォルト動作を防止
+            if (e.key === 'Meta' || e.key === 'OS') {
+                e.preventDefault();
+            }
+
+            pressedKeys.delete(keyCode);
+            highlightKey(keyCode, false);
+        });
+
+        // ウィンドウフォーカス喪失時に全てのキーをリセット
+        window.addEventListener('blur', () => {
+            // Winキーを押すとウィンドウがフォーカスを失う場合があるため、全キーをリセット
+            pressedKeys.clear();
+            document.querySelectorAll('.key.pressed').forEach(key => {
+                key.classList.remove('pressed');
+            });
+        });
+
+        // キーハイライト
+        function highlightKey(keyCode, isPressed) {
+            if (!keymapData || !keymapData.layers || !keymapData.layers[currentLayer]) {
+                return;
+            }
+
+            // キーコードをキーマップのキーにマッピング
+            const keyMapping = {
+                'KeyQ': 'Q', 'KeyW': 'W', 'KeyE': 'E', 'KeyR': 'R', 'KeyT': 'T',
+                'KeyY': 'Y', 'KeyU': 'U', 'KeyI': 'I', 'KeyO': 'O', 'KeyP': 'P',
+                'KeyA': 'A', 'KeyS': 'S', 'KeyD': 'D', 'KeyF': 'F', 'KeyG': 'G',
+                'KeyH': 'H', 'KeyJ': 'J', 'KeyK': 'K', 'KeyL': 'L',
+                'KeyZ': 'Z', 'KeyX': 'X', 'KeyC': 'C', 'KeyV': 'V', 'KeyB': 'B',
+                'KeyN': 'N', 'KeyM': 'M',
+                'Digit1': '1', 'Digit2': '2', 'Digit3': '3', 'Digit4': '4', 'Digit5': '5',
+                'Digit6': '6', 'Digit7': '7', 'Digit8': '8', 'Digit9': '9', 'Digit0': '0',
+                'Space': 'Space',
+                'Enter': 'Enter',
+                'Backspace': 'BS',
+                'Tab': 'Tab',
+                'Escape': 'Esc',
+                'Delete': 'Del',
+                'Minus': '-',
+                'Equal': '=',
+                'BracketLeft': '[',
+                'BracketRight': ']',
+                'Backslash': '\\',
+                'Semicolon': ';',
+                'Quote': "'",
+                'Comma': ',',
+                'Period': '.',
+                'Slash': '/',
+                'Backquote': '`',
+                'ShiftLeft': 'LShift',
+                'ShiftRight': 'RShift',
+                'ControlLeft': 'LCtrl',
+                'ControlRight': 'RCtrl',
+                'AltLeft': 'LAlt',
+                'AltRight': 'RAlt',
+                'MetaLeft': 'LWin',
+                'MetaRight': 'RWin',
+                'OSLeft': 'LWin',
+                'OSRight': 'RWin',
+                'ArrowUp': '↑',
+                'ArrowDown': '↓',
+                'ArrowLeft': '←',
+                'ArrowRight': '→',
+                'Convert': 'Lang1',
+                'NonConvert': '無変換',
+                'KanaMode': 'Lang2',
+                'Lang1': 'Lang1',
+                'Lang2': 'Lang2',
+            };
+
+            const mappedKey = keyMapping[keyCode];
+            if (!mappedKey) {
+                console.log('Unmapped keyCode:', keyCode);
+                return;
+            }
+
+            const layerBindings = keymapData.layers[currentLayer];
+
+            // 現在のレイヤーで該当するキーを探す
+            layerBindings.forEach((binding, index) => {
+                // 複数のマッチ条件をチェック
+                let isMatch = false;
+
+                if (binding.type === 'keypress' && binding.key === mappedKey) {
+                    isMatch = true;
+                } else if (binding.type === 'mod-tap') {
+                    // mod-tapはメインキーまたは修飾キーにマッチ
+                    if (binding.key === mappedKey || binding.mod === mappedKey) {
+                        isMatch = true;
+                    }
+                } else if (binding.type === 'layer-tap' && binding.key === mappedKey) {
+                    isMatch = true;
+                } else if (binding.type === 'momentary' && binding.key === mappedKey) {
+                    isMatch = true;
+                }
+
+                if (isMatch) {
+                    const keyElement = document.querySelector(`[data-key-index="${index}"]`);
+                    if (keyElement) {
+                        if (isPressed) {
+                            keyElement.classList.add('pressed');
+                            // テスト履歴に追加
+                            keyElement.classList.add('tested');
+                        } else {
+                            keyElement.classList.remove('pressed');
+                            // testedクラスは維持
+                        }
+                    }
+                }
+            });
+        }
+
+    </script>
+</body>
+</html>
