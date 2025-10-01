@@ -45,7 +45,16 @@
 
             <div id="layer-controls" class="layer-controls" style="display: none;">
                 <label>レイヤー:</label>
-                <div id="layer-buttons" class="layer-buttons"></div>
+                <div class="layer-buttons-row">
+                    <div id="layer-buttons" class="layer-buttons"></div>
+                    <button id="open-trackball-test" class="trackball-test-button" style="display: none;">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                            <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+                            <circle cx="10" cy="10" r="3" fill="currentColor"/>
+                        </svg>
+                        トラックボールテスト
+                    </button>
+                </div>
                 <div class="current-layer-info">
                     <span id="current-layer-name">Layer 0: Default</span>
                 </div>
@@ -85,6 +94,74 @@
         <section id="keyboard-display" class="keyboard-display" style="display: none;">
             <div id="keyboard-visual" class="keyboard-visual"></div>
         </section>
+
+        <!-- トラックボールテストポップアップ -->
+        <div id="trackball-popup" class="trackball-popup" style="display: none;">
+            <div class="trackball-popup-content">
+                <div class="trackball-popup-header">
+                    <h3>トラックボールテスト</h3>
+                    <button id="close-trackball-popup" class="close-popup-button">&times;</button>
+                </div>
+                <div class="trackball-popup-body">
+                    <div class="trackball-container">
+                        <div class="trackball-section">
+                            <h4>カーソル操作</h4>
+                            <div class="trackball-visual" id="cursor-test-area">
+                                <div class="cursor-indicator" id="cursor-indicator"></div>
+                                <div class="center-marker"></div>
+                            </div>
+                            <div class="trackball-stats">
+                                <div class="stat-item">
+                                    <span class="stat-label">X移動量:</span>
+                                    <span class="stat-value" id="cursor-x">0</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Y移動量:</span>
+                                    <span class="stat-value" id="cursor-y">0</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">総移動量:</span>
+                                    <span class="stat-value" id="cursor-total">0</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="trackball-section">
+                            <h4>スクロール操作</h4>
+                            <div class="scroll-visual">
+                                <div class="scroll-indicator-horizontal">
+                                    <div class="scroll-arrow left" id="scroll-left">←</div>
+                                    <div class="scroll-indicator-vertical">
+                                        <div class="scroll-arrow up" id="scroll-up">↑</div>
+                                        <div class="scroll-center"></div>
+                                        <div class="scroll-arrow down" id="scroll-down">↓</div>
+                                    </div>
+                                    <div class="scroll-arrow right" id="scroll-right">→</div>
+                                </div>
+                            </div>
+                            <div class="trackball-stats">
+                                <div class="stat-item">
+                                    <span class="stat-label">上スクロール:</span>
+                                    <span class="stat-value" id="scroll-up-count">0</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">下スクロール:</span>
+                                    <span class="stat-value" id="scroll-down-count">0</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">左スクロール:</span>
+                                    <span class="stat-value" id="scroll-left-count">0</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">右スクロール:</span>
+                                    <span class="stat-value" id="scroll-right-count">0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="reset-trackball" class="reset-button">リセット</button>
+                </div>
+            </div>
+        </div>
 
         <section class="tester-info">
             <h3>使い方</h3>
@@ -165,12 +242,28 @@
         let testHistory = new Set(); // テスト済みキーの履歴
         let customKeyboardData = null; // カスタムキーボードのデータを保存
 
+        // トラックボールテスト用の変数
+        let trackballEnabled = false;
+        let trackballAvailable = false; // Soa44/Soa39で利用可能
+        let cursorX = 0;
+        let cursorY = 0;
+        let cursorTotal = 0;
+        let scrollUpCount = 0;
+        let scrollDownCount = 0;
+        let scrollLeftCount = 0;
+        let scrollRightCount = 0;
+        let scrollTotal = 0;
+        let lastMouseMoveTime = 0;
+        let mouseMovementThrottle = 16; // 約60fps
+
         // キーボード選択
         document.getElementById('keyboard-select').addEventListener('change', async (e) => {
             const selectedKeyboard = e.target.value;
             if (!selectedKeyboard) {
                 document.getElementById('layer-controls').style.display = 'none';
                 document.getElementById('keyboard-display').style.display = 'none';
+                document.getElementById('open-trackball-test').style.display = 'none';
+                trackballAvailable = false;
                 return;
             }
 
@@ -178,11 +271,22 @@
             if (keyboardConfigs[selectedKeyboard]) {
                 currentKeyboard = keyboardConfigs[selectedKeyboard];
                 await loadKeyboardData(currentKeyboard);
+
+                // Soa44とSoa39の場合はトラックボールテストボタンを表示
+                if (selectedKeyboard === 'soa44' || selectedKeyboard === 'soa39') {
+                    trackballAvailable = true;
+                    document.getElementById('open-trackball-test').style.display = 'inline-flex';
+                } else {
+                    trackballAvailable = false;
+                    document.getElementById('open-trackball-test').style.display = 'none';
+                }
             }
             // カスタムキーボード
             else if (selectedKeyboard.startsWith('custom_') && customKeyboardData) {
                 currentKeyboard = customKeyboardData;
                 await loadKeyboardData(currentKeyboard);
+                trackballAvailable = false;
+                document.getElementById('open-trackball-test').style.display = 'none';
             }
         });
 
@@ -1136,6 +1240,146 @@
                 });
             });
         }
+
+        // トラックボール - カーソル操作の検出
+        document.addEventListener('mousemove', (e) => {
+            if (!trackballEnabled) return;
+
+            // スロットリング処理
+            const now = Date.now();
+            if (now - lastMouseMoveTime < mouseMovementThrottle) return;
+            lastMouseMoveTime = now;
+
+            const movementX = e.movementX || 0;
+            const movementY = e.movementY || 0;
+
+            // 累積値を更新
+            cursorX += movementX;
+            cursorY += movementY;
+            cursorTotal += Math.abs(movementX) + Math.abs(movementY);
+
+            // UIを更新
+            updateCursorDisplay();
+        });
+
+        // トラックボール - スクロール操作の検出
+        document.addEventListener('wheel', (e) => {
+            if (!trackballEnabled) return;
+
+            const deltaY = e.deltaY;
+            const deltaX = e.deltaX;
+
+            // 縦スクロール
+            if (deltaY > 0) {
+                // 下スクロール
+                scrollDownCount++;
+                flashScrollIndicator('down');
+            } else if (deltaY < 0) {
+                // 上スクロール
+                scrollUpCount++;
+                flashScrollIndicator('up');
+            }
+
+            // 横スクロール
+            if (deltaX > 0) {
+                // 右スクロール
+                scrollRightCount++;
+                flashScrollIndicator('right');
+            } else if (deltaX < 0) {
+                // 左スクロール
+                scrollLeftCount++;
+                flashScrollIndicator('left');
+            }
+
+            scrollTotal += Math.abs(deltaY) + Math.abs(deltaX);
+
+            // UIを更新
+            updateScrollDisplay();
+        });
+
+        // カーソル表示の更新
+        function updateCursorDisplay() {
+            document.getElementById('cursor-x').textContent = cursorX;
+            document.getElementById('cursor-y').textContent = cursorY;
+            document.getElementById('cursor-total').textContent = Math.round(cursorTotal);
+
+            // カーソルインジケーターの位置を更新（中心からの相対位置）
+            const indicator = document.getElementById('cursor-indicator');
+            const maxOffset = 80; // 最大移動距離（px）
+            const scale = 0.1; // スケール係数
+
+            const offsetX = Math.max(-maxOffset, Math.min(maxOffset, cursorX * scale));
+            const offsetY = Math.max(-maxOffset, Math.min(maxOffset, cursorY * scale));
+
+            indicator.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+        }
+
+        // スクロール表示の更新
+        function updateScrollDisplay() {
+            document.getElementById('scroll-up-count').textContent = scrollUpCount;
+            document.getElementById('scroll-down-count').textContent = scrollDownCount;
+            document.getElementById('scroll-left-count').textContent = scrollLeftCount;
+            document.getElementById('scroll-right-count').textContent = scrollRightCount;
+        }
+
+        // スクロールインジケーターの点滅
+        function flashScrollIndicator(direction) {
+            const element = document.getElementById(`scroll-${direction}`);
+            element.classList.add('active');
+            setTimeout(() => {
+                element.classList.remove('active');
+            }, 200);
+        }
+
+        // トラックボール統計のリセット
+        function resetTrackballStats() {
+            cursorX = 0;
+            cursorY = 0;
+            cursorTotal = 0;
+            scrollUpCount = 0;
+            scrollDownCount = 0;
+            scrollLeftCount = 0;
+            scrollRightCount = 0;
+            scrollTotal = 0;
+
+            updateCursorDisplay();
+            updateScrollDisplay();
+
+            // インジケーターの位置をリセット
+            const indicator = document.getElementById('cursor-indicator');
+            indicator.style.transform = 'translate(0, 0)';
+        }
+
+        // リセットボタンのイベントリスナー
+        document.getElementById('reset-trackball').addEventListener('click', () => {
+            resetTrackballStats();
+        });
+
+        // トラックボールテストポップアップを開く
+        document.getElementById('open-trackball-test').addEventListener('click', () => {
+            document.getElementById('trackball-popup').style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // 背景スクロールを無効化
+            trackballEnabled = true;
+            resetTrackballStats();
+        });
+
+        // トラックボールテストポップアップを閉じる
+        function closeTrackballPopup() {
+            document.getElementById('trackball-popup').style.display = 'none';
+            document.body.style.overflow = ''; // 背景スクロールを有効化
+            trackballEnabled = false;
+        }
+
+        document.getElementById('close-trackball-popup').addEventListener('click', () => {
+            closeTrackballPopup();
+        });
+
+        // ポップアップ外クリックで閉じる
+        document.getElementById('trackball-popup').addEventListener('click', (e) => {
+            if (e.target.id === 'trackball-popup') {
+                closeTrackballPopup();
+            }
+        });
 
     </script>
 </body>
