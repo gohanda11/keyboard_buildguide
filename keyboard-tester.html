@@ -208,12 +208,21 @@
     <script>
         // Chrome拡張機能のエラーを抑制
         window.addEventListener('error', (e) => {
-            // エラーのソースをチェック（message, filename, error.stackなど）
-            const errorSource = e.filename || e.message || (e.error && e.error.stack) || '';
-            if (errorSource.includes('chrome-extension://')) {
-                e.stopImmediatePropagation();
-                e.preventDefault();
-                return true;
+            try {
+                // エラーのソースをチェック（filename, message, error.stackなど）
+                const filename = e.filename || '';
+                const message = e.message || '';
+                const stack = (e.error && e.error.stack) ? e.error.stack : '';
+                const errorSource = filename + ' ' + message + ' ' + stack;
+
+                if (errorSource.includes('chrome-extension://')) {
+                    e.stopImmediatePropagation();
+                    e.preventDefault();
+                    return true;
+                }
+            } catch (err) {
+                // エラーハンドラー自体がエラーを起こさないようにする
+                console.warn('Error handler failed:', err);
             }
         }, true);
 
