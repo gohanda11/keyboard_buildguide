@@ -208,7 +208,9 @@
     <script>
         // Chrome拡張機能のエラーを抑制
         window.addEventListener('error', (e) => {
-            if (e.filename && e.filename.includes('chrome-extension://')) {
+            // エラーのソースをチェック（message, filename, error.stackなど）
+            const errorSource = e.filename || e.message || (e.error && e.error.stack) || '';
+            if (errorSource.includes('chrome-extension://')) {
                 e.stopImmediatePropagation();
                 e.preventDefault();
                 return true;
