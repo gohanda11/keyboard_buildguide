@@ -1,0 +1,151 @@
+// 部品データベース（JSONからJavaScriptオブジェクトに変換）
+const partsDatabase = {
+  "parts": {
+    "xiao-nrf52840-plus": {
+      "name": "XIAO nRF52840 Plus",
+      "suppliers": [
+        {
+          "name": "遊舎工房",
+          "url": "https://shop.yushakobo.jp/products/10946?_pos=1&_sid=884ec3eed&_ss=r"
+        },
+        {
+          "name": "SWITCH SCIENCE",
+          "url": "https://www.switch-science.com/products/10468?srsltid=AfmBOop6P3scmrxNJdXFY_g8qWHIoYW5u5mDK1f3NNkCFPz9CK5flvyk"
+        },
+        {
+          "name": "Seeed Studio",
+          "url": "https://jp.seeedstudio.com/Seeed-Studio-XIAO-nRF52840-Plus-p-6359.html"
+        }
+      ],
+      "warning": "XIAO nRF52840は対応していません。必ず「XIAO nRF52840 Plus」をお買い求めください。",
+      "warningType": "warning"
+    },
+    "aa-battery": {
+      "name": "単三電池",
+      "suppliers": [
+        {
+          "name": "Amazon",
+          "url": "https://amzn.asia/d/7iQGAJh"
+        }
+      ],
+      "info": "電圧計測を充電池の仕様に合わせているので、充電池がおすすめです。",
+      "infoType": "info"
+    },
+    "aaa-battery": {
+      "name": "単四電池",
+      "suppliers": [
+        {
+          "name": "Amazon",
+          "url": "https://amzn.asia/d/7LVyuvz"
+        }
+      ],
+      "info": "電圧計測を充電池の仕様に合わせているので、充電池がおすすめです。",
+      "infoType": "info"
+    },
+    "switches-choc-mx": {
+      "name": "スイッチ",
+      "description": "ChocスイッチまたはMXスイッチ、Gateron LP 3.0スイッチに対応",
+      "suppliers": []
+    },
+    "switches-choc-v1-v2": {
+      "name": "キースイッチ（Choc v1またはv2）",
+      "suppliers": [
+        {
+          "name": "遊舎工房",
+          "url": "https://shop.yushakobo.jp/collections/all-switches/Kailh-Choc-V2%E3%82%B9%E3%82%A4%E3%83%83%E3%83%81"
+        },
+        {
+          "name": "TALP KEYBOARD",
+          "url": "https://shop.talpkeyboard.com/collections/kailh-chocv2"
+        }
+      ]
+    },
+    "bearing-4x1.5x2": {
+      "name": "ベアリング（外径4mm、内径1.5mm、幅2mm）",
+      "suppliers": [
+        {
+          "name": "Amazon",
+          "url": "https://amzn.asia/d/0X4I1g0"
+        }
+      ]
+    },
+    "trackball-25mm": {
+      "name": "25mmトラックボール",
+      "suppliers": [
+        {
+          "name": "Amazon",
+          "url": "https://amzn.asia/d/8gMm4S2"
+        },
+        {
+          "name": "Booth",
+          "url": "https://booth.pm/ja/items/6457643"
+        }
+      ]
+    },
+    "keycaps-choc-mx": {
+      "name": "キーキャップ",
+      "description": "選択したスイッチタイプ（ChocまたはMX）に対応するキーキャップをご用意ください",
+      "suppliers": []
+    }
+  },
+  "keyboards": {
+    "soa44": {
+      "parts": [
+        {
+          "id": "xiao-nrf52840-plus",
+          "quantity": 2,
+          "unit": "個"
+        },
+        {
+          "id": "aa-battery",
+          "quantity": 2,
+          "unit": "個"
+        },
+        {
+          "id": "switches-choc-mx",
+          "quantity": 44,
+          "unit": "個"
+        },
+        {
+          "id": "bearing-4x1.5x2",
+          "quantity": 3,
+          "unit": "個"
+        },
+        {
+          "id": "trackball-25mm",
+          "quantity": 1,
+          "unit": "個"
+        },
+        {
+          "id": "keycaps-choc-mx",
+          "quantity": 44,
+          "unit": "個"
+        }
+      ]
+    },
+    "soa39": {
+      "parts": [
+        {
+          "id": "xiao-nrf52840-plus",
+          "quantity": 2,
+          "unit": "個"
+        },
+        {
+          "id": "aaa-battery",
+          "quantity": 2,
+          "unit": "本"
+        },
+        {
+          "id": "bearing-4x1.5x2",
+          "quantity": 3,
+          "unit": "個"
+        },
+        {
+          "id": "switches-choc-v1-v2",
+          "quantity": 39,
+          "unit": "個"
+        }
+      ]
+    }
+  }
+};

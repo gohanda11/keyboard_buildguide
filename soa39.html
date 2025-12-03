@@ -163,46 +163,9 @@
 
                     <div class="parts-list">
                         <h4>別途用意が必要な部品</h4>
-                        <ul>
-                            <li>XIAO nRF52840 Plus <span style="background: #df7919; color: white; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.8rem; font-weight: bold; margin-left: 0.5rem;">2個</span>
-                                <div style="margin-top: 0.5rem; padding-left: 1rem;">
-                                    <span style="font-size: 0.9rem; color: #666;">購入先：</span>
-                                    <a href="https://shop.yushakobo.jp/products/10946?_pos=1&_sid=884ec3eed&_ss=r" target="_blank" style="color: #667eea; text-decoration: none; margin: 0 0.5rem;">遊舎工房</a>
-                                    <span style="color: #999;">|</span>
-                                    <a href="https://www.switch-science.com/products/10468?srsltid=AfmBOop6P3scmrxNJdXFY_g8qWHIoYW5u5mDK1f3NNkCFPz9CK5flvyk" target="_blank" style="color: #667eea; text-decoration: none; margin: 0 0.5rem;">SWITCH SCIENCE</a>
-                                    <span style="color: #999;">|</span>
-                                    <a href="https://jp.seeedstudio.com/Seeed-Studio-XIAO-nRF52840-Plus-p-6359.html" target="_blank" style="color: #667eea; text-decoration: none; margin: 0 0.5rem;">Seeed Studio</a>
-                                </div>
-                                <div style="background: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 1rem; border-radius: 8px; margin: 0.5rem 0 0 1rem;">
-                                    <strong>⚠️ 注意</strong><br>
-                                    XIAO nRF52840は対応していません。必ず「XIAO nRF52840 Plus」をお買い求めください。
-                                </div>
-                            </li>
-                            <li>単四電池 <span style="background: #df7919; color: white; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.8rem; font-weight: bold; margin-left: 0.5rem;">2本</span>
-                                <div style="margin-top: 0.5rem; padding-left: 1rem;">
-                                    <span style="font-size: 0.9rem; color: #666;">購入先：</span>
-                                    <a href="https://amzn.asia/d/7LVyuvz" target="_blank" style="color: #667eea; text-decoration: none; margin: 0 0.5rem;">Amazon</a>
-                                </div>
-                                <div style="background: #e7f3ff; border: 1px solid #b3d9ff; color: #0066cc; padding: 1rem; border-radius: 8px; margin: 0.5rem 0 0 1rem;">
-                                    <strong>ℹ️ 情報</strong><br>
-                                    電圧計測を充電池の仕様に合わせているので、充電池がおすすめです。
-                                </div>
-                            </li>
-                            <li>ベアリング（外径4mm、内径1.5mm、幅2mm） <span style="background: #df7919; color: white; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.8rem; font-weight: bold; margin-left: 0.5rem;">3個</span>
-                                <div style="margin-top: 0.5rem; padding-left: 1rem;">
-                                    <span style="font-size: 0.9rem; color: #666;">購入先：</span>
-                                    <a href="https://amzn.asia/d/0X4I1g0" target="_blank" style="color: #667eea; text-decoration: none; margin: 0 0.5rem;">Amazon</a>
-                                </div>
-                            </li>
-                            <li>キースイッチ（Choc v1またはv2） <span style="background: #df7919; color: white; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.8rem; font-weight: bold; margin-left: 0.5rem;">39個</span>
-                                <div style="margin-top: 0.5rem; padding-left: 1rem;">
-                                    <span style="font-size: 0.9rem; color: #666;">購入先：</span>
-                                    <a href="https://shop.yushakobo.jp/collections/all-switches/Kailh-Choc-V2%E3%82%B9%E3%82%A4%E3%83%83%E3%83%81" target="_blank" style="color: #667eea; text-decoration: none; margin: 0 0.5rem;">遊舎工房</a>
-                                    <span style="color: #999;">|</span>
-                                    <a href="https://shop.talpkeyboard.com/collections/kailh-chocv2" target="_blank" style="color: #667eea; text-decoration: none; margin: 0 0.5rem;">TALP KEYBOARD</a>
-                                </div>
-                            </li>
-                        </ul>
+                        <div id="soa39-parts-list">
+                            <p>読み込み中...</p>
+                        </div>
                     </div>
 
                     <div class="tools-list">
@@ -714,7 +677,14 @@
         </div>
     </footer>
 
+    <script src="parts-database.js"></script>
+    <script src="parts-loader.js"></script>
     <script>
+        // ページ読み込み時に部品データを読み込む
+        document.addEventListener('DOMContentLoaded', function() {
+            loadKeyboardParts('soa39', 'soa39-parts-list');
+        });
+
         function openModal(img) {
             const modal = document.getElementById('imageModal');
             const modalImg = document.getElementById('modalImage');
