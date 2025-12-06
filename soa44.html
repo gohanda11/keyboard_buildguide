@@ -147,6 +147,11 @@
                             <li>センサーレンズ <span style="background: #28a745; color: white; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.8rem; font-weight: bold; margin-left: 0.5rem;">1個</span></li>
                             <li>FFCケーブル <span style="background: #28a745; color: white; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.8rem; font-weight: bold; margin-left: 0.5rem;">1個</span></li>
                             <li>Chocソケット <span style="background: #28a745; color: white; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.8rem; font-weight: bold; margin-left: 0.5rem;">5個</span></li>
+                            <li>SK6812MINI-E LED <span style="background: #28a745; color: white; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.8rem; font-weight: bold; margin-left: 0.5rem;">2個</span>
+                                <div style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.9rem; color: #666;">
+                                    ※2025/11/28以前に購入された方には付属しません
+                                </div>
+                            </li>
                             <li>単三電池ホルダー <span style="background: #28a745; color: white; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.8rem; font-weight: bold; margin-left: 0.5rem;">2個</span></li>
                             <li>ゴムブッシュ <span style="background: #28a745; color: white; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.8rem; font-weight: bold; margin-left: 0.5rem;">8個</span></li>
                             <li>M2ねじ（10mm） <span style="background: #28a745; color: white; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.8rem; font-weight: bold; margin-left: 0.5rem;">8個</span></li>
@@ -314,6 +319,14 @@
                 <div class="step-content">
                     <p>ZMKファームウェアをXIAO nRF52840 Plusに書き込みます。</p>
 
+                    <div style="background: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 1rem; border-radius: 8px; margin: 1.5rem 0;">
+                        <strong>⚠️ 購入時期により使用するファームウェアが異なります</strong><br><br>
+                        <strong>2025/11/28以前に購入された方：</strong><br>
+                        → <a href="https://github.com/gohanda11/zmk-config-soa44" target="_blank" style="color: #667eea; text-decoration: underline;">zmk-config-soa44</a> を使用してください<br><br>
+                        <strong>2025/11/28以降に購入された方：</strong><br>
+                        → <a href="https://github.com/gohanda11/zmk-config-soa44-v2" target="_blank" style="color: #667eea; text-decoration: underline;">zmk-config-soa44-v2</a> を使用してください（LED対応版）
+                    </div>
+
                     <div class="warning">
                         キーマップの変更にはGitHubアカウントが必要です。<br>
                         詳しい手順は下記の動画が参考になります。
@@ -321,17 +334,17 @@
 
                     <div style="text-align: center; margin: 1.5rem 0;">
                         <a href="https://www.youtube.com/watch?v=vXpV9jgRB1M" target="_blank">
-                            <img src="https://img.youtube.com/vi/vXpV9jgRB1M/maxresdefault.jpg" 
-                                 alt="ZMKファームウェア書き込み手順の動画" 
+                            <img src="https://img.youtube.com/vi/vXpV9jgRB1M/maxresdefault.jpg"
+                                 alt="ZMKファームウェア書き込み手順の動画"
                                  style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" />
                         </a>
                         <p style="margin-top: 0.5rem; color: #666; font-size: 0.9rem;">
                             ↑ クリックして動画を視聴
                         </p>
                     </div>
-                    
+
                     <ol>
-                        <li><a href="https://github.com/gohanda11/zmk-config-soa44" target="_blank">ZMKリポジトリ</a>をフォークする</li>
+                        <li>上記の購入時期に応じたZMKリポジトリをフォークする</li>
                         <li><a href="https://nickcoutsos.github.io/keymap-editor/" target="_blank">KeymapEditor</a>でキーマップを変更し保存する</li>
                         <li>ビルドが完了したらファームウェアをダウンロード</li>
                         <li>左のXiaoにUSB接続、リセットボタンを2回素早く押してブートローダーモードに入る</li>
