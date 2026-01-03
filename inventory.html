@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在庫管理 - gohanda_kbd</title>
+    <link rel="icon" type="image/png" href="image/icon/gohanda.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/inventory.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <h1>gohanda_kbd</h1>
+                </div>
+                <div class="nav-links">
+                    <a href="index.html">ホーム</a>
+                    <a href="inventory.html" class="active">在庫管理</a>
+                    <div id="userInfo" class="user-info"></div>
+                    <button id="logoutButton" class="btn btn-secondary">ログアウト</button>
+                </div>
+            </nav>
+            <div class="hero">
+                <h2>在庫管理システム</h2>
+                <p>部品・商品の在庫を一元管理</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="inventory-main">
+        <!-- サイドバーナビゲーション -->
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-tab="dashboard">
+                    <span class="icon">📊</span>
+                    <span>ダッシュボード</span>
+                </button>
+                <button class="nav-item" data-tab="parts">
+                    <span class="icon">🔩</span>
+                    <span>部品管理</span>
+                </button>
+                <button class="nav-item" data-tab="products">
+                    <span class="icon">⌨️</span>
+                    <span>商品管理</span>
+                </button>
+                <button class="nav-item" data-tab="manufacturing">
+                    <span class="icon">🏭</span>
+                    <span>製造</span>
+                </button>
+                <button class="nav-item" data-tab="sales">
+                    <span class="icon">💰</span>
+                    <span>販売</span>
+                </button>
+                <button class="nav-item" data-tab="orders">
+                    <span class="icon">📦</span>
+                    <span>発注</span>
+                </button>
+            </nav>
+        </aside>
+
+        <!-- メインコンテンツエリア -->
+        <div class="content-area">
+            <!-- ダッシュボード -->
+            <section id="dashboard-tab" class="tab-content active">
+                <h2>ダッシュボード</h2>
+
+                <!-- 統計情報 -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>総部品数</h3>
+                        <p class="stat-value" id="totalParts">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>総商品数</h3>
+                        <p class="stat-value" id="totalProducts">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>今月の売上</h3>
+                        <p class="stat-value" id="monthlySales">¥0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>今月の製造数</h3>
+                        <p class="stat-value" id="monthlyManufacturing">0</p>
+                    </div>
+                </div>
+
+                <!-- アラート -->
+                <div class="alerts-section">
+                    <h3>⚠️ 在庫アラート</h3>
+                    <div id="alertsList" class="alerts-list">
+                        <p class="no-data">アラートはありません</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 部品管理タブ -->
+            <section id="parts-tab" class="tab-content">
+                <div class="section-header">
+                    <h2>部品管理</h2>
+                    <button class="btn btn-primary" id="addPartButton">+ 新規部品追加</button>
+                </div>
+
+                <!-- 検索・フィルター -->
+                <div class="search-bar">
+                    <input type="text" id="partsSearchInput" placeholder="部品名で検索..." class="search-input">
+                    <button class="btn btn-secondary" id="partsSearchButton">検索</button>
+                </div>
+
+                <!-- 部品一覧テーブル -->
+                <div class="table-container">
+                    <table id="partsTable" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>部品名</th>
+                                <th>在庫数</th>
+                                <th>単位</th>
+                                <th>最小在庫</th>
+                                <th>発注点</th>
+                                <th>単価</th>
+                                <th>ステータス</th>
+                                <th>アクション</th>
+                            </tr>
+                        </thead>
+                        <tbody id="partsTableBody">
+                            <tr>
+                                <td colspan="8" class="no-data">部品データがありません</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 商品管理タブ -->
+            <section id="products-tab" class="tab-content">
+                <div class="section-header">
+                    <h2>商品管理</h2>
+                    <button class="btn btn-primary" id="addProductButton">+ 新規商品追加</button>
+                </div>
+                <p class="coming-soon">商品管理機能は Phase 2 で実装予定です</p>
+            </section>
+
+            <!-- 製造タブ -->
+            <section id="manufacturing-tab" class="tab-content">
+                <h2>製造管理</h2>
+                <p class="coming-soon">製造機能は Phase 5 で実装予定です</p>
+            </section>
+
+            <!-- 販売タブ -->
+            <section id="sales-tab" class="tab-content">
+                <h2>販売管理</h2>
+                <p class="coming-soon">販売機能は Phase 6 で実装予定です</p>
+            </section>
+
+            <!-- 発注タブ -->
+            <section id="orders-tab" class="tab-content">
+                <h2>発注管理</h2>
+                <p class="coming-soon">発注機能は Phase 7 で実装予定です</p>
+            </section>
+        </div>
+    </main>
+
+    <!-- 部品追加/編集モーダル -->
+    <div id="partModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="partModalTitle">新規部品追加</h3>
+                <button class="modal-close" id="closePartModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="partForm">
+                    <input type="hidden" id="partId">
+
+                    <div class="form-group">
+                        <label for="partName">部品名 <span class="required">*</span></label>
+                        <input type="text" id="partName" required placeholder="例: M2スペーサー 13mm">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="partStock">現在の在庫数 <span class="required">*</span></label>
+                            <input type="number" id="partStock" required min="0" step="0.01" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="partUnit">単位</label>
+                            <input type="text" id="partUnit" placeholder="例: 個、本、枚" value="個">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="partMinStock">最小在庫数</label>
+                            <input type="number" id="partMinStock" min="0" step="0.01" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="partReorderPoint">発注点</label>
+                            <input type="number" id="partReorderPoint" min="0" step="0.01" value="0">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="partCost">単価（円）</label>
+                        <input type="number" id="partCost" min="0" step="0.01" value="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="partDescription">説明</label>
+                        <textarea id="partDescription" rows="3" placeholder="部品の説明や備考"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="partTags">タグ（カンマ区切り）</label>
+                        <input type="text" id="partTags" placeholder="例: MCU, 基板, LED">
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="cancelPartButton">キャンセル</button>
+                        <button type="submit" class="btn btn-primary" id="savePartButton">保存</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Supabase設定 -->
+    <script src="js/supabase-config.js"></script>
+
+    <!-- 認証ヘルパー -->
+    <script src="js/auth.js"></script>
+
+    <!-- 在庫管理スクリプト -->
+    <script src="js/inventory-parts.js"></script>
+
+    <!-- メインスクリプト -->
+    <script>
+        let currentUser = null;
+
+        // ページ読み込み時の初期化
+        window.addEventListener('DOMContentLoaded', async () => {
+            // 認証チェック
+            try {
+                currentUser = await authHelpers.requireAuth();
+                console.log('ログインユーザー:', currentUser);
+
+                // ユーザー情報を表示
+                authHelpers.displayUserInfo(currentUser);
+
+                // データ読み込み
+                await loadDashboardData();
+                await loadPartsData();
+
+            } catch (error) {
+                console.error('初期化エラー:', error);
+            }
+        });
+
+        // ログアウトボタン
+        document.getElementById('logoutButton').addEventListener('click', () => {
+            if (confirm('ログアウトしますか？')) {
+                authHelpers.signOut();
+            }
+        });
+
+        // タブ切り替え
+        const navItems = document.querySelectorAll('.nav-item');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const tabName = item.dataset.tab;
+
+                // アクティブ状態の切り替え
+                navItems.forEach(nav => nav.classList.remove('active'));
+                item.classList.add('active');
+
+                // タブコンテンツの切り替え
+                tabContents.forEach(content => content.classList.remove('active'));
+                document.getElementById(`${tabName}-tab`).classList.add('active');
+            });
+        });
+
+        // ダッシュボードデータの読み込み
+        async function loadDashboardData() {
+            try {
+                // 部品数のカウント
+                const { count: partsCount } = await supabase
+                    .from('parts')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('user_id', currentUser.id);
+
+                document.getElementById('totalParts').textContent = partsCount || 0;
+
+                // 商品数のカウント（Phase 2で実装）
+                document.getElementById('totalProducts').textContent = '0';
+
+                // 今月の売上（Phase 6で実装）
+                document.getElementById('monthlySales').textContent = '¥0';
+
+                // 今月の製造数（Phase 5で実装）
+                document.getElementById('monthlyManufacturing').textContent = '0';
+
+                // アラートの表示
+                await loadAlerts();
+
+            } catch (error) {
+                console.error('ダッシュボードデータ読み込みエラー:', error);
+            }
+        }
+
+        // アラートの読み込み
+        async function loadAlerts() {
+            try {
+                const { data: parts, error } = await supabase
+                    .from('parts')
+                    .select('*')
+                    .eq('user_id', currentUser.id)
+                    .lt('current_stock', supabase.raw('min_stock'));
+
+                if (error) throw error;
+
+                const alertsList = document.getElementById('alertsList');
+
+                if (parts && parts.length > 0) {
+                    alertsList.innerHTML = parts.map(part => `
+                        <div class="alert-item alert-danger">
+                            <strong>${part.name}</strong>: 在庫が最小在庫数を下回っています
+                            （現在: ${part.current_stock}${part.unit} / 最小: ${part.min_stock}${part.unit}）
+                        </div>
+                    `).join('');
+                } else {
+                    alertsList.innerHTML = '<p class="no-data">アラートはありません</p>';
+                }
+
+            } catch (error) {
+                console.error('アラート読み込みエラー:', error);
+            }
+        }
+    </script>
+</body>
+</html>

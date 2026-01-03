@@ -1,0 +1,34 @@
+error.txt
+.claude/
+.serena/
+.mcp.json
+CLAUDE.md
+url.txt
+buildguide.txt
+送り状Keybase44.pdf
+INVENTORY_SYSTEM_SPEC.md
+client_secret_*.json
+SUPABASE_SETUP.md
+database-schema.sql
+
+# Node.js関連
+node_modules/
+package.json
+package-lock.json
+
+# デバッグ・テスト用スクリプト
+check-console.js
+check-responsive.js
+check-github-pages.js
+check-github-responsive.js
+check-github-detailed.js
+detailed-check.js
+monitor-errors.js
+live-monitor.js
+get-console-logs.js
+
+# テンプレートファイル
+buildguide-template.html
+
+# Supabase設定（APIキーを含むため非公開）
+js/supabase-config.js
