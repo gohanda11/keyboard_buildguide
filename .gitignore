@@ -29,6 +29,3 @@ get-console-logs.js
 
 # テンプレートファイル
 buildguide-template.html
-
-# Supabase設定（APIキーを含むため非公開）
-js/supabase-config.js
