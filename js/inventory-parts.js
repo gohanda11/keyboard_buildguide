@@ -8,6 +8,8 @@
 
 let partsData = [];
 let editingPartId = null;
+let selectedPartId = null;
+let selectedPartSuppliers = [];
 
 // ========================================
 // 部品データの読み込み
@@ -38,14 +40,19 @@ function renderPartsTable(parts) {
     const tbody = document.getElementById('partsTableBody');
 
     if (parts.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" class="no-data">部品データがありません</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" class="no-data">部品データがありません</td></tr>';
         return;
     }
 
     tbody.innerHTML = parts.map(part => {
         const status = getStockStatus(part);
+        const isSelected = selectedPartId === part.id;
         return `
-            <tr data-part-id="${part.id}">
+            <tr data-part-id="${part.id}"
+                onclick="selectPart('${part.id}')"
+                style="cursor: pointer; ${isSelected ? 'background: #e7f3ff;' : ''}"
+                onmouseover="this.style.background='#f5f5f5'"
+                onmouseout="this.style.background='${isSelected ? '#e7f3ff' : 'white'}'">
                 <td>${escapeHtml(part.name)}</td>
                 <td>${part.current_stock}</td>
                 <td>${escapeHtml(part.unit || '個')}</td>
@@ -53,10 +60,6 @@ function renderPartsTable(parts) {
                 <td>${part.reorder_point}</td>
                 <td>¥${part.unit_cost.toLocaleString()}</td>
                 <td><span class="status-badge status-${status.class}">${status.text}</span></td>
-                <td>
-                    <button class="btn btn-sm btn-primary" onclick="editPart('${part.id}')">編集</button>
-                    <button class="btn btn-sm btn-danger" onclick="deletePart('${part.id}')">削除</button>
-                </td>
             </tr>
         `;
     }).join('');
@@ -265,8 +268,210 @@ document.getElementById('partsSearchInput').addEventListener('keypress', (e) => 
 });
 
 // ========================================
+// 部品を選択して詳細を表示
+// ========================================
+async function selectPart(partId) {
+    selectedPartId = partId;
+    renderPartsTable(partsData);
+
+    // 部品情報を取得
+    const part = partsData.find(p => p.id === partId);
+    if (!part) return;
+
+    // 購入先を取得
+    try {
+        const { data: suppliers, error } = await supabase
+            .from('part_suppliers')
+            .select('*')
+            .eq('part_id', partId)
+            .eq('user_id', currentUser.id);
+
+        if (error) throw error;
+
+        selectedPartSuppliers = suppliers || [];
+        renderPartDetail(part);
+
+    } catch (error) {
+        console.error('購入先取得エラー:', error);
+        selectedPartSuppliers = [];
+        renderPartDetail(part);
+    }
+}
+
+// ========================================
+// 部品詳細パネルのレンダリング
+// ========================================
+function renderPartDetail(part) {
+    const detailPanel = document.getElementById('partDetailPanel');
+    const detailContent = document.getElementById('partDetailContent');
+
+    if (!part) {
+        detailPanel.style.display = 'none';
+        return;
+    }
+
+    const status = getStockStatus(part);
+
+    detailContent.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1.5rem;">
+            <div>
+                <h3 style="margin: 0 0 0.5rem 0;">${escapeHtml(part.name)}</h3>
+                <span class="status-badge status-${status.class}">${status.text}</span>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+                <button class="btn btn-primary" onclick="editPart('${part.id}')">✏️ 編集</button>
+                <button class="btn btn-danger" onclick="deletePart('${part.id}')">🗑️ 削除</button>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
+            <div>
+                <strong>現在在庫:</strong> ${part.current_stock} ${escapeHtml(part.unit || '個')}
+            </div>
+            <div>
+                <strong>最小在庫:</strong> ${part.min_stock} ${escapeHtml(part.unit || '個')}
+            </div>
+            <div>
+                <strong>発注点:</strong> ${part.reorder_point} ${escapeHtml(part.unit || '個')}
+            </div>
+            <div>
+                <strong>単価:</strong> ¥${part.unit_cost.toLocaleString()}
+            </div>
+        </div>
+
+        ${part.description ? `
+            <div style="margin-bottom: 1.5rem;">
+                <strong>説明:</strong><br>
+                <p style="margin: 0.5rem 0; color: #666;">${escapeHtml(part.description)}</p>
+            </div>
+        ` : ''}
+
+        <div style="border-top: 1px solid #eee; padding-top: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h4 style="margin: 0;">購入先情報</h4>
+                <button class="btn btn-sm btn-primary" onclick="addSupplier('${part.id}')">+ 購入先追加</button>
+            </div>
+            <div id="suppliersList">
+                ${renderSuppliersList()}
+            </div>
+        </div>
+    `;
+
+    detailPanel.style.display = 'block';
+}
+
+// ========================================
+// 購入先リストのレンダリング
+// ========================================
+function renderSuppliersList() {
+    if (selectedPartSuppliers.length === 0) {
+        return '<p style="color: #999; font-style: italic;">購入先が登録されていません</p>';
+    }
+
+    return selectedPartSuppliers.map(supplier => `
+        <div style="background: #f9f9f9; padding: 1rem; border-radius: 6px; margin-bottom: 0.75rem;">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+                <div style="flex: 1;">
+                    <div style="font-weight: bold; margin-bottom: 0.5rem;">${escapeHtml(supplier.supplier_name)}</div>
+                    ${supplier.url ? `<div style="margin-bottom: 0.5rem;">
+                        <a href="${escapeHtml(supplier.url)}" target="_blank" style="color: #667eea; text-decoration: none;">
+                            🔗 ${escapeHtml(supplier.url)}
+                        </a>
+                    </div>` : ''}
+                    ${supplier.price > 0 ? `<div style="color: #666;">価格: ¥${supplier.price.toLocaleString()}</div>` : ''}
+                    ${supplier.notes ? `<div style="color: #666; font-size: 0.9rem; margin-top: 0.5rem;">${escapeHtml(supplier.notes)}</div>` : ''}
+                </div>
+                <button class="btn btn-sm btn-danger" onclick="deleteSupplier('${supplier.id}')">削除</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// ========================================
+// 購入先追加モーダルを開く
+// ========================================
+function addSupplier(partId) {
+    document.getElementById('supplierPartId').value = partId;
+    document.getElementById('supplierForm').reset();
+    document.getElementById('supplierModal').style.display = 'block';
+}
+
+// ========================================
+// 購入先追加モーダルを閉じる
+// ========================================
+function closeSupplierModal() {
+    document.getElementById('supplierModal').style.display = 'none';
+}
+
+// ========================================
+// 購入先を保存
+// ========================================
+async function saveSupplier(event) {
+    event.preventDefault();
+
+    const partId = document.getElementById('supplierPartId').value;
+    const supplierName = document.getElementById('supplierName').value.trim();
+    const supplierUrl = document.getElementById('supplierUrl').value.trim();
+    const supplierPrice = parseFloat(document.getElementById('supplierPrice').value) || 0;
+    const supplierNotes = document.getElementById('supplierNotes').value.trim();
+
+    try {
+        const { error } = await supabase
+            .from('part_suppliers')
+            .insert([{
+                user_id: currentUser.id,
+                part_id: partId,
+                supplier_name: supplierName,
+                url: supplierUrl || null,
+                price: supplierPrice,
+                notes: supplierNotes || null
+            }]);
+
+        if (error) throw error;
+
+        alert('購入先を追加しました');
+        closeSupplierModal();
+        await selectPart(partId); // 詳細を再読み込み
+
+    } catch (error) {
+        console.error('購入先追加エラー:', error);
+        alert('購入先の追加に失敗しました: ' + error.message);
+    }
+}
+
+// ========================================
+// 購入先を削除
+// ========================================
+async function deleteSupplier(supplierId) {
+    if (!confirm('この購入先を削除しますか？')) {
+        return;
+    }
+
+    try {
+        const { error } = await supabase
+            .from('part_suppliers')
+            .delete()
+            .eq('id', supplierId);
+
+        if (error) throw error;
+
+        alert('購入先を削除しました');
+        await selectPart(selectedPartId); // 詳細を再読み込み
+
+    } catch (error) {
+        console.error('購入先削除エラー:', error);
+        alert('購入先の削除に失敗しました: ' + error.message);
+    }
+}
+
+// ========================================
 // グローバルスコープに関数を公開
 // ========================================
 window.loadPartsData = loadPartsData;
 window.editPart = editPart;
 window.deletePart = deletePart;
+window.selectPart = selectPart;
+window.addSupplier = addSupplier;
+window.closeSupplierModal = closeSupplierModal;
+window.saveSupplier = saveSupplier;
+window.deleteSupplier = deleteSupplier;

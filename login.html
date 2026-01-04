@@ -166,18 +166,8 @@
                 const { data: { session } } = await supabase.auth.getSession();
 
                 if (session) {
-                    const user = session.user;
-
-                    // メールアドレスが許可されているかチェック
-                    if (!window.authConfig || !window.authConfig.ALLOWED_EMAILS || !window.authConfig.ALLOWED_EMAILS.includes(user.email)) {
-                        // 許可されていない場合はログアウト
-                        await supabase.auth.signOut();
-                        errorMessage.textContent = 'このアカウントはアクセスが許可されていません。管理者のみアクセス可能です。';
-                        errorMessage.style.display = 'block';
-                        return;
-                    }
-
                     // すでにログイン済みの場合は在庫管理画面へリダイレクト
+                    // メールアドレスチェックはAuth Hookで実施済み
                     window.location.href = 'inventory.html';
                 }
             } catch (error) {
@@ -192,12 +182,17 @@
                 loadingSpinner.style.display = 'block';
                 errorMessage.style.display = 'none';
 
+                // ローカル環境の判定（localhost または 127.0.0.1）
+                const isLocal = window.location.hostname === 'localhost' ||
+                               window.location.hostname === '127.0.0.1';
+                const redirectUrl = isLocal
+                    ? `${window.location.origin}/inventory.html`
+                    : 'https://gohanda11.github.io/keyboard_buildguide/inventory.html';
+
                 const { data, error } = await supabase.auth.signInWithOAuth({
                     provider: 'google',
                     options: {
-                        redirectTo: window.location.hostname === 'localhost'
-                            ? 'http://localhost:8000/inventory.html'
-                            : 'https://gohanda11.github.io/keyboard_buildguide/inventory.html'
+                        redirectTo: redirectUrl
                     }
                 });
 

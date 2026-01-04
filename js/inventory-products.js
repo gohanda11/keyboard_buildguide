@@ -53,6 +53,7 @@ function renderProductsTable(products) {
                 <td>¥${product.price.toLocaleString()}</td>
                 <td><span class="status-badge status-${status.class}">${status.text}</span></td>
                 <td>
+                    <button class="btn btn-sm btn-info" onclick="openBOMModal('${product.id}')" style="background: #17a2b8; margin-right: 4px;">BOM</button>
                     <button class="btn btn-sm btn-primary" onclick="editProduct('${product.id}')">編集</button>
                     <button class="btn btn-sm btn-danger" onclick="deleteProduct('${product.id}')">削除</button>
                 </td>

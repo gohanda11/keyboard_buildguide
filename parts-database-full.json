@@ -1,0 +1,225 @@
+{
+  "parts": {
+    "pcb": {
+      "name": "PCB（左右各1枚）",
+      "unit": "枚",
+      "suppliers": []
+    },
+    "sensor-board": {
+      "name": "センサー基板",
+      "unit": "枚",
+      "suppliers": []
+    },
+    "pmw3610": {
+      "name": "PMW3610センサー",
+      "unit": "個",
+      "suppliers": []
+    },
+    "sensor-lens": {
+      "name": "センサーレンズ",
+      "unit": "個",
+      "suppliers": []
+    },
+    "ffc-cable": {
+      "name": "FFCケーブル",
+      "unit": "個",
+      "suppliers": []
+    },
+    "choc-socket": {
+      "name": "Chocソケット",
+      "unit": "個",
+      "suppliers": []
+    },
+    "sk6812mini-e": {
+      "name": "SK6812MINI-E LED",
+      "unit": "個",
+      "suppliers": []
+    },
+    "aa-battery-holder": {
+      "name": "単三電池ホルダー",
+      "unit": "個",
+      "suppliers": []
+    },
+    "aaa-battery-holder": {
+      "name": "単四電池ホルダー",
+      "unit": "個",
+      "suppliers": []
+    },
+    "rubber-bush": {
+      "name": "ゴムブッシュ",
+      "unit": "個",
+      "suppliers": []
+    },
+    "m2-screw-10mm": {
+      "name": "M2ねじ（10mm）",
+      "unit": "個",
+      "suppliers": []
+    },
+    "m2-screw-8mm": {
+      "name": "M2ねじ（8mm）",
+      "unit": "個",
+      "suppliers": []
+    },
+    "m14-screw-5mm": {
+      "name": "M1.4ねじ（5mm）",
+      "unit": "個",
+      "suppliers": []
+    },
+    "rubber-feet": {
+      "name": "ゴム足",
+      "unit": "個",
+      "suppliers": []
+    },
+    "trackball-case-25mm": {
+      "name": "25mmトラックボールケース",
+      "unit": "個",
+      "suppliers": []
+    },
+    "trackball-case-spacer": {
+      "name": "トラボケーススペーサ",
+      "unit": "個",
+      "suppliers": []
+    },
+    "3d-print-case": {
+      "name": "3Dプリントケース",
+      "unit": "式",
+      "suppliers": []
+    },
+    "case-data": {
+      "name": "ケースデータ",
+      "unit": "式",
+      "suppliers": []
+    },
+    "tpu-foam": {
+      "name": "TPUフォーム（左右各1枚）",
+      "unit": "枚",
+      "suppliers": []
+    },
+    "steel-ball-12mm": {
+      "name": "12mmステンレスボール",
+      "unit": "個",
+      "suppliers": []
+    },
+    "3d-print-keycap": {
+      "name": "3Dプリントキーキャップ",
+      "unit": "個",
+      "suppliers": []
+    },
+    "xiao-nrf52840-plus": {
+      "name": "XIAO nRF52840 Plus",
+      "unit": "個",
+      "suppliers": [
+        {
+          "name": "遊舎工房",
+          "url": "https://shop.yushakobo.jp/products/10946"
+        },
+        {
+          "name": "SWITCH SCIENCE",
+          "url": "https://www.switch-science.com/products/10468"
+        },
+        {
+          "name": "Seeed Studio",
+          "url": "https://jp.seeedstudio.com/Seeed-Studio-XIAO-nRF52840-Plus-p-6359.html"
+        }
+      ]
+    },
+    "aa-battery": {
+      "name": "単三電池",
+      "unit": "個",
+      "suppliers": [
+        {
+          "name": "Amazon",
+          "url": "https://amzn.asia/d/7iQGAJh"
+        }
+      ]
+    },
+    "aaa-battery": {
+      "name": "単四電池",
+      "unit": "本",
+      "suppliers": [
+        {
+          "name": "Amazon",
+          "url": "https://amzn.asia/d/7LVyuvz"
+        }
+      ]
+    },
+    "bearing-4x1-5x2": {
+      "name": "ベアリング（外径4mm、内径1.5mm、幅2mm）",
+      "unit": "個",
+      "suppliers": [
+        {
+          "name": "Amazon",
+          "url": "https://amzn.asia/d/0X4I1g0"
+        }
+      ]
+    },
+    "trackball-25mm": {
+      "name": "25mmトラックボール",
+      "unit": "個",
+      "suppliers": [
+        {
+          "name": "Amazon",
+          "url": "https://amzn.asia/d/8gMm4S2"
+        },
+        {
+          "name": "Booth",
+          "url": "https://booth.pm/ja/items/6457643"
+        }
+      ]
+    }
+  },
+  "keyboards": {
+    "soa44": {
+      "name": "Soa44",
+      "kit_parts": [
+        {"id": "pcb", "quantity": 2},
+        {"id": "sensor-board", "quantity": 1},
+        {"id": "pmw3610", "quantity": 1},
+        {"id": "sensor-lens", "quantity": 1},
+        {"id": "ffc-cable", "quantity": 1},
+        {"id": "choc-socket", "quantity": 5},
+        {"id": "sk6812mini-e", "quantity": 2},
+        {"id": "aa-battery-holder", "quantity": 2},
+        {"id": "rubber-bush", "quantity": 8},
+        {"id": "m2-screw-10mm", "quantity": 8},
+        {"id": "m2-screw-8mm", "quantity": 2},
+        {"id": "m14-screw-5mm", "quantity": 3},
+        {"id": "rubber-feet", "quantity": 8},
+        {"id": "trackball-case-25mm", "quantity": 1},
+        {"id": "trackball-case-spacer", "quantity": 1},
+        {"id": "3d-print-case", "quantity": 1},
+        {"id": "case-data", "quantity": 1}
+      ],
+      "user_provided_parts": [
+        {"id": "xiao-nrf52840-plus", "quantity": 2},
+        {"id": "aa-battery", "quantity": 2},
+        {"id": "bearing-4x1-5x2", "quantity": 3},
+        {"id": "trackball-25mm", "quantity": 1}
+      ]
+    },
+    "soa39": {
+      "name": "Soa39",
+      "kit_parts": [
+        {"id": "pcb", "quantity": 2},
+        {"id": "tpu-foam", "quantity": 2},
+        {"id": "pmw3610", "quantity": 1},
+        {"id": "sensor-lens", "quantity": 1},
+        {"id": "steel-ball-12mm", "quantity": 1},
+        {"id": "choc-socket", "quantity": 39},
+        {"id": "sk6812mini-e", "quantity": 2},
+        {"id": "rubber-bush", "quantity": 8},
+        {"id": "aaa-battery-holder", "quantity": 2},
+        {"id": "m2-screw-10mm", "quantity": 4},
+        {"id": "m14-screw-5mm", "quantity": 3},
+        {"id": "rubber-feet", "quantity": 8},
+        {"id": "3d-print-case", "quantity": 2},
+        {"id": "3d-print-keycap", "quantity": 39}
+      ],
+      "user_provided_parts": [
+        {"id": "xiao-nrf52840-plus", "quantity": 2},
+        {"id": "aaa-battery", "quantity": 2},
+        {"id": "bearing-4x1-5x2", "quantity": 3}
+      ]
+    }
+  }
+}

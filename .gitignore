@@ -12,6 +12,11 @@ SUPABASE_SETUP.md
 database-schema.sql
 products-table.sql
 auth-hook.sql
+bom-table.sql
+bom-update-category.sql
+suppliers-table.sql
+import-data.html
+import-data-full.html
 
 # Node.js関連
 node_modules/

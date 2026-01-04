@@ -108,27 +108,33 @@
                     <button class="btn btn-secondary" id="partsSearchButton">検索</button>
                 </div>
 
-                <!-- 部品一覧テーブル -->
-                <div class="table-container">
-                    <table id="partsTable" class="data-table">
-                        <thead>
-                            <tr>
-                                <th>部品名</th>
-                                <th>在庫数</th>
-                                <th>単位</th>
-                                <th>最小在庫</th>
-                                <th>発注点</th>
-                                <th>単価</th>
-                                <th>ステータス</th>
-                                <th>アクション</th>
-                            </tr>
-                        </thead>
-                        <tbody id="partsTableBody">
-                            <tr>
-                                <td colspan="8" class="no-data">部品データがありません</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div style="display: flex; gap: 1.5rem;">
+                    <!-- 部品一覧テーブル -->
+                    <div class="table-container" style="flex: 1;">
+                        <table id="partsTable" class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>部品名</th>
+                                    <th>在庫数</th>
+                                    <th>単位</th>
+                                    <th>最小在庫</th>
+                                    <th>発注点</th>
+                                    <th>単価</th>
+                                    <th>ステータス</th>
+                                </tr>
+                            </thead>
+                            <tbody id="partsTableBody">
+                                <tr>
+                                    <td colspan="7" class="no-data">部品データがありません</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 部品詳細パネル -->
+                    <div id="partDetailPanel" style="display: none; width: 400px; background: white; border: 1px solid #ddd; border-radius: 8px; padding: 1.5rem; max-height: 600px; overflow-y: auto;">
+                        <div id="partDetailContent"></div>
+                    </div>
                 </div>
             </section>
 
@@ -250,6 +256,46 @@
         </div>
     </div>
 
+    <!-- 購入先追加モーダル -->
+    <div id="supplierModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>購入先追加</h3>
+                <button class="modal-close" onclick="closeSupplierModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="supplierForm" onsubmit="saveSupplier(event)">
+                    <input type="hidden" id="supplierPartId">
+
+                    <div class="form-group">
+                        <label for="supplierName">購入先名 <span class="required">*</span></label>
+                        <input type="text" id="supplierName" required placeholder="例: 遊舎工房">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="supplierUrl">URL</label>
+                        <input type="url" id="supplierUrl" placeholder="https://example.com/...">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="supplierPrice">価格（円）</label>
+                        <input type="number" id="supplierPrice" min="0" step="0.01" value="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="supplierNotes">備考</label>
+                        <textarea id="supplierNotes" rows="3" placeholder="購入時の注意事項など"></textarea>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="closeSupplierModal()">キャンセル</button>
+                        <button type="submit" class="btn btn-primary">保存</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- 商品追加/編集モーダル -->
     <div id="productModal" class="modal">
         <div class="modal-content">
@@ -301,6 +347,132 @@
         </div>
     </div>
 
+    <!-- BOM管理モーダル -->
+    <div id="bomModal" class="modal">
+        <div class="modal-content" style="max-width: 900px;">
+            <div class="modal-header">
+                <h3>部品構成（BOM）管理: <span id="bomProductName"></span></h3>
+                <button class="modal-close" id="closeBOMModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- 製造可能数と材料費 -->
+                <div class="stats-grid" style="margin-bottom: 1.5rem;">
+                    <div class="stat-card">
+                        <h4>製造可能数</h4>
+                        <p class="stat-value" id="manufacturableQty" style="color: #28a745;">0</p>
+                        <p style="font-size: 0.85rem; color: #666;">台</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>1台あたり材料費</h4>
+                        <p class="stat-value" id="totalMaterialCost">¥0</p>
+                    </div>
+                </div>
+
+                <!-- 不足部品アラート -->
+                <div class="alerts-section" style="margin-bottom: 1.5rem;">
+                    <h4>⚠️ 不足部品</h4>
+                    <div id="shortageList" class="alerts-list">
+                        <p class="no-data">部品が登録されていません</p>
+                    </div>
+                </div>
+
+                <!-- キット内容品テーブル -->
+                <div class="section-header">
+                    <h4>📦 キット内容品（自分が販売）</h4>
+                    <button class="btn btn-primary" id="addBOMPartButton">+ 部品追加</button>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>部品名</th>
+                                <th>必要数</th>
+                                <th>現在庫</th>
+                                <th>製造可能数</th>
+                                <th>材料費</th>
+                                <th>アクション</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bomKitTableBody">
+                            <tr>
+                                <td colspan="6" class="no-data">キット内容品が登録されていません</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 別途用意が必要な部品テーブル -->
+                <div class="section-header" style="margin-top: 2rem;">
+                    <h4>🛒 別途用意が必要な部品（購入者が用意）</h4>
+                </div>
+                <p style="font-size: 0.9rem; color: #666; margin-bottom: 1rem;">
+                    ※ これらの部品は在庫管理されません。購入者への参考情報として表示されます。
+                </p>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>部品名</th>
+                                <th>必要数</th>
+                                <th>アクション</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bomUserProvidedTableBody">
+                            <tr>
+                                <td colspan="3" class="no-data">別途用意が必要な部品が登録されていません</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOM部品追加モーダル -->
+    <div id="addBOMPartModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>部品を追加</h3>
+                <button class="modal-close" id="closeAddBOMPartModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addBOMPartForm">
+                    <div class="form-group">
+                        <label for="bomPartSelect">部品 <span class="required">*</span></label>
+                        <select id="bomPartSelect" required>
+                            <option value="">部品を選択...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bomPartQuantity">必要数 <span class="required">*</span></label>
+                        <input type="number" id="bomPartQuantity" required min="0.01" step="0.01" value="1">
+                        <small style="color: #666;">この商品1台を製造するのに必要な数量</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bomPartCategory">カテゴリー <span class="required">*</span></label>
+                        <select id="bomPartCategory" required>
+                            <option value="kit">📦 キット内容品（自分が販売・在庫管理する）</option>
+                            <option value="user_provided">🛒 別途用意が必要な部品（購入者が用意）</option>
+                        </select>
+                        <small style="color: #666;">
+                            キット内容品は在庫管理され、製造可能数の計算に含まれます。<br>
+                            別途用意が必要な部品は購入者への参考情報としてのみ表示されます。
+                        </small>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="closeAddBOMPartModal()">キャンセル</button>
+                        <button type="submit" class="btn btn-primary">追加</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -313,6 +485,7 @@
     <!-- 在庫管理スクリプト -->
     <script src="js/inventory-parts.js"></script>
     <script src="js/inventory-products.js"></script>
+    <script src="js/inventory-bom.js"></script>
 
     <!-- メインスクリプト -->
     <script>
