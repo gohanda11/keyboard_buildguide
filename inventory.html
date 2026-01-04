@@ -108,33 +108,26 @@
                     <button class="btn btn-secondary" id="partsSearchButton">検索</button>
                 </div>
 
-                <div style="display: flex; gap: 1.5rem;">
-                    <!-- 部品一覧テーブル -->
-                    <div class="table-container" style="flex: 1;">
-                        <table id="partsTable" class="data-table">
-                            <thead>
-                                <tr>
-                                    <th>部品名</th>
-                                    <th>在庫数</th>
-                                    <th>単位</th>
-                                    <th>最小在庫</th>
-                                    <th>発注点</th>
-                                    <th>単価</th>
-                                    <th>ステータス</th>
-                                </tr>
-                            </thead>
-                            <tbody id="partsTableBody">
-                                <tr>
-                                    <td colspan="7" class="no-data">部品データがありません</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- 部品詳細パネル -->
-                    <div id="partDetailPanel" style="display: none; width: 400px; background: white; border: 1px solid #ddd; border-radius: 8px; padding: 1.5rem; max-height: 600px; overflow-y: auto;">
-                        <div id="partDetailContent"></div>
-                    </div>
+                <!-- 部品一覧テーブル -->
+                <div class="table-container">
+                    <table id="partsTable" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>部品名</th>
+                                <th>在庫数</th>
+                                <th>単位</th>
+                                <th>最小在庫</th>
+                                <th>発注点</th>
+                                <th>単価</th>
+                                <th>ステータス</th>
+                            </tr>
+                        </thead>
+                        <tbody id="partsTableBody">
+                            <tr>
+                                <td colspan="7" class="no-data">部品データがありません</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </section>
 
@@ -292,6 +285,19 @@
                         <button type="submit" class="btn btn-primary">保存</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 部品詳細モーダル -->
+    <div id="partDetailModal" class="modal">
+        <div class="modal-content" style="max-width: 700px;">
+            <div class="modal-header">
+                <h3 id="partDetailModalTitle">部品詳細</h3>
+                <button class="modal-close" onclick="closePartDetailModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="partDetailContent"></div>
             </div>
         </div>
     </div>

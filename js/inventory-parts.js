@@ -46,13 +46,12 @@ function renderPartsTable(parts) {
 
     tbody.innerHTML = parts.map(part => {
         const status = getStockStatus(part);
-        const isSelected = selectedPartId === part.id;
         return `
             <tr data-part-id="${part.id}"
                 onclick="selectPart('${part.id}')"
-                style="cursor: pointer; ${isSelected ? 'background: #e7f3ff;' : ''}"
+                style="cursor: pointer;"
                 onmouseover="this.style.background='#f5f5f5'"
-                onmouseout="this.style.background='${isSelected ? '#e7f3ff' : 'white'}'">
+                onmouseout="this.style.background='white'">
                 <td>${escapeHtml(part.name)}</td>
                 <td>${part.current_stock}</td>
                 <td>${escapeHtml(part.unit || '個')}</td>
@@ -272,7 +271,6 @@ document.getElementById('partsSearchInput').addEventListener('keypress', (e) => 
 // ========================================
 async function selectPart(partId) {
     selectedPartId = partId;
-    renderPartsTable(partsData);
 
     // 部品情報を取得
     const part = partsData.find(p => p.id === partId);
@@ -291,37 +289,34 @@ async function selectPart(partId) {
         selectedPartSuppliers = suppliers || [];
         renderPartDetail(part);
 
+        // 詳細モーダルを開く
+        document.getElementById('partDetailModal').classList.add('active');
+
     } catch (error) {
         console.error('購入先取得エラー:', error);
         selectedPartSuppliers = [];
         renderPartDetail(part);
+
+        // 詳細モーダルを開く
+        document.getElementById('partDetailModal').classList.add('active');
     }
 }
 
 // ========================================
-// 部品詳細パネルのレンダリング
+// 部品詳細モーダルのレンダリング
 // ========================================
 function renderPartDetail(part) {
-    const detailPanel = document.getElementById('partDetailPanel');
     const detailContent = document.getElementById('partDetailContent');
+    const detailTitle = document.getElementById('partDetailModalTitle');
 
-    if (!part) {
-        detailPanel.style.display = 'none';
-        return;
-    }
+    if (!part) return;
 
     const status = getStockStatus(part);
+    detailTitle.textContent = part.name;
 
     detailContent.innerHTML = `
-        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1.5rem;">
-            <div>
-                <h3 style="margin: 0 0 0.5rem 0;">${escapeHtml(part.name)}</h3>
-                <span class="status-badge status-${status.class}">${status.text}</span>
-            </div>
-            <div style="display: flex; gap: 0.5rem;">
-                <button class="btn btn-primary" onclick="editPart('${part.id}')">✏️ 編集</button>
-                <button class="btn btn-danger" onclick="deletePart('${part.id}')">🗑️ 削除</button>
-            </div>
+        <div style="margin-bottom: 1.5rem;">
+            <span class="status-badge status-${status.class}">${status.text}</span>
         </div>
 
         <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
@@ -346,7 +341,16 @@ function renderPartDetail(part) {
             </div>
         ` : ''}
 
-        <div style="border-top: 1px solid #eee; padding-top: 1.5rem;">
+        ${part.tags && part.tags.length > 0 ? `
+            <div style="margin-bottom: 1.5rem;">
+                <strong>タグ:</strong><br>
+                <div style="margin-top: 0.5rem;">
+                    ${part.tags.map(tag => `<span class="status-badge" style="background: #6c757d; margin-right: 0.5rem;">${escapeHtml(tag)}</span>`).join('')}
+                </div>
+            </div>
+        ` : ''}
+
+        <div style="border-top: 1px solid #eee; padding-top: 1.5rem; margin-bottom: 1.5rem;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
                 <h4 style="margin: 0;">購入先情報</h4>
                 <button class="btn btn-sm btn-primary" onclick="addSupplier('${part.id}')">+ 購入先追加</button>
@@ -355,9 +359,13 @@ function renderPartDetail(part) {
                 ${renderSuppliersList()}
             </div>
         </div>
-    `;
 
-    detailPanel.style.display = 'block';
+        <div style="display: flex; gap: 0.5rem; justify-content: flex-end; padding-top: 1rem; border-top: 1px solid #eee;">
+            <button class="btn btn-secondary" onclick="closePartDetailModal()">閉じる</button>
+            <button class="btn btn-danger" onclick="confirmDeletePart('${part.id}')">🗑️ 削除</button>
+            <button class="btn btn-primary" onclick="editPartFromDetail('${part.id}')">✏️ 編集</button>
+        </div>
+    `;
 }
 
 // ========================================
@@ -431,7 +439,19 @@ async function saveSupplier(event) {
 
         alert('購入先を追加しました');
         closeSupplierModal();
-        await selectPart(partId); // 詳細を再読み込み
+
+        // 詳細モーダルを再読み込み
+        const part = partsData.find(p => p.id === partId);
+        if (part) {
+            const { data: suppliers } = await supabase
+                .from('part_suppliers')
+                .select('*')
+                .eq('part_id', partId)
+                .eq('user_id', currentUser.id);
+
+            selectedPartSuppliers = suppliers || [];
+            renderPartDetail(part);
+        }
 
     } catch (error) {
         console.error('購入先追加エラー:', error);
@@ -456,13 +476,62 @@ async function deleteSupplier(supplierId) {
         if (error) throw error;
 
         alert('購入先を削除しました');
-        await selectPart(selectedPartId); // 詳細を再読み込み
+
+        // 詳細モーダルを再読み込み
+        const part = partsData.find(p => p.id === selectedPartId);
+        if (part) {
+            const { data: suppliers } = await supabase
+                .from('part_suppliers')
+                .select('*')
+                .eq('part_id', selectedPartId)
+                .eq('user_id', currentUser.id);
+
+            selectedPartSuppliers = suppliers || [];
+            renderPartDetail(part);
+        }
 
     } catch (error) {
         console.error('購入先削除エラー:', error);
         alert('購入先の削除に失敗しました: ' + error.message);
     }
 }
+
+// ========================================
+// 詳細モーダルを閉じる
+// ========================================
+function closePartDetailModal() {
+    document.getElementById('partDetailModal').classList.remove('active');
+    selectedPartId = null;
+}
+
+// ========================================
+// 詳細モーダルから編集モーダルを開く
+// ========================================
+function editPartFromDetail(partId) {
+    // 詳細モーダルを閉じる
+    closePartDetailModal();
+
+    // 編集モーダルを開く
+    editPart(partId);
+}
+
+// ========================================
+// 詳細モーダルから削除を確認
+// ========================================
+function confirmDeletePart(partId) {
+    // 詳細モーダルを閉じてから削除
+    closePartDetailModal();
+    deletePart(partId);
+}
+
+// ========================================
+// モーダル背景クリックで詳細モーダルを閉じる
+// ========================================
+document.getElementById('partDetailModal').addEventListener('click', (e) => {
+    if (e.target.id === 'partDetailModal') {
+        closePartDetailModal();
+    }
+});
 
 // ========================================
 // グローバルスコープに関数を公開
@@ -475,3 +544,6 @@ window.addSupplier = addSupplier;
 window.closeSupplierModal = closeSupplierModal;
 window.saveSupplier = saveSupplier;
 window.deleteSupplier = deleteSupplier;
+window.closePartDetailModal = closePartDetailModal;
+window.editPartFromDetail = editPartFromDetail;
+window.confirmDeletePart = confirmDeletePart;
