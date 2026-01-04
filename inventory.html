@@ -138,7 +138,34 @@
                     <h2>商品管理</h2>
                     <button class="btn btn-primary" id="addProductButton">+ 新規商品追加</button>
                 </div>
-                <p class="coming-soon">商品管理機能は Phase 2 で実装予定です</p>
+
+                <!-- 検索・フィルター -->
+                <div class="search-bar">
+                    <input type="text" id="productsSearchInput" placeholder="商品名・SKUで検索..." class="search-input">
+                    <button class="btn btn-secondary" id="productsSearchButton">検索</button>
+                </div>
+
+                <!-- 商品一覧テーブル -->
+                <div class="table-container">
+                    <table id="productsTable" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>商品名</th>
+                                <th>SKU</th>
+                                <th>在庫数</th>
+                                <th>最小在庫</th>
+                                <th>販売価格</th>
+                                <th>ステータス</th>
+                                <th>アクション</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productsTableBody">
+                            <tr>
+                                <td colspan="7" class="no-data">商品データがありません</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </section>
 
             <!-- 製造タブ -->
@@ -223,20 +250,69 @@
         </div>
     </div>
 
+    <!-- 商品追加/編集モーダル -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="productModalTitle">新規商品追加</h3>
+                <button class="modal-close" id="closeProductModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="productForm">
+                    <input type="hidden" id="productId">
+
+                    <div class="form-group">
+                        <label for="productName">商品名 <span class="required">*</span></label>
+                        <input type="text" id="productName" required placeholder="例: Soa44 キーボード">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productSku">SKU / 商品コード</label>
+                        <input type="text" id="productSku" placeholder="例: SOA44-BK-001">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="productStock">現在の在庫数 <span class="required">*</span></label>
+                            <input type="number" id="productStock" required min="0" step="1" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="productMinStock">最小在庫数</label>
+                            <input type="number" id="productMinStock" min="0" step="1" value="0">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productPrice">販売価格（円） <span class="required">*</span></label>
+                        <input type="number" id="productPrice" required min="0" step="1" value="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productDescription">説明</label>
+                        <textarea id="productDescription" rows="3" placeholder="商品の説明や特徴"></textarea>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="cancelProductButton">キャンセル</button>
+                        <button type="submit" class="btn btn-primary" id="saveProductButton">保存</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <!-- Supabase設定 -->
     <script src="js/supabase-config.js"></script>
 
-    <!-- 認証設定 -->
-    <script src="js/auth-config.js"></script>
-
     <!-- 認証ヘルパー -->
     <script src="js/auth.js"></script>
 
     <!-- 在庫管理スクリプト -->
     <script src="js/inventory-parts.js"></script>
+    <script src="js/inventory-products.js"></script>
 
     <!-- メインスクリプト -->
     <script>
@@ -255,6 +331,7 @@
                 // データ読み込み
                 await loadDashboardData();
                 await loadPartsData();
+                await loadProductsData();
 
             } catch (error) {
                 console.error('初期化エラー:', error);
@@ -297,8 +374,13 @@
 
                 document.getElementById('totalParts').textContent = partsCount || 0;
 
-                // 商品数のカウント（Phase 2で実装）
-                document.getElementById('totalProducts').textContent = '0';
+                // 商品数のカウント
+                const { count: productsCount } = await supabase
+                    .from('products')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('user_id', currentUser.id);
+
+                document.getElementById('totalProducts').textContent = productsCount || 0;
 
                 // 今月の売上（Phase 6で実装）
                 document.getElementById('monthlySales').textContent = '¥0';

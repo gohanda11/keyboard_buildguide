@@ -10,6 +10,8 @@ INVENTORY_SYSTEM_SPEC.md
 client_secret_*.json
 SUPABASE_SETUP.md
 database-schema.sql
+products-table.sql
+auth-hook.sql
 
 # Node.js関連
 node_modules/
@@ -29,3 +31,6 @@ get-console-logs.js
 
 # テンプレートファイル
 buildguide-template.html
+
+# 認証設定（許可メールアドレスを含むため非公開）
+js/auth-config.js

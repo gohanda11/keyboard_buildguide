@@ -28,6 +28,7 @@ async function getCurrentUser() {
 
 /**
  * ログイン状態をチェックして、未ログインの場合はログインページへリダイレクト
+ * 注: メールアドレスの許可チェックはサーバー側のAuth Hookで実施されます
  * @returns {Promise<Object>} ログインユーザーオブジェクト
  */
 async function requireAuth() {
@@ -39,6 +40,7 @@ async function requireAuth() {
         throw new Error('認証が必要です');
     }
 
+    // メールアドレスの許可チェックはサーバー側のAuth Hook (check_allowed_email) で実施済み
     return user;
 }
 

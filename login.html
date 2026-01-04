@@ -151,6 +151,9 @@
     <!-- Supabase設定 -->
     <script src="js/supabase-config.js"></script>
 
+    <!-- 認証ヘルパー -->
+    <script src="js/auth.js"></script>
+
     <!-- ログイン処理 -->
     <script>
         const loginButton = document.getElementById('loginButton');
@@ -163,6 +166,17 @@
                 const { data: { session } } = await supabase.auth.getSession();
 
                 if (session) {
+                    const user = session.user;
+
+                    // メールアドレスが許可されているかチェック
+                    if (!window.authConfig || !window.authConfig.ALLOWED_EMAILS || !window.authConfig.ALLOWED_EMAILS.includes(user.email)) {
+                        // 許可されていない場合はログアウト
+                        await supabase.auth.signOut();
+                        errorMessage.textContent = 'このアカウントはアクセスが許可されていません。管理者のみアクセス可能です。';
+                        errorMessage.style.display = 'block';
+                        return;
+                    }
+
                     // すでにログイン済みの場合は在庫管理画面へリダイレクト
                     window.location.href = 'inventory.html';
                 }
