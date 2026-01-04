@@ -229,6 +229,9 @@
     <!-- Supabase設定 -->
     <script src="js/supabase-config.js"></script>
 
+    <!-- 認証設定 -->
+    <script src="js/auth-config.js"></script>
+
     <!-- 認証ヘルパー -->
     <script src="js/auth.js"></script>
 
@@ -317,15 +320,19 @@
                 const { data: parts, error } = await supabase
                     .from('parts')
                     .select('*')
-                    .eq('user_id', currentUser.id)
-                    .lt('current_stock', supabase.raw('min_stock'));
+                    .eq('user_id', currentUser.id);
 
                 if (error) throw error;
 
+                // JavaScriptで在庫が最小在庫数を下回っているものをフィルタリング
+                const lowStockParts = parts ? parts.filter(part =>
+                    part.current_stock < part.min_stock
+                ) : [];
+
                 const alertsList = document.getElementById('alertsList');
 
-                if (parts && parts.length > 0) {
-                    alertsList.innerHTML = parts.map(part => `
+                if (lowStockParts.length > 0) {
+                    alertsList.innerHTML = lowStockParts.map(part => `
                         <div class="alert-item alert-danger">
                             <strong>${part.name}</strong>: 在庫が最小在庫数を下回っています
                             （現在: ${part.current_stock}${part.unit} / 最小: ${part.min_stock}${part.unit}）
