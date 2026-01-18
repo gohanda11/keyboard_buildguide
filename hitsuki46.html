@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hitsuki46 ビルドガイド - gohanda_kbd</title>
+    <link rel="icon" type="image/png" href="image/icon/gohanda.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 画像拡大表示用のモーダル -->
+    <div id="imageModal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: flex-start; align-items: center;" onclick="closeModal()">
+        <img id="modalImage" style="max-width: 90%; max-height: 90%; border-radius: 8px;" />
+        <div style="position: absolute; top: 20px; right: 30px; color: white; font-size: 40px; font-weight: bold; cursor: pointer;" onclick="closeModal()">&times;</div>
+    </div>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <h1>gohanda_kbd</h1>
+                </div>
+                <div class="nav-links">
+                    <a href="index.html">ホーム</a>
+                </div>
+            </nav>
+            <div class="hero">
+                <h2>Hitsuki46 ビルドガイド</h2>
+                <p>46キー分割型オーソリニア扇形キーボード（お苦しみキット）</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- PC用サイドバー目次 -->
+    <div class="sidebar-toc" id="sidebarToc">
+        <div class="sidebar-content">
+            <h3>目次</h3>
+            <ul class="sidebar-toc-list">
+                <li><a href="#step1">1. 必要な部品の確認</a></li>
+                <li><a href="#step2">2. 組み立て（参考）</a></li>
+                <li><a href="#step3">3. ファームウェアの書き込み</a></li>
+                <li><a href="#complete">完成！</a></li>
+                <li><a href="#led-indicators">LEDインジケータの説明</a></li>
+                <li><a href="#mouse-operation">マウス操作について</a></li>
+                <li><a href="#customization">おすすめカスタマイズ</a></li>
+                <li><a href="#troubleshooting">トラブルシューティング</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <main class="container">
+        <div class="build-guide">
+            <section class="keyboard-overview">
+                <h2>Hitsuki46 について</h2>
+                <p>Hitsuki46はオーソリニアを扇のように湾曲させたような形状の分割無線キーボードです。本製品は自作キーボードのお苦しみキットとなっております。お苦しみの名の通り、パーツを自分で調達して、ケースを3Dプリンターで印刷して、ビルドガイドなしに組み立てる必要があります。サポートもないので組み立てる自信のある方のみご購入ください。</p>
+
+                <div style="text-align: center; margin: 2rem 0;">
+                    <img src="image/hitsuki46/hitsuki46.JPG" alt="Hitsuki46キーボード" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                </div>
+
+                <div class="keyboard-specs">
+                    <span class="spec-tag">46キー</span>
+                    <span class="spec-tag">分割型</span>
+                    <span class="spec-tag">オーソリニア扇形</span>
+                    <span class="spec-tag">無線</span>
+                    <span class="spec-tag">デュアルトラックボール対応</span>
+                    <span class="spec-tag">ガスケットマウント</span>
+                </div>
+
+                <div style="background: #e7f3ff; border: 1px solid #b3d9ff; color: #0066cc; padding: 1rem; border-radius: 8px; margin: 1.5rem 0;">
+                    <strong>ℹ️ 3つの形態から選択可能</strong><br>
+                    トラックボールを搭載したりしなかったり、ご自身で三形態の中から選択いただけます。
+                    <ul style="margin-top: 0.5rem; margin-bottom: 0;">
+                        <li><strong>第一形態</strong>：トラボ無し</li>
+                        <li><strong>第二形態</strong>：片手トラボ（左手トラボも可）</li>
+                        <li><strong>第三形態</strong>：両手トラボ</li>
+                    </ul>
+                    <div style="text-align: center; margin-top: 1rem;">
+                        <img src="image/hitsuki46/type.png" alt="Hitsuki46の3つの形態" style="max-width: 100%; height: auto; border-radius: 8px; cursor: pointer;" onclick="openModal(this)" />
+                    </div>
+                </div>
+
+                <div style="background: #f0f7ff; border: 1px solid #b3d9ff; border-radius: 8px; padding: 1.5rem; margin: 1rem 0;">
+                    <h4 style="color: #667eea; margin: 0 0 1rem 0;">主な機能</h4>
+                    <ul style="margin: 0; padding-left: 1.5rem;">
+                        <li>46キー分割レイアウト（左右各23キー）</li>
+                        <li>デュアルトラックボール対応
+                            <ul style="margin-top: 0.25rem;">
+                                <li>左手側: 常にスクロール操作（デフォルト）</li>
+                                <li>右手側: カーソル操作 + レイヤー5でスクロール操作</li>
+                            </ul>
+                        </li>
+                        <li>ニッケル水素電池対応（カスタム電圧管理）</li>
+                        <li>Bluetooth接続性能向上（+8dBm出力）</li>
+                        <li>Zephyr 4.1対応</li>
+                    </ul>
+                </div>
+
+                <p>マウント方式はゴムブッシュを使用した簡易ガスケットマウントになっており、柔らかな打鍵感が味わえます。</p>
+                <p>8割ぐらいの部品がすでにはんだ付けされていて、はんだ付けが必要な部品は5種類です。</p>
+            </section>
+
+            <section class="step">
+                <h3>組み立てを始める前に</h3>
+                <div class="step-content">
+                    <p>組み立てを開始する前に、以下の重要な注意事項を必ずお読みください。</p>
+
+                    <div class="warning">
+                        <strong>⚠️ お苦しみキットについて</strong><br>
+                        本製品はお苦しみキットです。ビルドガイドなしで組み立てる必要があります。<br>
+                        サポートもないので組み立てる自信のある方のみご購入ください。
+                    </div>
+
+                    <div class="warning">
+                        <strong>⚠️ v1.0の配線ミスについて</strong><br>
+                        今回販売するv1.0は配線ミスにより、右手側にトラックボールを搭載するために基板をカットすると１つのキーが動作しなくなります。<br>
+                        動作させるためにはジャンパー線で下記の写真のようにつなげる必要があります。<br>
+                        そのため、500円引きで販売します。ご了承ください。
+                        <div style="text-align: center; margin-top: 1rem;">
+                            <img src="image/hitsuki46/jamper.jpg" alt="v1.0のジャンパー線接続例" style="max-width: 100%; height: auto; border-radius: 8px; cursor: pointer;" onclick="openModal(this)" />
+                        </div>
+                    </div>
+
+                    <div class="warning">
+                        <strong>⚠️ はんだ付け時の重要な注意事項</strong><br>
+                        はんだ付けをする際には必ず電池を外してから行ってください。<br>
+                        電池が入ったままの状態でのはんだ付けは危険です。
+                    </div>
+
+                    <div class="warning">
+                        <strong>⚠️ 電池の取り扱いに関する注意事項</strong><br>
+                        このキーボードを車内に長時間放置しないでください。<br>
+                        長期間使用しない場合はキーボードから電池を外して保管してください。
+                    </div>
+
+                    <h4>作業前のチェックリスト</h4>
+                    <ul>
+                        <li>✅ 必要な部品と工具が揃っている</li>
+                        <li>✅ 作業スペースが十分に確保されている</li>
+                        <li>✅ 換気の良い場所で作業する</li>
+                        <li>✅ 静電気対策を行っている</li>
+                        <li>✅ はんだごての温度設定を確認している</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="table-of-contents">
+                <h2>目次</h2>
+                <div class="toc-content">
+                    <ul class="toc-list">
+                        <li><a href="#step1">ステップ 1: 必要な部品の確認</a></li>
+                        <li><a href="#step2">ステップ 2: 組み立て（参考）</a></li>
+                        <li><a href="#step3">ステップ 3: ファームウェアの書き込み</a></li>
+                        <li><a href="#complete">完成！</a></li>
+                        <li><a href="#led-indicators">LEDインジケータの説明</a></li>
+                        <li><a href="#mouse-operation">マウス操作について</a></li>
+                        <li><a href="#customization">おすすめカスタマイズ</a></li>
+                        <li><a href="#troubleshooting">トラブルシューティング</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="step" id="step1">
+                <h3>ステップ 1: 必要な部品の確認</h3>
+                <div class="step-content">
+                    <div class="parts-list">
+                        <h4>キット内容品</h4>
+                        <ul>
+                            <li>PCB（左右各1枚） <span style="background: #28a745; color: white; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.8rem; font-weight: bold; margin-left: 0.5rem;">2枚</span></li>
+                            <li>ゴムブッシュ <span style="background: #28a745; color: white; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.8rem; font-weight: bold; margin-left: 0.5rem;">8個</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="parts-list">
+                        <h4>別途用意が必要な部品（第一形態：トラボ無し）</h4>
+                        <div id="hitsuki46-basic-parts-list">
+                            <p>読み込み中...</p>
+                        </div>
+                    </div>
+
+                    <div class="parts-list">
+                        <h4>別途用意が必要な部品（第二形態：片手トラボ）</h4>
+                        <p style="color: #666; margin-bottom: 1rem;">※第一形態で必要なものに加えて以下が必要です</p>
+                        <div id="hitsuki46-trackball-parts-list">
+                            <p>読み込み中...</p>
+                        </div>
+                    </div>
+
+                    <div class="parts-list">
+                        <h4>別途用意が必要な部品（第三形態：両手トラボ）</h4>
+                        <div style="background: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                            <strong>第一形態で必要なもの</strong> ＋ <strong>第二形態で必要なもの × 2</strong>
+                        </div>
+                    </div>
+
+                    <div class="parts-list">
+                        <h4>はんだ付けが必要な部品（5種類）</h4>
+                        <ul>
+                            <li>Chocソケット</li>
+                            <li>XIAO nRF52840 Plus</li>
+                            <li>SK6812MINI-E</li>
+                            <li>電池ホルダー</li>
+                            <li>PMW3610（トラボ搭載の場合）</li>
+                        </ul>
+                    </div>
+
+                    <div class="tools-list">
+                        <h4>必要な工具・その他</h4>
+                        <ul>
+                            <li>3Dプリンター（ケースの印刷用）</li>
+                            <li>はんだセット（はんだごて、はんだ、フラックス）</li>
+                            <li>ドライバー（M2、M1.4を回せるもの）</li>
+                            <li>USB-Cケーブル</li>
+                            <li>ニッパー（第二・第三形態の場合）</li>
+                            <li>やすり（第二・第三形態の場合）</li>
+                            <li>カッター（ニッパーでPCBをカットできないときに必要かもしれません）</li>
+                        </ul>
+                    </div>
+
+                    <div style="background: #f0fff0; border: 1px solid #c3e6c3; border-radius: 8px; padding: 1.5rem; margin: 2rem 0;">
+                        <h4 style="color: #28a745; margin: 0 0 1rem 0;">💡 ロープロファイル化するために</h4>
+                        <p>Chocソケットをご自身で46個準備し、はんだ付けを行ってください。ミドルプレートを使用せず、スイッチをはめることでロープロファイル化することができます。</p>
+                        <p style="margin-top: 0.5rem;"><strong>Gateron LP3.0スイッチ</strong>も使えることが確認できました。このスイッチであれば、MXソケットに刺さるのでChocソケットをはんだ付けしなくてもロープロ化できます！</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="step" id="step2">
+                <h3>ステップ 2: 組み立て（参考）</h3>
+                <div class="step-content">
+                    <p>Hitsuki46はSoa44と同じパーツを使用しています。組み立ての参考として、Soa44のビルドガイドをご覧ください。</p>
+
+                    <div style="background: #e7f3ff; border: 1px solid #b3d9ff; color: #0066cc; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; text-align: center;">
+                        <strong style="font-size: 1.1rem;">📖 Soa44 ビルドガイド</strong><br><br>
+                        <p style="margin: 0.5rem 0;">使用しているパーツは同じなので、はんだ付けや組み立ての手順は参考になると思います。</p>
+                        <a href="https://gohanda11.github.io/buildguide/soa44.html" target="_blank" style="display: inline-block; background: #667eea; color: white; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 6px; margin-top: 1rem; font-weight: bold;">
+                            Soa44 ビルドガイドを見る
+                        </a>
+                    </div>
+
+                    <h4>参考になるステップ</h4>
+                    <ul>
+                        <li><strong>Chocソケットのはんだ付け</strong> - 白のシルクに沿ってソケットを載せてはんだ付け</li>
+                        <li><strong>SK6812MINI-Eのはんだ付け</strong> - LEDの向きに注意（切り欠きの位置を確認）</li>
+                        <li><strong>XIAO nRF52840 Plusの取り付け</strong> - ピンヘッダを使って位置決め</li>
+                        <li><strong>電池ホルダーの取り付け</strong> - 極性に注意（-側がばねのある方）</li>
+                        <li><strong>PMW3610センサーの取り付け</strong> - トラボ搭載の場合のみ</li>
+                        <li><strong>FFCケーブルの接続</strong> - コネクタに対して垂直に挿入</li>
+                    </ul>
+
+                    <div class="warning">
+                        <strong>⚠️ 注意</strong><br>
+                        Soa44とHitsuki46はキー配列やケース形状が異なります。<br>
+                        パーツのはんだ付け方法は同じですが、ケースの組み立て手順はHitsuki46のケースデータに合わせて行ってください。
+                    </div>
+                </div>
+            </section>
+
+            <section class="step" id="step3">
+                <h3>ステップ 3: ファームウェアの書き込み</h3>
+                <div class="step-content">
+                    <p>ZMKファームウェアをXIAO nRF52840 Plusに書き込みます。</p>
+
+                    <div style="background: #f0f7ff; border: 1px solid #b3d9ff; border-radius: 8px; padding: 1.5rem; margin: 1rem 0;">
+                        <h4 style="color: #667eea; margin: 0 0 1rem 0;">📦 ファームウェアリポジトリ</h4>
+                        <a href="https://github.com/gohanda11/zmk-config-hitsuki46" target="_blank" style="display: inline-block; background: #667eea; color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 6px;">
+                            zmk-config-hitsuki46
+                        </a>
+                    </div>
+
+                    <div class="warning">
+                        キーマップの変更にはGitHubアカウントが必要です。<br>
+                        詳しい手順は下記の動画が参考になります。
+                    </div>
+
+                    <div style="text-align: center; margin: 1.5rem 0;">
+                        <a href="https://www.youtube.com/watch?v=vXpV9jgRB1M" target="_blank">
+                            <img src="https://img.youtube.com/vi/vXpV9jgRB1M/maxresdefault.jpg"
+                                 alt="ZMKファームウェア書き込み手順の動画"
+                                 style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" />
+                        </a>
+                        <p style="margin-top: 0.5rem; color: #666; font-size: 0.9rem;">
+                            ↑ クリックして動画を視聴
+                        </p>
+                    </div>
+
+                    <ol>
+                        <li>ZMKリポジトリ（<a href="https://github.com/gohanda11/zmk-config-hitsuki46" target="_blank">zmk-config-hitsuki46</a>）をフォークする</li>
+                        <li><a href="https://nickcoutsos.github.io/keymap-editor/" target="_blank">KeymapEditor</a>でキーマップを変更し保存する</li>
+                        <li>ビルドが完了したらファームウェアをダウンロード</li>
+                        <li>左のXiaoにUSB接続、リセットボタンを2回素早く押してブートローダーモードに入る</li>
+                        <li>settings_reset-seeeduino_xiao_ble-zmk.uf2を書き込み</li>
+                        <li>右にも同様にsettings_reset-seeeduino_xiao_ble-zmk.uf2を書き込み</li>
+                        <li>左にhitsuki46_L-seeeduino_xiao_ble-zmk.uf2を書き込み</li>
+                        <li>右にhitsuki46_R-seeeduino_xiao_ble-zmk.uf2を書き込み</li>
+                    </ol>
+
+                    <div class="warning">
+                        左右のペアリング後は、settings_reset-seeeduino_xiao_ble-zmk.uf2の書き込みは不要です。
+                    </div>
+
+                    <h4 style="color: #667eea; margin: 2rem 0 1rem 0;">トラックボールモードの設定</h4>
+                    <p>左右のトラックボールの動作モードは、<code>hitsuki46_R.overlay</code>ファイル先頭の<code>#define</code>で設定できます。</p>
+
+                    <div style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 1rem; margin: 1rem 0; font-family: monospace; font-size: 0.9rem;">
+                        <span style="color: #d63384;">#define</span> LEFT_TRACKBALL_MODE 1 &nbsp;&nbsp;<span style="color: #6c757d;">// 左トラックボール (0/1)</span><br>
+                        <span style="color: #d63384;">#define</span> RIGHT_TRACKBALL_MODE 0 &nbsp;&nbsp;<span style="color: #6c757d;">// 右トラックボール (0/1)</span>
+                    </div>
+
+                    <ul>
+                        <li><strong>値を0に設定</strong>：カーソルモード（マウスカーソル操作 + Layer 5でスクロール）</li>
+                        <li><strong>値を1に設定</strong>：スクロールモード（常にスクロール操作）</li>
+                    </ul>
+                    <p style="color: #666; font-size: 0.9rem;">変更後はファームウェアを再ビルドしてください。</p>
+                </div>
+            </section>
+
+            <div id="complete" style="text-align: center; margin: 3rem 0;">
+                <h2 style="color: #2c3e50; margin-bottom: 1rem;">完成！</h2>
+                <img src="image/hitsuki46/finish.JPG" alt="Hitsuki46キーボード完成" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                <p style="margin-top: 1rem; color: #666; font-size: 1.1rem;">お疲れさまでした！</p>
+            </div>
+
+            <section class="step" id="led-indicators">
+                <h3>LEDインジケータの説明</h3>
+                <div class="step-content">
+                    <p>Hitsuki46にはRGB LED（WS2812B）が搭載されており、キーボードの状態を色で表示します。</p>
+
+                    <h4 style="color: #667eea; margin: 1.5rem 0 1rem 0;">バッテリー表示</h4>
+                    <p>電源ON時のバッテリーレベル表示：</p>
+
+                    <div style="margin: 1rem 0;">
+                        <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                            <li><span style="background: green; color: white; padding: 2px 8px; border-radius: 4px; margin-right: 8px;">緑</span>高 (80%以上)</li>
+                            <li><span style="background: #ffd700; color: black; padding: 2px 8px; border-radius: 4px; margin-right: 8px;">黄</span>中 (20-80%)</li>
+                            <li><span style="background: orange; color: white; padding: 2px 8px; border-radius: 4px; margin-right: 8px;">オレンジ</span>低 (5-20%)</li>
+                            <li><span style="background: red; color: white; padding: 2px 8px; border-radius: 4px; margin-right: 8px;">赤</span>危険 (5%未満)</li>
+                        </ul>
+                    </div>
+
+                    <h4 style="color: #667eea; margin: 1.5rem 0 1rem 0;">接続状態表示</h4>
+                    <div style="margin: 1rem 0;">
+                        <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                            <li><span style="background: green; color: white; padding: 2px 8px; border-radius: 4px; margin-right: 8px;">緑</span>USB接続</li>
+                            <li><span style="background: blue; color: white; padding: 2px 8px; border-radius: 4px; margin-right: 8px;">青</span>BLE接続済み</li>
+                        </ul>
+                    </div>
+
+                    <h4 style="color: #667eea; margin: 1.5rem 0 1rem 0;">レイヤー表示</h4>
+                    <p>レイヤー切り替え時に白色で点滅。アクティブレイヤーを色で表示（右手側のみ）：</p>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1rem 0;">
+                        <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                            <strong>Layer 0 (Default)</strong><br>
+                            <span style="background: black; color: white; padding: 2px 8px; border-radius: 4px;">消灯</span>
+                        </div>
+                        <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                            <strong>Layer 1 (MOUSE)</strong><br>
+                            <span style="background: red; color: white; padding: 2px 8px; border-radius: 4px;">赤</span>
+                        </div>
+                        <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                            <strong>Layer 2 (FUNCTION)</strong><br>
+                            <span style="background: green; color: white; padding: 2px 8px; border-radius: 4px;">緑</span>
+                        </div>
+                        <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                            <strong>Layer 3 (NUM)</strong><br>
+                            <span style="background: #ffd700; color: black; padding: 2px 8px; border-radius: 4px;">黄</span>
+                        </div>
+                        <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                            <strong>Layer 4 (ARROW)</strong><br>
+                            <span style="background: blue; color: white; padding: 2px 8px; border-radius: 4px;">青</span>
+                        </div>
+                        <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                            <strong>Layer 5 (SCROLL)</strong><br>
+                            <span style="background: magenta; color: white; padding: 2px 8px; border-radius: 4px;">マゼンタ</span>
+                        </div>
+                        <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                            <strong>Layer 6 (Bluetooth)</strong><br>
+                            <span style="background: cyan; color: black; padding: 2px 8px; border-radius: 4px;">シアン</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="step" id="mouse-operation">
+                <h3>マウス操作について</h3>
+                <div class="step-content">
+                    <p>Hitsuki46は両手にトラックボールを搭載可能なデュアルトラックボール設計です。</p>
+
+                    <h4 style="color: #667eea; margin: 1.5rem 0 1rem 0;">左手側トラックボール（デフォルト: スクロールモード）</h4>
+                    <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                        <li><strong>スクロールモード時</strong>：センサーを動かすとスクロール操作</li>
+                        <li><strong>カーソルモード時</strong>：センサーを動かすと自動的にマウスレイヤー(Layer 1)へ移行</li>
+                    </ul>
+
+                    <h4 style="color: #667eea; margin: 1.5rem 0 1rem 0;">右手側トラックボール（デフォルト: カーソルモード）</h4>
+                    <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                        <li><strong>カーソルモード</strong>：センサーを動かすと自動的にマウスレイヤー(Layer 1)へ移行
+                            <ul style="margin-top: 0.25rem;">
+                                <li>タイムアウト: 700ms（動きが止まるとデフォルトレイヤーに戻る）</li>
+                            </ul>
+                        </li>
+                        <li><strong>スクロールモード</strong>：Layer 5でトラックボールがスクロール操作に切り替わります</li>
+                    </ul>
+
+                    <div style="margin: 1rem 0;">
+                        <h4 style="color: #667eea; margin: 1.5rem 0 1rem 0; font-size: 1.1rem;">マウスボタン（Layer 1）</h4>
+                        <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                            <li><strong>MB1</strong>：左クリック</li>
+                            <li><strong>MB2</strong>：右クリック</li>
+                            <li><strong>MB3</strong>：ミドルクリック（中クリック）</li>
+                            <li><strong>Alt+Left/Right</strong>：ブラウザ履歴（戻る/進む）</li>
+                        </ul>
+                    </div>
+
+                    <div style="background: #e7f3ff; border: 1px solid #b3d9ff; color: #0066cc; padding: 1rem; border-radius: 8px; margin: 1.5rem 0;">
+                        <strong>ℹ️ XY Clipper（斜め入力防止）</strong><br>
+                        スクロール操作時に斜め方向の入力を防止するため、xy_clipperを使用しています。しきい値(threshold=20)以下の弱い軸の入力はカットされ、最も強い軸（上下または左右）のみが検出されます。
+                    </div>
+
+                    <h4 style="color: #667eea; margin: 1.5rem 0 1rem 0;">レイヤー構成</h4>
+                    <div style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 1rem; margin: 1rem 0;">
+                        <ul style="margin: 0; padding-left: 1.5rem;">
+                            <li><strong>Layer 0 (Default)</strong>：QWERTY配列のベースレイヤー</li>
+                            <li><strong>Layer 1 (MOUSE)</strong>：右手トラックボールの自動マウスレイヤー</li>
+                            <li><strong>Layer 2 (FUNCTION)</strong>：記号キーとファンクションキー（F1-F12）</li>
+                            <li><strong>Layer 3 (NUM)</strong>：テンキーと記号（0-9、演算子）</li>
+                            <li><strong>Layer 4 (ARROW)</strong>：矢印キー専用レイヤー</li>
+                            <li><strong>Layer 5 (SCROLL)</strong>：右手トラックボールのスクロールレイヤー</li>
+                            <li><strong>Layer 6 (Bluetooth)</strong>：Bluetooth設定（BT_SEL、BT_CLR、Bootloader）</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning">
+                        トラックボールが正常に動作しない場合は、センサー基板の接続とはんだ付けを確認してください。
+                    </div>
+                </div>
+            </section>
+
+            <section class="step" id="customization">
+                <h3>おすすめカスタマイズ</h3>
+                <div class="step-content">
+                    <p>Hitsuki46をより便利に使うためのカスタマイズ方法をご紹介します。</p>
+
+                <div style="background: #f0f7ff; border: 1px solid #b3d9ff; border-radius: 8px; padding: 1.5rem; margin: 1rem 0;">
+                    <h4 style="color: #667eea; margin: 0 0 1rem 0;">🔋 左右バッテリー残量の確認</h4>
+                    <p>通常、分割キーボードでは主側（左手側）のバッテリー残量しか確認できませんが、以下のツールを使用することで左右両方のバッテリー残量を確認できるようになります。</p>
+
+                    <div style="text-align: center; margin: 1.5rem 0;">
+                        <img src="image/soa44/battery.jpg" alt="ZMK Battery Centerでバッテリー残量を確認している様子" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                    </div>
+
+                    <div style="background: #f8f9fa; border-left: 4px solid #667eea; padding: 1rem; margin: 1rem 0; border-radius: 0 8px 8px 0;">
+                        <h5 style="margin: 0 0 0.5rem 0; color: #667eea;">ZMK Battery Center</h5>
+                        <p style="margin: 0.5rem 0;">左右両方のキーボードのバッテリー残量をWindowsのシステムトレイで確認できるツールです。</p>
+                        <p style="margin: 0.5rem 0;"><strong>ダウンロード：</strong></p>
+                        <a href="https://github.com/kot149/zmk-battery-center/releases" target="_blank" style="display: inline-block; background: #667eea; color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 6px; margin: 0.5rem 0;">
+                            zmk-battery-center ダウンロード
+                        </a>
+                        <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: #666;">
+                            ↑ GitHubのReleasesページから最新版をダウンロードしてください
+                        </p>
+                    </div>
+
+                    <div style="margin: 1rem 0;">
+                        <h5 style="margin: 1rem 0 0.5rem 0;">使用方法</h5>
+                        <ol style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                            <li>上記リンクから最新のリリース版をダウンロード</li>
+                            <li>ダウンロードしたファイルを実行してインストール</li>
+                            <li>Hitsuki46を追加</li>
+                            <li>システムトレイに左右両方のバッテリー残量が表示される</li>
+                            <li>Centralが右でPeripheralが左になります</li>
+                        </ol>
+                    </div>
+                </div>
+                </div>
+            </section>
+
+            <section class="step" id="troubleshooting">
+                <h3>トラブルシューティング</h3>
+                <div class="step-content">
+                    <h4>よくある問題と解決法</h4>
+
+                    <div class="warning">
+                        <strong>キーが反応しない</strong><br>
+                        → スイッチの足が折れていないか。はんだ付けを忘れていないかを再確認。
+                    </div>
+
+                    <div class="warning">
+                        <strong>トラックボールが動かない</strong><br>
+                        → センサーのはんだ付けとトラックボールの配置を確認
+                    </div>
+
+                    <div class="warning">
+                        <strong>Bluetooth接続できない</strong><br>
+                        → ファームウェアの書き込みを再度実行。
+                    </div>
+
+                    <div class="warning">
+                        <strong>ペアリングが途切れる</strong><br>
+                        → 下記の動画を確認してください。
+                        <div style="text-align: center; margin: 1.5rem 0;">
+                            <a href="https://www.youtube.com/watch?v=u2jcjx3hFhA" target="_blank">
+                                <img src="https://img.youtube.com/vi/u2jcjx3hFhA/maxresdefault.jpg"
+                                    alt="ペアリング問題の解決方法動画"
+                                    style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" />
+                            </a>
+                            <p style="margin-top: 0.5rem; color: #666; font-size: 0.9rem;">
+                                ↑ クリックして動画を視聴
+                            </p>
+                        </div>
+                    </div>
+
+                    <h4 style="color: #dc3545; margin: 2rem 0 1rem 0;">マイコン（XIAO nRF52840 Plus）のはんだ不良</h4>
+
+                    <div class="warning">
+                        <strong>横一列のキーが反応しない</strong><br>
+                        → マイコンの横方向の接続に問題があります。はんだ付けを再確認してください。
+                        <div style="text-align: center; margin: 1.5rem 0;">
+                            <img src="image/soa44/trouble1.jpg" alt="横一列が反応しないトラブル例"
+                                 style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;"
+                                 onclick="openModal(this)" />
+                        </div>
+                    </div>
+
+                    <div class="warning">
+                        <strong>縦一列のキーが反応しない</strong><br>
+                        → マイコンの縦方向の接続に問題があります。はんだ付けを再確認してください。
+                        <div style="text-align: center; margin: 1.5rem 0;">
+                            <img src="image/soa44/trouble2.jpg" alt="縦一列が反応しないトラブル例"
+                                 style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;"
+                                 onclick="openModal(this)" />
+                        </div>
+                    </div>
+
+                    <div class="warning">
+                        <strong>トラックボールが反応しない</strong><br>
+                        → センサー関連の接続に問題があります。PMW3610センサーとFFCケーブルの接続を確認してください。
+                        <div style="text-align: center; margin: 1.5rem 0;">
+                            <img src="image/soa44/trouble3.jpg" alt="トラックボールが反応しないトラブル例"
+                                 style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;"
+                                 onclick="openModal(this)" />
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <div class="keyboard-links">
+            <a href="index.html" class="btn btn-secondary">一覧に戻る</a>
+            <a href="https://gohanda.booth.pm/items/7886125" class="btn btn-primary" target="_blank">Hitsuki46を購入</a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 gohanda_kbd. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function openModal(img) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+
+            modal.style.display = 'flex';
+            modalImg.src = img.src;
+            modalImg.alt = img.alt;
+
+            // Escapeキーでモーダルを閉じる
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeModal();
+                }
+            });
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.style.display = 'none';
+        }
+    </script>
+    <script src="parts-database.js"></script>
+    <script src="parts-loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadKeyboardParts('hitsuki46-basic', 'hitsuki46-basic-parts-list');
+            loadKeyboardParts('hitsuki46-trackball', 'hitsuki46-trackball-parts-list');
+        });
+    </script>
+</body>
+</html>
