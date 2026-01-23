@@ -144,6 +144,44 @@ const partsDatabase = {
         }
       ]
     },
+    "aaa-battery-holder-single": {
+      "name": "単四電池ホルダー（1本用）",
+      "suppliers": [
+        {
+          "name": "モノタロウ",
+          "url": "https://www.monotaro.com/p/6855/7539/"
+        }
+      ]
+    },
+    "xiao-nrf52840": {
+      "name": "XIAO nRF52840",
+      "suppliers": [
+        {
+          "name": "TALP KEYBOARD",
+          "url": "https://shop.talpkeyboard.com/products/seeed-studio-xiao-nrf52840-xiao-ble"
+        },
+        {
+          "name": "秋月電子",
+          "url": "https://akizukidenshi.com/catalog/g/g117341/"
+        },
+        {
+          "name": "Seeed Studio",
+          "url": "https://www.seeedstudio.com/Seeed-XIAO-BLE-nRF52840-p-5201.html"
+        }
+      ],
+      "warning": "XIAO nRF52840 Plusではありません。",
+      "warningType": "warning"
+    },
+    "conthrough-2-5mm": {
+      "name": "コンスルー（2.5mm、13ピン分）",
+      "description": "ニッパーで6ピンと7ピンにカットして使用",
+      "suppliers": [
+        {
+          "name": "TALP KEYBOARD",
+          "url": "https://shop.talpkeyboard.com/products/mac8-xb-3-2-5-20p"
+        }
+      ]
+    },
     "sk6812mini-e": {
       "name": "SK6812MINI-E LED",
       "suppliers": [
@@ -220,6 +258,64 @@ const partsDatabase = {
       "name": "ケースデータ",
       "description": "購入後に購入履歴からダウンロード",
       "suppliers": []
+    },
+    "switches-choc": {
+      "name": "Chocスイッチ",
+      "suppliers": [
+        {
+          "name": "遊舎工房",
+          "url": "https://shop.yushakobo.jp/collections/all-switches/Kailh-Choc-V1%E3%82%B9%E3%82%A4%E3%83%83%E3%83%81"
+        },
+        {
+          "name": "TALP KEYBOARD",
+          "url": "https://shop.talpkeyboard.com/collections/kailh-choc-v1"
+        }
+      ]
+    },
+    "lowpro-keycap-1-5u": {
+      "name": "ロープロキーキャップ（1.5u）",
+      "suppliers": [
+        {
+          "name": "MakerWorld",
+          "url": "https://makerworld.com/ja/models/1386684-choc-v2-1-5u-low-profile-convex-keycap#profileId-1436197"
+        }
+      ]
+    },
+    "insert-nut-m3": {
+      "name": "インサートナット（M3×3mm×4mm）",
+      "suppliers": [
+        {
+          "name": "Amazon",
+          "url": "https://amzn.asia/d/d7oaAds"
+        }
+      ]
+    },
+    "rubber-feet-6mm": {
+      "name": "ゴム足（直径6mm×高さ2mm）",
+      "suppliers": [
+        {
+          "name": "Amazon",
+          "url": "https://amzn.asia/d/6TGiTDh"
+        }
+      ]
+    },
+    "parallel-pin": {
+      "name": "平行ピン（Φ1.5×8mm）",
+      "suppliers": [
+        {
+          "name": "モノタロウ",
+          "url": "https://www.monotaro.com/p/4220/4906/"
+        }
+      ]
+    },
+    "support-ball": {
+      "name": "支持球",
+      "suppliers": [
+        {
+          "name": "Amazon",
+          "url": "https://amzn.asia/d/7DUXJvF"
+        }
+      ]
     }
   },
   "keyboards": {
@@ -369,6 +465,98 @@ const partsDatabase = {
         },
         {
           "id": "m14-screw-5mm",
+          "quantity": 3,
+          "unit": "個"
+        }
+      ]
+    },
+    "wristball2": {
+      "parts": [
+        {
+          "id": "xiao-nrf52840",
+          "quantity": 1,
+          "unit": "個"
+        },
+        {
+          "id": "conthrough-2-5mm",
+          "quantity": 1,
+          "unit": "個"
+        },
+        {
+          "id": "aaa-battery",
+          "quantity": 1,
+          "unit": "本"
+        },
+        {
+          "id": "switches-choc",
+          "quantity": 4,
+          "unit": "個"
+        },
+        {
+          "id": "lowpro-keycap-1-5u",
+          "quantity": 4,
+          "unit": "個"
+        },
+        {
+          "id": "choc-socket",
+          "quantity": 4,
+          "unit": "個"
+        },
+        {
+          "id": "aaa-battery-holder-single",
+          "quantity": 2,
+          "unit": "個"
+        },
+        {
+          "id": "m2-screw-10mm",
+          "quantity": 4,
+          "unit": "個"
+        },
+        {
+          "id": "insert-nut-m3",
+          "quantity": 4,
+          "unit": "個"
+        },
+        {
+          "id": "rubber-feet-6mm",
+          "quantity": 4,
+          "unit": "個"
+        },
+        {
+          "id": "pmw3610",
+          "quantity": 1,
+          "unit": "個"
+        },
+        {
+          "id": "trackball-25mm",
+          "quantity": 1,
+          "unit": "個"
+        },
+        {
+          "id": "case-data",
+          "quantity": 1,
+          "unit": "式"
+        }
+      ]
+    },
+    "wristball2-bearing": {
+      "parts": [
+        {
+          "id": "bearing-4x1.5x2",
+          "quantity": 3,
+          "unit": "個"
+        },
+        {
+          "id": "parallel-pin",
+          "quantity": 3,
+          "unit": "個"
+        }
+      ]
+    },
+    "wristball2-ball": {
+      "parts": [
+        {
+          "id": "support-ball",
           "quantity": 3,
           "unit": "個"
         }

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>wristball2 ビルドガイド - gohanda_kbd</title>
+    <link rel="icon" type="image/png" href="image/icon/gohanda.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 画像拡大表示用のモーダル -->
+    <div id="imageModal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: flex-start; align-items: center;" onclick="closeModal()">
+        <img id="modalImage" style="max-width: 90%; max-height: 90%; border-radius: 8px;" />
+        <div style="position: absolute; top: 20px; right: 30px; color: white; font-size: 40px; font-weight: bold; cursor: pointer;" onclick="closeModal()">&times;</div>
+    </div>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <h1>gohanda_kbd</h1>
+                </div>
+                <div class="nav-links">
+                    <a href="index.html">ホーム</a>
+                </div>
+            </nav>
+            <div class="hero">
+                <h2>wristball2 ビルドガイド</h2>
+                <p>無線トラックパッド with 25mmトラックボール（お苦しみキット）</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- PC用サイドバー目次 -->
+    <div class="sidebar-toc" id="sidebarToc">
+        <div class="sidebar-content">
+            <h3>目次</h3>
+            <ul class="sidebar-toc-list">
+                <li><a href="#step1">1. 必要な部品の確認</a></li>
+                <li><a href="#step2">2. 組み立て（参考）</a></li>
+                <li><a href="#step3">3. ファームウェアの書き込み</a></li>
+                <li><a href="#complete">完成！</a></li>
+                <li><a href="#mouse-operation">マウス操作について</a></li>
+                <li><a href="#troubleshooting">トラブルシューティング</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <main class="container">
+        <div class="build-guide">
+            <section class="keyboard-overview">
+                <h2>wristball2 について</h2>
+                <p>wristball2はトラックボールを載せた無線トラックパッドです。キーボードとリストレストの間に入れて後付けトラックボールマウスとしてお使いいただけます。本製品は自作キーボードのお苦しみキットとなっております。お苦しみの名の通り、パーツを自分で調達して、ケースを3Dプリンターで印刷して、ビルドガイドなしに組み立てる必要があります。サポートもないので組み立てる自信のある方のみご購入ください。</p>
+
+                <div style="text-align: center; margin: 2rem 0;">
+                    <img src="image/wristball2/wristball2.jpg" alt="wristball2" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                </div>
+
+                <div class="keyboard-specs">
+                    <span class="spec-tag">4キー</span>
+                    <span class="spec-tag">無線</span>
+                    <span class="spec-tag">25mmトラックボール</span>
+                    <span class="spec-tag">トラックパッド</span>
+                </div>
+
+                <div style="background: #e7f3ff; border: 1px solid #b3d9ff; color: #0066cc; padding: 1rem; border-radius: 8px; margin: 1.5rem 0;">
+                    <strong>ℹ️ 2つの支持方式から選択可能</strong><br>
+                    トラックボールの支持方式を選択できます。
+                    <ul style="margin-top: 0.5rem; margin-bottom: 0;">
+                        <li><strong>ベアリング支持</strong>：ベアリング + 平行ピンを使用</li>
+                        <li><strong>支持球支持</strong>：支持球を使用</li>
+                    </ul>
+                </div>
+
+                <div style="background: #f0f7ff; border: 1px solid #b3d9ff; border-radius: 8px; padding: 1.5rem; margin: 1rem 0;">
+                    <h4 style="color: #667eea; margin: 0 0 1rem 0;">主な機能</h4>
+                    <ul style="margin: 0; padding-left: 1.5rem;">
+                        <li>4キーレイアウト（1.5uキー）</li>
+                        <li>25mmトラックボール搭載</li>
+                        <li>無線接続（Bluetooth）</li>
+                        <li>キーボードとリストレストの間に設置可能</li>
+                    </ul>
+                </div>
+
+                <p>7割ぐらいの部品がすでにはんだ付けされていて、はんだ付けが必要な部品は7種類です。</p>
+
+            </section>
+
+            <section class="step">
+                <h3>組み立てを始める前に</h3>
+                <div class="step-content">
+                    <p>組み立てを開始する前に、以下の重要な注意事項を必ずお読みください。</p>
+
+                    <div class="warning">
+                        <strong>⚠️ お苦しみキットについて</strong><br>
+                        本製品はお苦しみキットです。ビルドガイドなしで組み立てる必要があります。<br>
+                        サポートもないので組み立てる自信のある方のみご購入ください。
+                    </div>
+
+                    <div class="warning">
+                        <strong>⚠️ はんだ付け時の重要な注意事項</strong><br>
+                        はんだ付けをする際には必ず電池を外してから行ってください。<br>
+                        電池が入ったままの状態でのはんだ付けは危険です。
+                    </div>
+
+                    <div class="warning">
+                        <strong>⚠️ 電池の取り扱いに関する注意事項</strong><br>
+                        このデバイスを車内に長時間放置しないでください。<br>
+                        長期間使用しない場合はデバイスから電池を外して保管してください。
+                    </div>
+
+                    <h4>作業前のチェックリスト</h4>
+                    <ul>
+                        <li>✅ 必要な部品と工具が揃っている</li>
+                        <li>✅ 作業スペースが十分に確保されている</li>
+                        <li>✅ 換気の良い場所で作業する</li>
+                        <li>✅ 静電気対策を行っている</li>
+                        <li>✅ はんだごての温度設定を確認している</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="table-of-contents">
+                <h2>目次</h2>
+                <div class="toc-content">
+                    <ul class="toc-list">
+                        <li><a href="#step1">ステップ 1: 必要な部品の確認</a></li>
+                        <li><a href="#step2">ステップ 2: 組み立て（参考）</a></li>
+                        <li><a href="#step3">ステップ 3: ファームウェアの書き込み</a></li>
+                        <li><a href="#complete">完成！</a></li>
+                        <li><a href="#mouse-operation">マウス操作について</a></li>
+                        <li><a href="#troubleshooting">トラブルシューティング</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="step" id="step1">
+                <h3>ステップ 1: 必要な部品の確認</h3>
+                <div class="step-content">
+                    <div class="parts-list">
+                        <h4>キット内容品</h4>
+                        <ul>
+                            <li>PCB <span style="background: #28a745; color: white; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.8rem; font-weight: bold; margin-left: 0.5rem;">1枚</span></li>
+                            <li>センサー基板 <span style="background: #28a745; color: white; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.8rem; font-weight: bold; margin-left: 0.5rem;">1枚</span></li>
+                            <li>ピンヘッダー <span style="background: #28a745; color: white; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.8rem; font-weight: bold; margin-left: 0.5rem;">2個</span></li>
+                            <li>ピンソケット <span style="background: #28a745; color: white; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.8rem; font-weight: bold; margin-left: 0.5rem;">2個</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="parts-list">
+                        <h4>別途用意が必要な部品</h4>
+                        <div id="wristball2-parts-list">
+                            <p>読み込み中...</p>
+                        </div>
+                    </div>
+
+                    <div class="parts-list">
+                        <h4>トラックボール支持方式（どちらか選択）</h4>
+                        <p style="color: #666; margin-bottom: 1rem;">※ベアリング支持か支持球支持のどちらかを選択してください</p>
+
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin: 1rem 0;">
+                            <div style="background: #f0f7ff; border: 1px solid #b3d9ff; border-radius: 8px; padding: 1rem;">
+                                <h5 style="color: #667eea; margin: 0 0 0.5rem 0;">ベアリング支持</h5>
+                                <div id="wristball2-bearing-parts-list">
+                                    <p>読み込み中...</p>
+                                </div>
+                            </div>
+                            <div style="background: #fff3e0; border: 1px solid #ffcc80; border-radius: 8px; padding: 1rem;">
+                                <h5 style="color: #e65100; margin: 0 0 0.5rem 0;">支持球支持</h5>
+                                <div id="wristball2-ball-parts-list">
+                                    <p>読み込み中...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="parts-list">
+                        <h4>はんだ付けが必要な部品（7種類）</h4>
+                        <ul>
+                            <li>Chocソケット</li>
+                            <li>ピンソケット</li>
+                            <li>コンスルーとXIAO nRF52840 Plus</li>
+                            <li>電池ホルダー</li>
+                            <li>PMW3610</li>
+                            <li>ピンヘッダー</li>
+                        </ul>
+                    </div>
+
+                    <div class="tools-list">
+                        <h4>必要な工具・その他</h4>
+                        <ul>
+                            <li>3Dプリンター（ケースの印刷用）</li>
+                            <li>はんだセット（はんだごて、はんだ、フラックス）</li>
+                            <li>ドライバー</li>
+                            <li>USB-Cケーブル</li>
+                        </ul>
+                    </div>
+
+                    <div style="background: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 1rem; border-radius: 8px; margin: 1.5rem 0;">
+                        <strong>⚠️ ケースデータについて</strong><br>
+                        販売しているデータ(STEP)は私の所有する3Dプリンター(P1S)に合わせて調整しています。<br>
+                        ご自身の3DプリンターやJLC3DPなどで印刷すると不具合があることがあります。自己責任でケースの作成をお願いします。
+                    </div>
+                </div>
+            </section>
+
+            <section class="step" id="step2">
+                <h3>ステップ 2: 組み立て（参考）</h3>
+                <div class="step-content">
+                    <p>wristball2の組み立ては以下のポストを参考にしてください。</p>
+
+                    <div style="background: #e7f3ff; border: 1px solid #b3d9ff; color: #0066cc; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; text-align: center;">
+                        <strong style="font-size: 1.1rem;">📖 組み立て参考</strong><br><br>
+                        <a href="https://x.com/gohanda_kbd/status/2008527224631423374" target="_blank" style="display: inline-block; background: #667eea; color: white; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 6px; font-weight: bold;">
+                            Xで組み立て参考を見る
+                        </a>
+                    </div>
+
+                    <h4>はんだ付けのポイント</h4>
+                    <ul>
+                        <li><strong>Chocソケット</strong> - 白のシルクに沿ってソケットを載せてはんだ付け</li>
+                        <li><strong>ピンソケット</strong> - PCBに取り付け</li>
+                        <li><strong>XIAO nRF52840 Plus</strong> - コンスルーを使って取り付け</li>
+                        <li><strong>電池ホルダー</strong> - 極性に注意（-側がばねのある方）</li>
+                        <li><strong>PMW3610センサー</strong> - センサー基板に取り付け</li>
+                        <li><strong>ピンヘッダー</strong> - センサー基板に取り付け</li>
+                    </ul>
+
+                    <div class="warning">
+                        <strong>⚠️ 注意</strong><br>
+                        PMW3610センサーのはんだ付けは細かいピッチのため、十分に注意して作業してください。
+                    </div>
+                </div>
+            </section>
+
+            <section class="step" id="step3">
+                <h3>ステップ 3: ファームウェアの書き込み</h3>
+                <div class="step-content">
+                    <p>ZMKファームウェアをXIAO nRF52840 Plusに書き込みます。</p>
+
+                    <div style="background: #f0f7ff; border: 1px solid #b3d9ff; border-radius: 8px; padding: 1.5rem; margin: 1rem 0;">
+                        <h4 style="color: #667eea; margin: 0 0 1rem 0;">📦 ファームウェアリポジトリ</h4>
+                        <a href="https://github.com/gohanda11/zmk-config-wristball2" target="_blank" style="display: inline-block; background: #667eea; color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 6px;">
+                            zmk-config-wristball2
+                        </a>
+                    </div>
+
+                    <div class="warning">
+                        キーマップの変更にはGitHubアカウントが必要です。<br>
+                        詳しい手順は下記の動画が参考になります。
+                    </div>
+
+                    <div style="text-align: center; margin: 1.5rem 0;">
+                        <a href="https://www.youtube.com/watch?v=vXpV9jgRB1M" target="_blank">
+                            <img src="https://img.youtube.com/vi/vXpV9jgRB1M/maxresdefault.jpg"
+                                 alt="ZMKファームウェア書き込み手順の動画"
+                                 style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" />
+                        </a>
+                        <p style="margin-top: 0.5rem; color: #666; font-size: 0.9rem;">
+                            ↑ クリックして動画を視聴
+                        </p>
+                    </div>
+
+                    <ol>
+                        <li>ZMKリポジトリ（<a href="https://github.com/gohanda11/zmk-config-wristball2" target="_blank">zmk-config-wristball2</a>）をフォークする</li>
+                        <li><a href="https://nickcoutsos.github.io/keymap-editor/" target="_blank">KeymapEditor</a>でキーマップを変更し保存する</li>
+                        <li>ビルドが完了したらファームウェアをダウンロード</li>
+                        <li>XiaoにUSB接続、リセットボタンを2回素早く押してブートローダーモードに入る</li>
+                        <li>settings_reset-seeeduino_xiao_ble-zmk.uf2を書き込み</li>
+                        <li>wristball2-seeeduino_xiao_ble-zmk.uf2を書き込み</li>
+                    </ol>
+                </div>
+            </section>
+
+            <div id="complete" style="text-align: center; margin: 3rem 0;">
+                <h2 style="color: #2c3e50; margin-bottom: 1rem;">完成！</h2>
+                <img src="image/wristball2/finish.jpg" alt="wristball2完成" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="openModal(this)" />
+                <p style="margin-top: 1rem; color: #666; font-size: 1.1rem;">お疲れさまでした！</p>
+                <div style="background: linear-gradient(135deg, #1da1f2 0%, #0d8ecf 100%); border-radius: 12px; padding: 2rem; margin-top: 2rem; box-shadow: 0 4px 15px rgba(29, 161, 242, 0.3);">
+                    <p style="margin: 0 0 1rem 0; font-size: 1.3rem; color: white;"><strong>📢 Xにポストしよう！</strong></p>
+                    <p style="margin: 0 0 1.5rem 0; color: rgba(255,255,255,0.9); font-size: 1.1rem;"><strong>#wristball2_kbd</strong> をつけてポストしよう</p>
+                    <a href="https://x.com/intent/tweet?text=%23wristball2_kbd%0A" target="_blank" style="display: inline-block; background: white; color: #1da1f2; padding: 0.75rem 2rem; text-decoration: none; border-radius: 50px; font-weight: bold; font-size: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.15); transition: transform 0.2s;">
+                        ポストする
+                    </a>
+                </div>
+            </div>
+
+            <section class="step" id="mouse-operation">
+                <h3>マウス操作について</h3>
+                <div class="step-content">
+                    <h4 style="color: #667eea; margin: 1.5rem 0 1rem 0;">トラックボールの角度調整（pmw_rotation）</h4>
+                    <p><code>pmw_rotation</code>でトラックボールの動作角度を変更できます。</p>
+                    <p>一度押すごとにwristball2を時計回りに90度回した位置になります。</p>
+
+                    <div style="background: #f0f7ff; border: 1px solid #b3d9ff; border-radius: 8px; padding: 1rem; margin: 1rem 0;">
+                        <ul style="margin: 0; padding-left: 1.5rem;">
+                            <li><strong>1回押す</strong>：90度回転</li>
+                            <li><strong>2回押す</strong>：180度回転</li>
+                            <li><strong>3回押す</strong>：270度回転</li>
+                            <li><strong>4回押す</strong>：元の位置（0度）に戻る</li>
+                        </ul>
+                    </div>
+
+                    <div style="background: #e7f3ff; border: 1px solid #b3d9ff; color: #0066cc; padding: 1rem; border-radius: 8px; margin: 1.5rem 0;">
+                        <strong>ℹ️ ヒント</strong><br>
+                        wristball2を設置する向きに合わせて角度を調整してください。
+                    </div>
+                </div>
+            </section>
+
+            <section class="step" id="troubleshooting">
+                <h3>トラブルシューティング</h3>
+                <div class="step-content">
+                    <h4>よくある問題と解決法</h4>
+
+                    <div class="warning">
+                        <strong>キーが反応しない</strong><br>
+                        → スイッチの足が折れていないか。はんだ付けを忘れていないかを再確認。
+                    </div>
+
+                    <div class="warning">
+                        <strong>トラックボールが動かない</strong><br>
+                        → センサーのはんだ付けとトラックボールの配置を確認
+                    </div>
+
+                    <div class="warning">
+                        <strong>Bluetooth接続できない</strong><br>
+                        → ファームウェアの書き込みを再度実行。
+                    </div>
+
+                    <div class="warning">
+                        <strong>ペアリングが途切れる</strong><br>
+                        → 下記の動画を確認してください。
+                        <div style="text-align: center; margin: 1.5rem 0;">
+                            <a href="https://www.youtube.com/watch?v=u2jcjx3hFhA" target="_blank">
+                                <img src="https://img.youtube.com/vi/u2jcjx3hFhA/maxresdefault.jpg"
+                                    alt="ペアリング問題の解決方法動画"
+                                    style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" />
+                            </a>
+                            <p style="margin-top: 0.5rem; color: #666; font-size: 0.9rem;">
+                                ↑ クリックして動画を視聴
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <div class="keyboard-links">
+            <a href="index.html" class="btn btn-secondary">一覧に戻る</a>
+            <a href="https://gohanda.booth.pm/items/7888682" class="btn btn-primary" target="_blank">wristball2を購入</a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 gohanda_kbd. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function openModal(img) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+
+            modal.style.display = 'flex';
+            modalImg.src = img.src;
+            modalImg.alt = img.alt;
+
+            // Escapeキーでモーダルを閉じる
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeModal();
+                }
+            });
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.style.display = 'none';
+        }
+    </script>
+    <script src="parts-database.js"></script>
+    <script src="parts-loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadKeyboardParts('wristball2', 'wristball2-parts-list');
+            loadKeyboardParts('wristball2-bearing', 'wristball2-bearing-parts-list');
+            loadKeyboardParts('wristball2-ball', 'wristball2-ball-parts-list');
+        });
+    </script>
+</body>
+</html>
