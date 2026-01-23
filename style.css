@@ -737,6 +737,16 @@ footer {
     color: #721c24;
 }
 
+.keyboard-notice {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    color: #856404;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
+
 .keyboard-display {
     background: white;
     padding: 2rem;

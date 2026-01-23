@@ -38,6 +38,7 @@
                 <li><a href="#step1">1. 必要な部品の確認</a></li>
                 <li><a href="#step2">2. 組み立て（参考）</a></li>
                 <li><a href="#step3">3. ファームウェアの書き込み</a></li>
+                <li><a href="#step4">4. 動作確認</a></li>
                 <li><a href="#complete">完成！</a></li>
                 <li><a href="#mouse-operation">マウス操作について</a></li>
                 <li><a href="#troubleshooting">トラブルシューティング</a></li>
@@ -126,6 +127,7 @@
                         <li><a href="#step1">ステップ 1: 必要な部品の確認</a></li>
                         <li><a href="#step2">ステップ 2: 組み立て（参考）</a></li>
                         <li><a href="#step3">ステップ 3: ファームウェアの書き込み</a></li>
+                        <li><a href="#step4">ステップ 4: 動作確認</a></li>
                         <li><a href="#complete">完成！</a></li>
                         <li><a href="#mouse-operation">マウス操作について</a></li>
                         <li><a href="#troubleshooting">トラブルシューティング</a></li>
@@ -268,6 +270,39 @@
                         <li>settings_reset-seeeduino_xiao_ble-zmk.uf2を書き込み</li>
                         <li>wristball2-seeeduino_xiao_ble-zmk.uf2を書き込み</li>
                     </ol>
+                </div>
+            </section>
+
+            <section class="step" id="step4">
+                <h3>ステップ 4: 動作確認</h3>
+                <div class="step-content">
+                    <p>組み立てとファームウェアの書き込みが完了したら、すべてのキーが正常に動作するか確認しましょう。</p>
+
+                    <h4 style="color: #667eea; margin: 1.5rem 0 1rem 0;">キーボードテスターで確認</h4>
+                    <p>キーボードテスターを使用して、各キーが正しく認識されているか確認できます。</p>
+
+                    <div style="text-align: center; margin: 1.5rem 0;">
+                        <a href="keyboard-tester.html" target="_blank" style="display: inline-block; background: #667eea; color: white; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 6px; font-weight: bold;">
+                            キーボードテスターを開く
+                        </a>
+                    </div>
+
+                    <ol>
+                        <li>キーボードテスターを開き、「wristball2」を選択</li>
+                        <li>wristball2をPCに接続（Bluetooth）</li>
+                        <li>4つのキーを順番に押して、画面上でハイライトされることを確認</li>
+                        <li>トラックボールを動かして、カーソルが正しく動くことを確認</li>
+                    </ol>
+
+                    <div class="warning" style="margin-top: 1rem;">
+                        <strong>確認ポイント</strong>
+                        <ul style="margin: 0.5rem 0 0 0; padding-left: 1.5rem;">
+                            <li>pmw_rotation と MO(6) はキーボードテスターでは反応しません（正常です）</li>
+                            <li>キーマップを初期状態から変更している場合、変更したキーは反応しなくなります</li>
+                            <li>反応しないキーがある場合は、はんだ付けを確認してください</li>
+                            <li>トラックボールが動かない場合は、センサー基板の接続を確認してください</li>
+                        </ul>
+                    </div>
                 </div>
             </section>
 

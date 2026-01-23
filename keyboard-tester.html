@@ -35,6 +35,8 @@
                         <option value="">選択してください</option>
                         <option value="soa44">Soa44</option>
                         <option value="soa39">Soa39</option>
+                        <option value="hitsuki46">Hitsuki46</option>
+                        <option value="wristball2">wristball2</option>
                     </select>
                     <button id="open-custom-dialog" class="custom-button" title="カスタムリポジトリから読み込み">
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
@@ -62,6 +64,7 @@
             </div>
 
             <div id="loading-status" class="loading-status"></div>
+            <div id="keyboard-notice" class="keyboard-notice" style="display: none;"></div>
         </section>
 
         <!-- カスタムリポジトリダイアログ -->
@@ -241,6 +244,20 @@
                 layoutUrl: 'https://raw.githubusercontent.com/gohanda11/zmk-config-soa39/main/config/soa39.json',
                 layout: 'split',
                 keys: 39
+            },
+            hitsuki46: {
+                name: 'Hitsuki46',
+                keymapUrl: 'https://raw.githubusercontent.com/gohanda11/zmk-config-hitsuki46/main/config/hitsuki46.keymap',
+                layoutUrl: 'https://raw.githubusercontent.com/gohanda11/zmk-config-hitsuki46/main/config/hitsuki46.json',
+                layout: 'split',
+                keys: 40
+            },
+            wristball2: {
+                name: 'wristball2',
+                keymapUrl: 'https://raw.githubusercontent.com/gohanda11/zmk-config-wristball2/main/config/wristball2.keymap',
+                layoutUrl: 'https://raw.githubusercontent.com/gohanda11/zmk-config-wristball2/main/config/wristball2.json',
+                layout: 'single',
+                keys: 6
             }
         };
 
@@ -284,13 +301,25 @@
                 currentKeyboard = keyboardConfigs[selectedKeyboard];
                 await loadKeyboardData(currentKeyboard);
 
-                // Soa44とSoa39の場合はトラックボールテストボタンを表示
-                if (selectedKeyboard === 'soa44' || selectedKeyboard === 'soa39') {
+                // トラックボール対応キーボードの場合はトラックボールテストボタンを表示
+                if (selectedKeyboard === 'soa44' || selectedKeyboard === 'soa39' || selectedKeyboard === 'hitsuki46' || selectedKeyboard === 'wristball2') {
                     trackballAvailable = true;
                     document.getElementById('open-trackball-test').style.display = 'inline-flex';
                 } else {
                     trackballAvailable = false;
                     document.getElementById('open-trackball-test').style.display = 'none';
+                }
+
+                // キーボード固有の注意書きを表示
+                const noticeDiv = document.getElementById('keyboard-notice');
+                if (selectedKeyboard === 'wristball2') {
+                    noticeDiv.innerHTML = '<strong>⚠️ 注意:</strong> pmw_rotation と MO(6) はキーボードテスターでは反応しません。';
+                    noticeDiv.style.display = 'block';
+                } else if (selectedKeyboard === 'hitsuki46') {
+                    noticeDiv.innerHTML = '<strong>⚠️ 注意:</strong> RShift はキーボードテスターでは反応しません。';
+                    noticeDiv.style.display = 'block';
+                } else {
+                    noticeDiv.style.display = 'none';
                 }
             }
             // カスタムキーボード
@@ -1158,6 +1187,7 @@
                 'Backquote': '`',
                 'ShiftLeft': 'LShift',
                 'ShiftRight': 'RShift',
+                'RightShift': 'RShift',
                 'ControlLeft': 'LCtrl',
                 'ControlRight': 'RCtrl',
                 'AltLeft': 'LAlt',
