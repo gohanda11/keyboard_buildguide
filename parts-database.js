@@ -309,7 +309,7 @@ const partsDatabase = {
       ]
     },
     "support-ball": {
-      "name": "支持球",
+      "name": "支持球（2mm）",
       "suppliers": [
         {
           "name": "Amazon",
@@ -504,7 +504,7 @@ const partsDatabase = {
         },
         {
           "id": "aaa-battery-holder-single",
-          "quantity": 2,
+          "quantity": 1,
           "unit": "個"
         },
         {
