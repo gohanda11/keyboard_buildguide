@@ -281,12 +281,12 @@ const partsDatabase = {
         }
       ]
     },
-    "insert-nut-m3": {
-      "name": "インサートナット（M3×3mm×4mm）",
+    "insert-nut-m2": {
+      "name": "インサートナット（M2×3mm×4mm）",
       "suppliers": [
         {
           "name": "Amazon",
-          "url": "https://amzn.asia/d/d7oaAds"
+          "url": "https://amzn.asia/d/3jEplIz"
         }
       ]
     },
@@ -513,7 +513,7 @@ const partsDatabase = {
           "unit": "個"
         },
         {
-          "id": "insert-nut-m3",
+          "id": "insert-nut-m2",
           "quantity": 4,
           "unit": "個"
         },
